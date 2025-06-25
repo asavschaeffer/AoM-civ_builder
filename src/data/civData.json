@@ -1,59 +1,72 @@
 {
-    "majorGods": [
-      {
-        "name": "Thor",
-        "tagline": "God of Thunder",
-        "image": "thor.jpg",
-        "godPower": "mjolnir.jpg"
+    "name": "Greek",
+    "majorGods": {
+      "poseidon": {
+        "name": "Poseidon",
+        "type": "majorGod",
+        "image": "poseidon.jpg",
+        "age_required": "Archaic",
+        "tagline": "God of the Sea",
+        "godPower": "lure"
       },
-      {
-        "name": "Ra",
-        "tagline": "Sun God",
-        "image": "ra.jpg",
-        "godPower": "sunray.jpg"
+      "hades": {
+        "name": "Hades",
+        "type": "majorGod",
+        "image": "hades.jpg",
+        "age_required": "Archaic",
+        "tagline": "God of the Underworld",
+        "godPower": "sentinels"
       },
-      {
+      "zeus": {
         "name": "Zeus",
-        "tagline": "King of Gods",
+        "type": "majorGod",
         "image": "zeus.jpg",
-        "godPower": "lightning.jpg"
+        "age_required": "Archaic",
+        "tagline": "King of Sky",
+        "godPower": "bolt"
       }
-    ],
-    "units": [
-      {
+    },
+    "minorGods": {},
+    "units": {
+      "hoplite": {
         "name": "Hoplite",
         "type": "unit",
+        "age_required": "Archaic",
         "unit_class": ["is_infantry"],
         "cost": { "food": 50, "gold": 40 },
         "hitpoints": 120,
         "attack": { "type": "melee", "damage": 15 }
       },
-      {
+      "toxotes": {
         "name": "Toxotes",
         "type": "unit",
+        "age_required": "Archaic",
         "unit_class": ["is_archer"],
         "cost": { "wood": 60, "gold": 40 },
         "hitpoints": 80,
         "attack": { "type": "ranged", "damage": 10, "reload_time": 1.5, "range": 15 }
       },
-      {
+      "ajax": {
         "name": "Ajax",
         "type": "unit",
+        "age_required": "Archaic",
         "unit_class": ["is_hero"],
         "cost": { "food": 120, "gold": 100 },
         "hitpoints": 220,
-        "attack": { "type": "melee", "damage": 19 },
-        "ability": { "name": "Shield Bash", "cooldown": 20 }
-
+        "attack": { "type": "melee", "damage": 19 }
       },
-      {
+      "centaur": {
         "name": "Centaur",
         "type": "unit",
-        "unit_class": ["is_myth","is_ranged"],
+        "age_required": "Archaic",
+        "unit_class": ["is_myth", "is_ranged"],
         "cost": { "food": 100, "favor": 20 },
         "hitpoints": 200,
-        "attack": { "type": "ranged", "damage": 20, "reload_time": 2, "range": 18 },
-        "ability": { "name": "Arrow Rain", "cooldown": 20 }
+        "attack": { "type": "ranged", "damage": 20, "reload_time": 2, "range": 18 }
       }
-    ]
+    },
+    "buildings": {},
+    "technologies": {},
+    "abilities": {}
   }
+  
