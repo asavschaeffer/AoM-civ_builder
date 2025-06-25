@@ -1,0 +1,57 @@
+{
+    "majorGods": [
+      {
+        "name": "Thor",
+        "tagline": "God of Thunder",
+        "image": "thor.jpg",
+        "godPower": "mjolnir.jpg"
+      },
+      {
+        "name": "Ra",
+        "tagline": "Sun God",
+        "image": "ra.jpg",
+        "godPower": "sunray.jpg"
+      },
+      {
+        "name": "Zeus",
+        "tagline": "King of Gods",
+        "image": "zeus.jpg",
+        "godPower": "lightning.jpg"
+      }
+    ],
+    "units": [
+      {
+        "name": "Hoplite",
+        "type": "unit",
+        "unit_class": ["is_infantry"],
+        "cost": { "food": 50, "gold": 40 },
+        "hitpoints": 120,
+        "attack": { "type": "melee", "damage": 15 }
+      },
+      {
+        "name": "Toxotes",
+        "type": "unit",
+        "unit_class": ["is_archer"],
+        "cost": { "wood": 60, "gold": 40 },
+        "hitpoints": 80,
+        "attack": { "type": "ranged", "damage": 10, "reload_time": 1.5, "range": 15 }
+      },
+      {
+        "name": "Ajax",
+        "type": "unit",
+        "unit_class": ["is_hero"],
+        "cost": { "food": 120, "gold": 100 },
+        "hitpoints": 220,
+        "attack": { "type": "melee", "damage": 19 }
+      },
+      {
+        "name": "Centaur",
+        "type": "unit",
+        "unit_class": ["is_myth","is_ranged"],
+        "cost": { "food": 100, "favor": 20 },
+        "hitpoints": 200,
+        "attack": { "type": "ranged", "damage": 20, "reload_time": 2, "range": 18 },
+        "ability": { "name": "Swift Shot", "cooldown": 30 }
+      }
+    ]
+  }
