@@ -1,72 +1,185 @@
 {
     "name": "Greek",
     "majorGods": {
-      "poseidon": {
-        "name": "Poseidon",
-        "type": "majorGod",
-        "image": "poseidon.jpg",
-        "age_required": "Archaic",
-        "tagline": "God of the Sea",
-        "godPower": "lure"
-      },
-      "hades": {
-        "name": "Hades",
-        "type": "majorGod",
-        "image": "hades.jpg",
-        "age_required": "Archaic",
-        "tagline": "God of the Underworld",
-        "godPower": "sentinels"
-      },
       "zeus": {
         "name": "Zeus",
         "type": "majorGod",
-        "image": "zeus.jpg",
+        "image": "zeus.png",
         "age_required": "Archaic",
-        "tagline": "King of Sky",
-        "godPower": "bolt"
+        "civ": "Greek",
+        "prerequisite_god": null,
+        "prerequisite_building": null,
+        "line_of_sight": 0,
+        "build_time": 0,
+        "tagline": "King of the Olympian Gods",
+        "godPowers": ["bolt", "passive_infantry_speed"],
+        "passive_bonuses": ["+15% infantry speed", "units do +50% damage vs buildings"]
+      },
+      "poseidon": {
+        "name": "Poseidon",
+        "type": "majorGod",
+        "image": "poseidon.png",
+        "age_required": "Archaic",
+        "civ": "Greek",
+        "prerequisite_god": null,
+        "line_of_sight": 0,
+        "build_time": 0,
+        "tagline": "God of the Sea",
+        "godPowers": ["lure", "passive_nav_bonus"],
+        "passive_bonuses": ["naval units gain +10% speed"]
       }
     },
     "minorGods": {},
+    "godPowers": {
+      "bolt": {
+        "name": "Bolt",
+        "type": "godPower",
+        "image": "bolt.png",
+        "age_required": "Archaic",
+        "civ": "Greek",
+        "prerequisite_god": "zeus",
+        "line_of_sight": 0,
+        "build_time": 0,
+        "description": "Strikes target area with lightning.",
+        "is_passive": false,
+        "cooldown": 90,
+        "area_of_effect": 2
+      },
+      "passive_infantry_speed": {
+        "name": "Infantry Zeal",
+        "type": "godPower",
+        "image": "",
+        "age_required": "Archaic",
+        "civ": "Greek",
+        "prerequisite_god": "zeus",
+        "line_of_sight": 0,
+        "build_time": 0,
+        "description": "Grants +15% speed to Greek infantry permanently.",
+        "is_passive": true
+      },
+      "lure": {
+        "name": "Lure",
+        "type": "godPower",
+        "image": "lure.png",
+        "age_required": "Archaic",
+        "civ": "Greek",
+        "prerequisite_god": "poseidon",
+        "line_of_sight": 0,
+        "build_time": 0,
+        "description": "Creates a Sheep at target location.",
+        "is_passive": false,
+        "cooldown": 120
+      }
+    },
     "units": {
       "hoplite": {
         "name": "Hoplite",
         "type": "unit",
-        "age_required": "Archaic",
-        "unit_class": ["is_infantry"],
+        "image": "hoplite.png",
+        "age_required": "Classical",
+        "civ": "Greek",
+        "prerequisite_building": "military_academy",
+        "line_of_sight": 16,
+        "build_time": 12,
+        "population_cost": 2,
+        "hitpoints": 115,
+        "speed": 4.3,
         "cost": { "food": 50, "gold": 40 },
-        "hitpoints": 120,
-        "attack": { "type": "melee", "damage": 15 }
-      },
-      "toxotes": {
-        "name": "Toxotes",
-        "type": "unit",
-        "age_required": "Archaic",
-        "unit_class": ["is_archer"],
-        "cost": { "wood": 60, "gold": 40 },
-        "hitpoints": 80,
-        "attack": { "type": "ranged", "damage": 10, "reload_time": 1.5, "range": 15 }
-      },
-      "ajax": {
-        "name": "Ajax",
-        "type": "unit",
-        "age_required": "Archaic",
-        "unit_class": ["is_hero"],
-        "cost": { "food": 120, "gold": 100 },
-        "hitpoints": 220,
-        "attack": { "type": "melee", "damage": 19 }
+        "unit_category": "human",
+        "unit_tags": ["is_infantry"],
+        "defensive_stats": { "hack_armor": 0.4, "pierce_armor": 0.15, "crush_armor": 0.99 },
+        "attack": {
+          "hack_damage": 8,
+          "pierce_damage": 0,
+          "crush_damage": 0,
+          "vs_human": 1,
+          "vs_cavalry": 1.25,
+          "type": "melee",
+          "reload_time": 1,
+          "range": 0.75
+        }
       },
       "centaur": {
         "name": "Centaur",
         "type": "unit",
-        "age_required": "Archaic",
-        "unit_class": ["is_myth", "is_ranged"],
-        "cost": { "food": 100, "favor": 20 },
-        "hitpoints": 200,
-        "attack": { "type": "ranged", "damage": 20, "reload_time": 2, "range": 18 }
+        "image": "centaur.png",
+        "age_required": "Classical",
+        "civ": "Greek",
+        "prerequisite_building": "myth_barracks",
+        "line_of_sight": 20,
+        "build_time": 16,
+        "population_cost": 2,
+        "hitpoints": 250,
+        "speed": 5.5,
+        "cost": { "wood": 180, "favor": 12 },
+        "unit_category": "myth",
+        "unit_tags": ["is_myth", "is_ranged"],
+        "defensive_stats": { "hack_armor": 0.15, "pierce_armor": 0.20, "crush_armor": 0.15 },
+        "attack": {
+          "hack_damage": 0,
+          "pierce_damage": 18,
+          "crush_damage": 0,
+          "vs_myth": 2,
+          "vs_hero": 0.5,
+          "type": "ranged",
+          "reload_time": 2,
+          "range": 18
+        }
       }
     },
-    "buildings": {},
-    "technologies": {},
+    "buildings": {
+      "military_academy": {
+        "name": "Military Academy",
+        "type": "building",
+        "image": "academy.png",
+        "age_required": "Classical",
+        "civ": "Greek",
+        "line_of_sight": 10,
+        "build_time": 30,
+        "cost": { "wood": 150 },
+        "defensive_stats": { "hack_armor": 0.3, "pierce_armor": 0.3, "crush_armor": 0.2 },
+        "functions": { "trains_units": ["hoplite"], "researches_techs": [] }
+      },
+      "myth_barracks": {
+        "name": "Mythic Barracks",
+        "type": "building",
+        "image": "myth_barracks.png",
+        "age_required": "Heroic",
+        "civ": "Greek",
+        "line_of_sight": 10,
+        "build_time": 35,
+        "cost": { "wood": 200 },
+        "defensive_stats": { "hack_armor": 0.35, "pierce_armor": 0.35, "crush_armor": 0.25 },
+        "functions": { "trains_units": ["centaur"], "researches_techs": [] }
+      }
+    },
+    "technologies": {
+      "bronze_armor": {
+        "name": "Bronze Armor",
+        "type": "technology",
+        "image": "bronze_armor.png",
+        "age_required": "Heroic",
+        "civ": "Greek",
+        "research_location": "military_academy",
+        "prerequisites": [{ "building": "military_academy", "age": "Heroic" }],
+        "line_of_sight": 0,
+        "build_time": 20,
+        "effects": [
+          {
+            "noun": { "unit_tags": ["is_infantry"] },
+            "verb": "add",
+            "adjective": "hack_armor",
+            "value": 0.10
+          },
+          {
+            "noun": { "unit_tags": ["is_infantry"] },
+            "verb": "add",
+            "adjective": "pierce_armor",
+            "value": 0.10
+          }
+        ]
+      }
+    },
     "abilities": {}
   }
   
