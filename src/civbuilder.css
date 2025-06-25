@@ -1,0 +1,335 @@
+/* CSS Variables for DRY */
+:root {
+  --primary-color: #2c3e50;
+  --accent-color: #e74c3c;
+  --bg-color: #f4f4f4;
+  --card-bg-opacity: 0.8;
+  --ghosted-opacity: 0.5;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --font-size-base: 16px;
+  --font-size-h1: 2.5rem;
+  --font-size-h2: 2rem;
+  --font-size-h3: 1.5rem;
+  --font-size-h4: 1.25rem;
+  --font-size-h5: 1rem;
+  --sprite-size: 64px;
+  --stat-sprite-size: 24px;
+  --card-bg-width: 300px;
+  --card-bg-height: 200px;
+  --preview-image-size: 200px;
+  --tile-size: 80px;
+}
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: var(--bg-color);
+  color: var(--primary-color);
+  font-size: var(--font-size-base);
+}
+
+/* Header */
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  margin-bottom: var(--spacing-md);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: var(--spacing-sm);
+}
+
+nav a:hover {
+  background-color: var(--accent-color);
+}
+
+/* Main content */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+/* Card styles (shared) */
+.card {
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-shadow: 0 0 5px black;
+  padding: var(--spacing-md);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  width: var(--card-bg-width);
+  min-height: var(--card-bg-height);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, var(--card-bg-opacity));
+  z-index: 0;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+h4, h5 {
+  margin-bottom: var(--spacing-sm);
+}
+
+h4 { font-size: var(--font-size-h4); }
+h5 { font-size: var(--font-size-h5); }
+
+.tagline {
+  font-style: italic;
+  margin-bottom: var(--spacing-sm);
+}
+
+.sprite {
+  width: var(--sprite-size);
+  height: var(--sprite-size);
+  object-fit: contain;
+  margin: var(--spacing-sm);
+}
+
+.sprite.stat {
+  width: var(--stat-sprite-size);
+  height: var(--stat-sprite-size);
+  vertical-align: middle;
+}
+
+/* Major Gods Carousel */
+.major-gods .carousel {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  position: relative;
+}
+
+.major-god {
+  flex: 1;
+  max-width: 33%;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.major-god.ghosted {
+  opacity: var(--ghosted-opacity);
+  transform: translateX(-10px);
+}
+
+.major-god:first-child.ghosted { transform: translateX(-20px); }
+.major-god:last-child.ghosted { transform: translateX(20px); }
+.major-god:not(.ghosted) { z-index: 1; }
+
+/* Minor Gods Carousel */
+.minor-gods .carousel {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.minor-gods-grid {
+  flex: 2;
+}
+
+.age-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.age-group h4 {
+  font-size: var(--font-size-h3);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.age-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+.minor-gods-ghosted {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.minor-god {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.minor-god.ghosted {
+  opacity: var(--ghosted-opacity);
+  transform: translateX(10px);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.minor-god .god-power {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Units/Techs and Buildings */
+.units-techs,
+.buildings {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: var(--spacing-sm);
+}
+
+.tile {
+  background-color: white;
+  border: 1px solid var(--primary-color);
+  padding: var(--spacing-sm);
+  text-align: center;
+  cursor: pointer;
+  min-height: var(--tile-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tile img.sprite {
+  margin-right: var(--spacing-sm);
+}
+
+.tile:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.preview {
+  background-color: white;
+  padding: var(--spacing-md);
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+}
+
+.preview-image {
+  width: var(--preview-image-size);
+  height: var(--preview-image-size);
+  object-fit: contain;
+  margin-bottom: var(--spacing-md);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-sm);
+}
+
+.stats dt {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.edit-btn {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  margin-top: var(--spacing-md);
+}
+
+.edit-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Footer */
+footer {
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+footer ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Visually hidden */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Drag-and-drop */
+.age-grid[draggable="true"] {
+  cursor: move;
+}
+
+.age-grid.dragging {
+  opacity: 0.7;
+}

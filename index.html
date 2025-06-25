@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AoM Civ Customizer Builder</title>
+  <link rel="stylesheet" href="src/civbuilder.css">
+</head>
+<body>
+  <header>
+    <h1>AoM Civ Customizer Builder</h1>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#standard-civs">Standard Civs</a></li>
+        <li><a href="#custom-civs">Popular Custom Civs</a></li>
+        <li><a href="#tutorial">Tutorial</a></li>
+        <li><a href="#forum">Forum</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section aria-labelledby="civ-name">
+      <h2 id="civ-name" contenteditable="true">Custom Civilization</h2>
+
+      <section class="major-gods" aria-labelledby="major-gods-heading">
+        <h3 id="major-gods-heading" class="visually-hidden">Major Gods</h3>
+        <div class="carousel" role="region" aria-label="Major Gods Carousel">
+          <article class="card major-god" data-god="thor" style="background-image: url('placeholdermajorgodcard.jpg')">
+            <h4>Thor</h4>
+            <p class="tagline">God of Thunder</p>
+            <img src="placeholdergodpower.jpg" alt="Mjolnir God Power" class="sprite god-power">
+          </article>
+          <article class="card major-god ghosted" data-god="ra" style="background-image: url('placeholdermajorgodcard.jpg')">
+            <h4>Ra</h4>
+            <p class="tagline">Sun God</p>
+            <img src="placeholdergodpower.jpg" alt="Sun Ray God Power" class="sprite god-power">
+          </article>
+          <article class="card major-god ghosted" data-god="zeus" style="background-image: url('placeholdermajorgodcard.jpg')">
+            <h4>Zeus</h4>
+            <p class="tagline">King of Gods</p>
+            <img src="placeholdergodpower.jpg" alt="Lightning Bolt God Power" class="sprite god-power">
+          </article>
+        </div>
+      </section>
+
+      <section class="minor-gods" aria-labelledby="minor-gods-heading">
+        <h3 id="minor-gods-heading" class="visually-hidden">Minor Gods</h3>
+        <div class="carousel" role="region" aria-label="Minor Gods Carousel">
+          <div class="minor-gods-grid">
+            <div class="age-group" data-age="Classical">
+              <h4>Classical Age</h4>
+              <div class="age-grid" draggable="true">
+                <article class="card minor-god" data-major="thor" data-age="Classical" style="background-image: url('placeholderminorgodcard.jpg')">
+                  <h5>Minor God 1</h5>
+                  <p class="tagline">God of Wisdom</p>
+                  <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                  <div class="tech-grid">
+                    <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                  </div>
+                </article>
+                <article class="card minor-god" data-major="thor" data-age="Classical" style="background-image: url('placeholderminorgodcard.jpg')">
+                  <h5>Minor God 2</h5>
+                  <p class="tagline">God of War</p>
+                  <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                  <div class="tech-grid">
+                    <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                  </div>
+                </article>
+                <article class="card minor-god ghosted" data-major="ra" data-age="Classical" style="background-image: url('placeholderminorgodcard.jpg')">
+                    <h5>Minor God 3</h5>
+                    <p class="tagline">God of Harvest</p>
+                    <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                    <div class="tech-grid">
+                      <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                    </div>
+                  </article>
+              </div>
+            </div>
+            <div class="age-group" data-age="Heroic">
+              <h4>Heroic Age</h4>
+              <div class="age-grid" draggable="true">
+                <article class="card minor-god" data-major="thor" data-age="Heroic" style="background-image: url('placeholderminorgodcard.jpg')">
+                  <h5>Minor God 4</h5>
+                  <p class="tagline">God of Trade</p>
+                  <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                  <div class="tech-grid">
+                    <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                  </div>
+                </article>
+                <article class="card minor-god" data-major="thor zeus" data-age="Heroic" style="background-image: url('placeholderminorgodcard.jpg')">
+                  <h5>Minor God 5</h5>
+                  <p class="tagline">God of Wine</p>
+                  <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                  <div class="tech-grid">
+                    <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                  </div>
+                </article>
+                <article class="card minor-god ghosted" data-major="ra zeus" data-age="Heroic" style="background-image: url('placeholderminorgodcard.jpg')">
+                    <h5>Minor God 6</h5>
+                    <p class="tagline">God of Sea</p>
+                    <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                    <div class="tech-grid">
+                      <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                    </div>
+                  </article>
+              </div>
+            </div>
+            <div class="age-group" data-age="Mythic">
+              <h4>Mythic Age</h4>
+              <div class="age-grid" draggable="true">
+                <article class="card minor-god" data-major="thor ra" data-age="Mythic" style="background-image: url('placeholderminorgodcard.jpg')">
+                  <h5>Minor God 7</h5>
+                  <p class="tagline">God of Fire</p>
+                  <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                  <div class="tech-grid">
+                    <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                  </div>
+                </article>
+                <article class="card minor-god" data-major="thor" data-age="Mythic" style="background-image: url('placeholderminorgodcard.jpg')">
+                  <h5>Minor God 8</h5>
+                  <p class="tagline">God of Craft</p>
+                  <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                  <div class="tech-grid">
+                    <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                    <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                  </div>
+                </article>
+                <article class="card minor-god ghosted" data-major="zeus" data-age="Mythic" style="background-image: url('placeholderminorgodcard.jpg')">
+                    <h5>Minor God 9</h5>
+                    <p class="tagline">God of Sky</p>
+                    <img src="placeholdergodpower.jpg" alt="God Power Sprite" class="sprite god-power">
+                    <div class="tech-grid">
+                      <img src="placeholderunit.jpg" alt="Myth Unit Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Myth Unit Tech Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Tech 1 Sprite" class="sprite">
+                      <img src="placeholdertechnology.jpg" alt="Tech 2 Sprite" class="sprite">
+                    </div>
+                  </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="units-techs" aria-labelledby="units-techs-heading">
+        <h3 id="units-techs-heading" class="visually-hidden">Units and Technologies</h3>
+        <div class="grid">
+          <div class="tile unit"><img src="placeholderunit.jpg" alt="Unit Sprite" class="sprite">Unit 1</div>
+          <div class="tile unit"><img src="placeholderunit.jpg" alt="Unit Sprite" class="sprite">Unit 2</div>
+          <div class="tile unit"><img src="placeholderunit.jpg" alt="Unit Sprite" class="sprite">Unit 3</div>
+          <div class="tile unit"><img src="placeholderunit.jpg" alt="Unit Sprite" class="sprite">Unit 4</div>
+          <div class="tile unit"><img src="placeholderunit.jpg" alt="Unit Sprite" class="sprite">Unit 5</div>
+          <div class="tile unit"><img src="placeholderunit.jpg" alt="Unit Sprite" class="sprite">Unit 6</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 1</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 2</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 3</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 4</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 5</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 6</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 7</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 8</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 9</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 10</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 11</div>
+          <div class="tile tech"><img src="placeholdertechnology.jpg" alt="Tech Sprite" class="sprite">Tech 12</div>
+        </div>
+        <div class="preview" role="region" aria-label="Unit/Tech Preview">
+          <h4>Selected Unit/Tech</h4>
+          <p>Description of the unit or technology.</p>
+          <img src="placeholderunit.jpg" alt="Selected Unit/Tech Preview" class="preview-image">
+          <dl class="stats">
+            <dt><img src="placeholderstat.jpg" alt="Training Time Icon" class="sprite stat">Training Time</dt>
+            <dd>10 seconds</dd>
+            <dt><img src="placeholderstat.jpg" alt="Hack Damage Icon" class="sprite stat">Hack Damage</dt>
+            <dd>15</dd>
+          </dl>
+          <button class="edit-btn">Edit Details</button>
+        </div>
+      </section>
+
+      <section class="buildings" aria-labelledby="buildings-heading">
+        <h3 id="buildings-heading" class="visually-hidden">Buildings</h3>
+        <div class="grid">
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">House</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Economic Drop A</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Economic Drop B</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Economic Drop C</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Temple</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Dock</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Military A</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Military B</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Military C</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Farm</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Market</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Armory</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Town Center</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Wall</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Tower</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Castle</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">x</div>
+          <div class="tile building"><img src="placeholderbuilding.jpg" alt="Building Sprite" class="sprite">Wonder</div>
+        </div>
+        <div class="preview" role="region" aria-label="Building Preview">
+          <h4>Selected Building</h4>
+          <p>Description of the building.</p>
+          <img src="placeholderbuilding.jpg" alt="Selected Building Preview" class="preview-image">
+          <dl class="stats">
+            <dt><img src="placeholderstat.jpg" alt="Construction Time Icon" class="sprite stat">Construction Time</dt>
+            <dd>30 seconds</dd>
+            <dt><img src="placeholderstat.jpg" alt="Hack Armor Icon" class="sprite stat">Hack Armor</dt>
+            <dd>20</dd>
+          </dl>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <nav aria-label="Footer navigation">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#privacy">Privacy Policy</a></li>
+      </ul>
+    </nav>
+    <p>made by Asa, always free and open source <a href="https://github.com/asavschaeffer/aom-civ-builder">github</a></p>
+  </footer>
+</body>
+</html>
