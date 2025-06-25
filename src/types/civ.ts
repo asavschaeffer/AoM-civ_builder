@@ -1,114 +1,167 @@
 // src/types/civ.ts
 
-// Base entity interface for all objects
-interface Entity {
-    name: string;
-    type: 'unit' | 'building' | 'technology' | 'majorGod' | 'minorGod' | 'ability' | 'godPower';
-    image?: string; // Optional image URL
-    age_required: 'Archaic' | 'Classical' | 'Heroic' | 'Mythic';
-  }
-  
-  // Shared cost attributes (used by Unit and Building)
-  interface Cost {
+// === SHARED BASES === //
+
+export type Age = 'Archaic' | 'Classical' | 'Heroic' | 'Mythic';
+export type CivName = 'Greek' | 'Norse' | 'Egyptian' | 'Atlantean' | 'Chinese';
+
+export interface Entity {
+  name: string;
+  type:
+    | 'unit'
+    | 'building'
+    | 'technology'
+    | 'majorGod'
+    | 'minorGod'
+    | 'ability'
+    | 'godPower';
+  image?: string;
+  age_required: Age;
+  civ?: CivName;
+  prerequisite_god?: string; // Optional god requirement
+  prerequisite_building?: string; // Optional building requirement
+  line_of_sight: number;
+  build_time: number;
+}
+
+// === COMMON TRAITS === //
+
+export interface Cost {
+  food?: number;
+  wood?: number;
+  gold?: number;
+  favor?: number;
+}
+
+export interface GatherRate {
     food?: number;
     wood?: number;
     gold?: number;
     favor?: number;
-    stone?: number; // Added for buildings like towers
-  }
-  
-  // Shared defensive stats (used by Unit and defensible Building)
-  interface DefensiveStats {
-    hack_armor: number;
-    pierce_armor: number;
-    crush_armor: number;
-  }
-  
-  // Shared attack stats (used by Unit and defensible Building)
-  interface AttackStats {
-    hack_damage: number;
-    pierce_damage: number;
-    crush_damage: number;
-    divine_damage?: number; // Optional for myth units or special buildings
-  }
-  
-  // Unit: Has cost, defensive stats, attack stats, and unique population cost
-  interface Unit extends Entity {
-    type: 'unit';
-    unit_class: string[]; // e.g., ['is_infantry', 'is_archer']
-    population_cost: number; // Unique to units
-    hitpoints: number;
-    cost: Cost;
-    defensive_stats: DefensiveStats;
-    attack?: AttackStats & { // Optional attack with additional properties for ranged units
-      type?: 'melee' | 'ranged';
-      reload_time?: number;
-      range?: number;
+}
+
+export interface DefensiveStats {
+  hack_armor: number;
+  pierce_armor: number;
+  crush_armor: number;
+}
+
+export type UnitCategory = 'human' | 'myth' | 'hero';
+export type UnitTag =
+  | 'is_infantry'
+  | 'is_archer'
+  | 'is_siege'
+  | 'is_cavalry'
+  | 'is_flying'
+  | 'is_economic'
+  | 'is_ship';
+
+export interface DamageMultipliers {
+  vs_human?: number;
+  vs_hero?: number;
+  vs_myth?: number;
+  vs_ranged?: number;
+  vs_infantry?: number;
+  vs_siege?: number;
+}
+
+export interface AttackStats extends DamageMultipliers {
+  hack_damage: number;
+  pierce_damage: number;
+  crush_damage: number;
+  divine_damage?: number;
+  type?: 'melee' | 'ranged';
+  reload_time?: number;
+  range?: number;
+}
+
+// === ENTITIES === //
+
+export interface Unit extends Entity {
+  type: 'unit';
+  population_cost: number;
+  hitpoints: number;
+  speed: number;
+  cost: Cost;
+  unit_category: UnitCategory; // One of: human, hero, myth
+  unit_tags: UnitTag[]; // e.g. is_infantry, is_archer
+  defensive_stats: DefensiveStats;
+  gather_rate?: GatherRate;
+  attack?: AttackStats;
+  abilities?: string[]; // keys from abilities
+}
+
+export interface Building extends Entity {
+  type: 'building';
+  cost: Cost;
+  defensive_stats: DefensiveStats;
+  attack?: AttackStats;
+  functions: {
+    trains_units?: string[];
+    researches_techs?: string[];
+  };
+}
+
+export interface Technology extends Entity {
+  type: 'technology';
+  research_location: string; // Building name
+  prerequisites?: {
+    building?: string;
+    age?: Age;
+    god?: string;
+    tech?: string;
+  }[];
+  effects: Array<{
+    noun: {
+      unit_tags?: UnitTag[];
+      unit_name?: string;
+      building_name?: string;
+      tech_name?: string;
     };
-    abilities?: string[]; // Names of abilities from abilities record
-  }
-  
-  // Building: Has cost, defensive stats, and optional attack stats for defensible buildings
-  interface Building extends Entity {
-    type: 'building';
-    cost: Cost;
-    defensive_stats: DefensiveStats;
-    attack?: AttackStats; // Only for towers, castles, etc.
-    functions: {
-      trains_units?: string[]; // Unit names
-      researches_techs?: string[]; // Tech names
-    };
-  }
-  
-  // Technology: No cost or stats, but has effects
-  interface Technology extends Entity {
-    type: 'technology';
-    research_location: string; // Building name
-    effects: Array<{
-      target: { unit_tags: string[] }; // e.g., ['is_infantry']
-      property: string; // e.g., 'hack_armor'
-      operation: 'add' | 'multiply';
-      value: number;
-    }>;
-  }
-  
-  // MajorGod: Has god powers
-  interface MajorGod extends Entity {
-    type: 'majorGod';
-    tagline: string;
-    godPowers: string[]; // Names of god powers from godPowers record
-  }
-  
-  // MinorGod: Has god powers and myth unit/techs
-  interface MinorGod extends Entity {
-    type: 'minorGod';
-    tagline: string;
-    godPowers: string[]; // Names of god powers from godPowers record
-    myth_unit?: string; // Myth unit name
-    technologies?: string[]; // Tech names
-  }
-  
-  // Ability: For myth units and heroes
-  interface Ability extends Entity {
-    type: 'ability';
-    cooldown: number;
-    description?: string;
-  }
-  
-  // GodPower: For major and minor gods
-  interface GodPower extends Entity {
-    type: 'godPower';
-    description?: string;
-  }
-  
-  // Civilization interface
-  interface Civ {
-    name: string;
-    majorGods: Record<string, MajorGod>;
-    minorGods: Record<string, MinorGod>;
-    units: Record<string, Unit>;
-    buildings: Record<string, Building>;
-    technologies: Record<string, Technology>;
-    abilities: Record<string, Ability>;
-    godPowers: Record<string, GodPower>;
-  }
+    verb: 'add' | 'multiply';
+    adjective: string; // e.g. 'speed', 'line_of_sight', 'hack_armor'
+    value: number;
+  }>;
+}
+
+export interface MajorGod extends Entity {
+  type: 'majorGod';
+  tagline: string;
+  godPowers: string[];
+  passive_bonuses?: string[];
+}
+
+export interface MinorGod extends Entity {
+  type: 'minorGod';
+  tagline: string;
+  godPowers: string[];
+  myth_unit?: string;
+  technologies?: string[];
+}
+
+export interface Ability extends Entity {
+  type: 'ability';
+  cooldown: number;
+  description?: string;
+}
+
+export interface GodPower extends Entity {
+  type: 'godPower';
+  description?: string;
+  is_passive?: boolean;
+  cooldown?: number;
+  area_of_effect?: number;
+}
+
+// === CIVILIZATION === //
+
+export interface Civ {
+  name: CivName;
+  majorGods: Record<string, MajorGod>;
+  minorGods: Record<string, MinorGod>;
+  units: Record<string, Unit>;
+  buildings: Record<string, Building>;
+  technologies: Record<string, Technology>;
+  abilities: Record<string, Ability>;
+  godPowers: Record<string, GodPower>;
+}
