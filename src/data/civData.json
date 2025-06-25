@@ -42,7 +42,9 @@
         "unit_class": ["is_hero"],
         "cost": { "food": 120, "gold": 100 },
         "hitpoints": 220,
-        "attack": { "type": "melee", "damage": 19 }
+        "attack": { "type": "melee", "damage": 19 },
+        "ability": { "name": "Shield Bash", "cooldown": 20 }
+
       },
       {
         "name": "Centaur",
@@ -51,7 +53,7 @@
         "cost": { "food": 100, "favor": 20 },
         "hitpoints": 200,
         "attack": { "type": "ranged", "damage": 20, "reload_time": 2, "range": 18 },
-        "ability": { "name": "Swift Shot", "cooldown": 30 }
+        "ability": { "name": "Arrow Rain", "cooldown": 20 }
       }
     ]
   }
