@@ -1,15 +1,23 @@
 // src/main.ts
 import { html, render } from 'lit-html';
 import civData from './data/civData.json';
-import { Civ, MajorGod, MinorGod, Unit, Building, Technology, Ability, GodPower, Entity } from './types/civ';
+import { Civ, MajorGod, MinorGod, Unit, Building, Technology, Ability, GodPower } from './types/civ';
 
 const data = civData as Civ;
 
-// State management for active major god
+// State management
 let activeMajorGod = localStorage.getItem('activeMajorGod') || 'zeus';
+let activeBuilding: string | null = null;
+
 function setActiveMajorGod(god: string) {
   activeMajorGod = god;
   localStorage.setItem('activeMajorGod', god);
+  renderAll();
+}
+
+function setActiveBuilding(building: string | null) {
+  activeBuilding = building;
+  localStorage.setItem('activeBuilding', building || '');
   renderAll();
 }
 
@@ -38,7 +46,7 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => html`
     ${Object.entries(gods).map(
       ([key, god]) => html`
         <article
-          class="card major-god ${key === activeMajorGod ? '' : 'ghosted'}"
+          class="card major-god ${key === activeMajorGod ? 'active' : 'ghosted'}"
           data-god="${key}"
           style="background-image: url('${god.image || 'assets/placeholder.jpg'}')"
           tabindex="0"
@@ -74,32 +82,52 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => html`
 
 const minorGodsTemplate = (gods: Record<string, MinorGod>) => html`
   <div class="grid">
-    ${Object.values(gods).map(
-      god => html`
-        <div class="tile minor-god" @click=${() => showPreview(god)}>
-          <img src="${god.image || 'assets/placeholder.jpg'}" alt="${god.name} Sprite" class="sprite" width="64" height="64" />
-          <h5>${god.name}</h5>
-          <p>${god.tagline}</p>
-          ${findGodPowers(god, data.godPowers).map(power => html`<p>God Power: ${power.name}</p>`)}
-        </div>
-      `
-    )}
+    ${Object.values(gods)
+      .filter(god => !god.prerequisite_god || god.prerequisite_god.toLowerCase() === activeMajorGod)
+      .map(
+        god => html`
+          <div class="tile minor-god" @click=${() => showPreview(god)} tabindex="0">
+            <img src="${god.image || 'assets/placeholder.jpg'}" alt="${god.name} Sprite" class="sprite" width="64" height="64" />
+            <h5>${god.name}</h5>
+            <p>${god.tagline}</p>
+            ${findGodPowers(god, data.godPowers).map(power => html`<p>God Power: ${power.name}</p>`)}
+          </div>
+        `
+      )}
   </div>
 `;
 
 const unitsTemplate = (units: Record<string, Unit>) => html`
   <div class="grid">
-    ${Object.values(units).map(
-      unit => html`
-        <div class="tile unit" data-unit="${unit.name}" @click=${() => showPreview(unit)}>
-          <img src="${unit.image || 'assets/placeholderunit.jpg'}" alt="${unit.name} Sprite" class="sprite" width="64" height="64" />
-          <h5>${unit.name}</h5>
-          <p>Category: ${unit.unit_category}</p>
-          <p>Trained at: ${findRelatedBuildings(unit.name, data.buildings, 'trains_units').join(', ') || 'None'}</p>
-          ${unit.abilities?.length ? html`<p>Abilities: ${unit.abilities.join(', ')}</p>` : ''}
-        </div>
-      `
-    )}
+    ${Object.values(units)
+      .filter(unit => !activeBuilding || findRelatedBuildings(unit.name, data.buildings, 'trains_units').includes(activeBuilding))
+      .map(
+        unit => html`
+          <div class="tile unit" data-unit="${unit.name}" @click=${() => showPreview(unit)} tabindex="0">
+            <img src="${unit.image || 'assets/placeholderunit.jpg'}" alt="${unit.name} Sprite" class="sprite" width="64" height="64" />
+            <h5>${unit.name}</h5>
+            <p>Category: ${unit.unit_category}</p>
+            <p>Trained at: ${findRelatedBuildings(unit.name, data.buildings, 'trains_units').join(', ') || 'None'}</p>
+            ${unit.abilities?.length ? html`<p>Abilities: ${unit.abilities.join(', ')}</p>` : ''}
+          </div>
+        `
+      )}
+  </div>
+`;
+
+const technologiesTemplate = (technologies: Record<string, Technology>) => html`
+  <div class="grid">
+    ${Object.values(technologies)
+      .filter(tech => !activeBuilding || findRelatedBuildings(tech.name, data.buildings, 'researches_techs').includes(activeBuilding))
+      .map(
+        tech => html`
+          <div class="tile technology" @click=${() => showPreview(tech)} tabindex="0">
+            <img src="${tech.image || 'assets/placeholder.jpg'}" alt="${tech.name} Sprite" class="sprite" width="64" height="64" />
+            <h5>${tech.name}</h5>
+            <p>Research at: ${findRelatedBuildings(tech.name, data.buildings, 'researches_techs').join(', ') || tech.research_location}</p>
+          </div>
+        `
+      )}
   </div>
 `;
 
@@ -107,7 +135,14 @@ const buildingsTemplate = (buildings: Record<string, Building>) => html`
   <div class="grid">
     ${Object.values(buildings).map(
       building => html`
-        <div class="tile building" @click=${() => showPreview(building)}>
+        <div
+          class="tile building ${activeBuilding === building.name ? 'active' : ''}"
+          @click=${() => {
+            setActiveBuilding(building.name);
+            showPreview(building);
+          }}
+          tabindex="0"
+        >
           <img src="${building.image || 'assets/placeholder.jpg'}" alt="${building.name} Sprite" class="sprite" width="64" height="64" />
           <h5>${building.name}</h5>
           ${building.functions.trains_units?.length
@@ -122,25 +157,11 @@ const buildingsTemplate = (buildings: Record<string, Building>) => html`
   </div>
 `;
 
-const technologiesTemplate = (technologies: Record<string, Technology>) => html`
-  <div class="grid">
-    ${Object.values(technologies).map(
-      tech => html`
-        <div class="tile technology" @click=${() => showPreview(tech)}>
-          <img src="${tech.image || 'assets/placeholder.jpg'}" alt="${tech.name} Sprite" class="sprite" width="64" height="64" />
-          <h5>${tech.name}</h5>
-          <p>Research at: ${findRelatedBuildings(tech.name, data.buildings, 'researches_techs').join(', ') || tech.research_location}</p>
-        </div>
-      `
-    )}
-  </div>
-`;
-
 const abilitiesTemplate = (abilities: Record<string, Ability>) => html`
   <div class="grid">
     ${Object.values(abilities).map(
       ability => html`
-        <div class="tile ability" @click=${() => showPreview(ability)}>
+        <div class="tile ability" @click=${() => showPreview(ability)} tabindex="0">
           <img src="${ability.image || 'assets/placeholder.jpg'}" alt="${ability.name} Sprite" class="sprite" width="64" height="64" />
           <h5>${ability.name}</h5>
           <p>Cooldown: ${ability.cooldown}s</p>
@@ -154,7 +175,7 @@ const godPowersTemplate = (godPowers: Record<string, GodPower>) => html`
   <div class="grid">
     ${Object.values(godPowers).map(
       power => html`
-        <div class="tile god-power" @click=${() => showPreview(power)}>
+        <div class="tile god-power" @click=${() => showPreview(power)} tabindex="0">
           <img src="${power.image || 'assets/placeholder.jpg'}" alt="${power.name} Sprite" class="sprite" width="64" height="64" />
           <h5>${power.name}</h5>
           ${power.description ? html`<p>${power.description}</p>` : ''}
@@ -167,7 +188,7 @@ const godPowersTemplate = (godPowers: Record<string, GodPower>) => html`
 // Preview template
 function showPreview(entity: Entity) {
   const template = html`
-    <div class="preview" role="region" aria-label="${entity.type} Preview">
+    <div class="preview-content" role="region" aria-label="${entity.type} Preview">
       <h4>${entity.name}</h4>
       <img src="${entity.image || 'assets/placeholder.jpg'}" alt="${entity.name} Preview" class="preview-image" width="200" height="200" />
       <dl class="stats">
@@ -263,7 +284,7 @@ function showPreview(entity: Entity) {
           ${Object.entries((entity as Building).functions).filter(([_, v]) => v?.length).map(
             ([k, v]) => html`
               <dt>${k.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</dt>
-              <dd>${(v as string[]).join(', ')}</dd>
+              <dd>${(v as any).join(', ')}</dd>
             `
           )}
         ` : ''}
@@ -276,7 +297,7 @@ function showPreview(entity: Entity) {
         ${'effects' in entity ? html`
           <dt>Effects</dt>
           <dd>${(entity as Technology).effects.map(e =>
-            `${e.verb} ${e.adjective} by ${e.value} for ${e.noun.unit_tags?.join(', ') || e.noun.unit_name || e.noun.building_name || e.noun.tech_name}`
+            `${e.verb} ${e.adjective} by ${e.value} for ${e.noun.unit_tags?.join(', ') || e.noun.unit_name || e.noun.building_name || e.noun.tech_name || ''}`
           ).join('; ')}</dd>
         ` : ''}
         ${'cooldown' in entity && (entity as Ability | GodPower).cooldown ? html`
@@ -295,7 +316,7 @@ function showPreview(entity: Entity) {
       <button class="edit-btn" @click=${() => openEditModal(entity)}>Edit Details</button>
     </div>
   `;
-  render(template, document.querySelector<HTMLElement>('.preview')!);
+  render(template, document.querySelector('.preview-content .preview')!);
 }
 
 // Stub for edit modal
@@ -305,13 +326,13 @@ function openEditModal(_entity: Entity) {
 
 // Render all sections
 function renderAll() {
-  render(majorGodsTemplate(data.majorGods), document.querySelector<HTMLElement>('.major-gods .carousel')!);
-  render(minorGodsTemplate(data.minorGods), document.querySelector<HTMLElement>('.minor-gods .grid')!);
-  render(unitsTemplate(data.units), document.querySelector<HTMLElement>('.units-techs .grid')!);
-  render(buildingsTemplate(data.buildings), document.querySelector<HTMLElement>('.buildings .grid')!);
-  render(technologiesTemplate(data.technologies), document.querySelector<HTMLElement>('.technologies .grid')!);
-  render(abilitiesTemplate(data.abilities), document.querySelector<HTMLElement>('.abilities .grid')!);
-  render(godPowersTemplate(data.godPowers), document.querySelector<HTMLElement>('.god-powers .grid')!);
+  render(majorGodsTemplate(data.majorGods), document.querySelector('.major-gods .carousel')!);
+  render(minorGodsTemplate(data.minorGods), document.querySelector('.minor-gods .grid')!);
+  render(unitsTemplate(data.units), document.querySelector('.units-grid')!);
+  render(technologiesTemplate(data.technologies), document.querySelector('.technologies-grid')!);
+  render(buildingsTemplate(data.buildings), document.querySelector('.buildings .grid')!);
+  render(abilitiesTemplate(data.abilities), document.querySelector('.abilities .grid')!);
+  render(godPowersTemplate(data.godPowers), document.querySelector('.god-powers .grid')!);
 }
 
 // Initial render
