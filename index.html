@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AoM Civ Customizer Builder</title>
+  <title>Age of Mythology</title>
   <link rel="stylesheet" href="/src/styles/civbuilder.css">
   <script type="module" src="/src/main.ts"></script>
 </head>
 <body>
   <header>
-    <h1>AoM Civ Customizer Builder</h1>
+    <h1>Civ Customizer Builder</h1>
     <nav aria-label="Main navigation">
       <ul>
         <li><a href="#home">Home</a></li>
-        <li><a href="#standard-civs">Standard Civs</a></li>
-        <li><a href="#custom-civs">Popular Custom Civs</a></li>
+        <li><a href="#standard-civils">Standard Civs</a></li>
+        <li><a href="#custom-civs">Custom Civs</a></li>
         <li><a href="#tutorial">Tutorial</a></li>
         <li><a href="#forum">Forum</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -24,7 +24,7 @@
 
   <main>
     <section aria-labelledby="civ-name">
-      <h2 id="civ-name" contenteditable="true">Greek</h2>
+      <h2 id="civ-name" contenteditable="true">Civ Name</h2>
 
       <section class="major-gods" aria-labelledby="major-gods-heading">
         <h3 id="major-gods-heading">Major Gods</h3>
@@ -37,18 +37,26 @@
       </section>
 
       <section class="units-techs" aria-labelledby="units-heading">
-        <h3 id="units-heading">Units</h3>
-        <div class="grid"></div>
+        <h3 id="units-heading">Units & Technologies</h3>
+        <div class="content-with-preview">
+          <div class="units-grid"></div>
+          <div class="technologies-grid"></div>
+          <div class="preview-content">
+            <h4 id="preview-heading" class="visually-hidden">Units/Techs Preview</h4>
+            <div class="preview"></div>
+          </div>
+        </div>
       </section>
 
       <section class="buildings" aria-labelledby="buildings-heading">
         <h3 id="buildings-heading">Buildings</h3>
-        <div class="grid"></div>
-      </section>
-
-      <section class="technologies" aria-labelledby="technologies-heading">
-        <h3 id="technologies-heading">Technologies</h3>
-        <div class="grid"></div>
+        <div class="content-with-preview">
+          <div class="grid"></div>
+          <div class="preview-content">
+            <h3 id="building-preview-heading" class="visually-hidden">Building Preview</h3>
+            <div class="preview"></div>
+          </div>
+        </div>
       </section>
 
       <section class="abilities" aria-labelledby="abilities-heading">
@@ -60,11 +68,6 @@
         <h3 id="god-powers-heading">God Powers</h3>
         <div class="grid"></div>
       </section>
-
-      <section class="preview" aria-labelledby="preview-heading">
-        <h3 id="preview-heading" class="visually-hidden">Entity Preview</h3>
-        <div class="preview-content"></div>
-      </section>
     </section>
   </main>
 
@@ -73,10 +76,10 @@
       <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="#privacy">Privacy Policy</a></li>
+        <li><a href="#privacy">Privacy</a></li>
       </ul>
     </nav>
-    <p>Made by Asa, always free and open source <a href="https://github.com/asavschaeffer/aom-civ-builder">GitHub</a></p>
+    <p>Made by Asa, always free and open source <a href="https://github.com/asaxschaeffer/aom-civ-builder">GitHub</a></p>
   </footer>
 </body>
 </html>
