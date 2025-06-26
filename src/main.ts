@@ -1,7 +1,7 @@
 // src/main.ts
 import { html, render } from 'lit-html';
 import civData from './data/civData.json';
-import { Civ, MajorGod, MinorGod, Unit, Building, Technology, Ability, GodPower } from './types/civ';
+import { Civ,Entity, MajorGod, MinorGod, Unit, Building, Technology, Ability, GodPower } from './types/civ';
 
 const data = civData as Civ;
 
@@ -316,7 +316,13 @@ function showPreview(entity: Entity) {
       <button class="edit-btn" @click=${() => openEditModal(entity)}>Edit Details</button>
     </div>
   `;
-  render(template, document.querySelector('.preview-content .preview')!);
+  const previewContainer = document.querySelector('.units-techs .preview-content .preview') ||
+                          document.querySelector('.buildings .preview-content .preview');
+  if (previewContainer instanceof HTMLElement) {
+    render(template, previewContainer);
+  } else {
+    console.error('Preview container not found or not an HTMLElement');
+  }
 }
 
 // Stub for edit modal
@@ -326,13 +332,54 @@ function openEditModal(_entity: Entity) {
 
 // Render all sections
 function renderAll() {
-  render(majorGodsTemplate(data.majorGods), document.querySelector('.major-gods .carousel')!);
-  render(minorGodsTemplate(data.minorGods), document.querySelector('.minor-gods .grid')!);
-  render(unitsTemplate(data.units), document.querySelector('.units-grid')!);
-  render(technologiesTemplate(data.technologies), document.querySelector('.technologies-grid')!);
-  render(buildingsTemplate(data.buildings), document.querySelector('.buildings .grid')!);
-  render(abilitiesTemplate(data.abilities), document.querySelector('.abilities .grid')!);
-  render(godPowersTemplate(data.godPowers), document.querySelector('.god-powers .grid')!);
+  const majorGodsContainer = document.querySelector('.major-gods .carousel');
+  if (majorGodsContainer instanceof HTMLElement) {
+    render(majorGodsTemplate(data.majorGods), majorGodsContainer);
+  } else {
+    console.error('Major gods container not found or not an HTMLElement');
+  }
+
+  const minorGodsContainer = document.querySelector('.minor-gods .grid');
+  if (minorGodsContainer instanceof HTMLElement) {
+    render(minorGodsTemplate(data.minorGods), minorGodsContainer);
+  } else {
+    console.error('Minor gods container not found or not an HTMLElement');
+  }
+
+  const unitsContainer = document.querySelector('.units-techs .units-grid');
+  if (unitsContainer instanceof HTMLElement) {
+    render(unitsTemplate(data.units), unitsContainer);
+  } else {
+    console.error('Units container not found or not an HTMLElement');
+  }
+
+  const technologiesContainer = document.querySelector('.units-techs .technologies-grid');
+  if (technologiesContainer instanceof HTMLElement) {
+    render(technologiesTemplate(data.technologies), technologiesContainer);
+  } else {
+    console.error('Technologies container not found or not an HTMLElement');
+  }
+
+  const buildingsContainer = document.querySelector('.buildings .grid');
+  if (buildingsContainer instanceof HTMLElement) {
+    render(buildingsTemplate(data.buildings), buildingsContainer);
+  } else {
+    console.error('Buildings container not found or not an HTMLElement');
+  }
+
+  const abilitiesContainer = document.querySelector('.abilities .grid');
+  if (abilitiesContainer instanceof HTMLElement) {
+    render(abilitiesTemplate(data.abilities), abilitiesContainer);
+  } else {
+    console.error('Abilities container not found or not an HTMLElement');
+  }
+
+  const godPowersContainer = document.querySelector('.god-powers .grid');
+  if (godPowersContainer instanceof HTMLElement) {
+    render(godPowersTemplate(data.godPowers), godPowersContainer);
+  } else {
+    console.error('God powers container not found or not an HTMLElement');
+  }
 }
 
 // Initial render
