@@ -3,7 +3,7 @@ import { html, render } from 'lit-html';
 import civData from './data/civData.json';
 import { Civ,Entity, MajorGod, MinorGod, Unit, Building, Technology, Ability, GodPower } from './types/civ';
 
-const data = civData as Civ;
+const data = civData as unknown as Civ;
 
 // State management
 let activeEntity: string | null = null;
@@ -58,7 +58,7 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => html`
     ${Object.entries(gods).map(
       ([key, god]) => html`
         <article
-          class="card major-god ${key === activeMajorGod ? 'active' : 'ghosted'}"
+          class="tile major-god ${key === activeMajorGod ? 'active' : 'ghosted'}"
           data-god="${key}"
           style="background-image: url('${god.image || 'assets/placeholder.jpg'}')"
           tabindex="0"

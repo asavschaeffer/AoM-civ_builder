@@ -1,1728 +1,1926 @@
 {
-    "name": "Greek",
-    "majorGods": {
-      "poseidon": {
-        "name": "Poseidon",
-        "type": "majorGod",
-        "image": "assets/poseidon.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 10,
-        "build_time": 0,
-        "tagline": "God of the Sea",
-        "godPowers": ["lure"],
-        "passive_bonuses": ["cavalry_speed_boost"],
-        "minorGods": ["hermes"]
+  "name": "Greek",
+  "majorGods": {
+    "poseidon": {
+      "name": "Poseidon",
+      "type": "majorGod",
+      "image": "assets/poseidon.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 10,
+      "build_time": 0,
+      "tagline": "God of the Sea",
+      "godPowers": ["lure"],
+      "passive_bonuses": ["cavalry_speed_boost"],
+      "minorGods": ["hermes"]
+    },
+    "hades": {
+      "name": "Hades",
+      "type": "majorGod",
+      "image": "assets/hades.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 10,
+      "build_time": 0,
+      "tagline": "God of the Underworld",
+      "godPowers": ["sentinels"],
+      "passive_bonuses": ["archer_damage_boost"],
+      "minorGods": ["ares"]
+    },
+    "zeus": {
+      "name": "Zeus",
+      "type": "majorGod",
+      "image": "assets/zeus.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 10,
+      "build_time": 0,
+      "tagline": "God of the Sky",
+      "godPowers": ["bolt"],
+      "passive_bonuses": ["infantry_hp_boost"],
+      "minorGods": ["hermes", "apollo", "athena", "hera"]
+    }
+  },
+  "minorGods": {
+    "hermes": {
+      "name": "Hermes",
+      "type": "minorGod",
+      "image": "assets/hermes.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "zeus",
+      "line_of_sight": 8,
+      "build_time": 0,
+      "tagline": "Messenger of the Gods",
+      "godPowers": ["ceasefire"],
+      "myth_unit": "centaur",
+      "technologies": ["winged_messenger"]
+    },
+    "apollo": {
+      "name": "Apollo",
+      "type": "minorGod",
+      "image": "assets/apollo.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "poseidon",
+      "line_of_sight": 8,
+      "build_time": 0,
+      "tagline": "God of Prophecy",
+      "godPowers": ["oracle"],
+      "myth_unit": "manticore",
+      "technologies": ["sun_ray"]
+    },
+    "artemis": {
+      "name": "Artemis",
+      "type": "minorGod",
+      "image": "assets/artemis.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "hades",
+      "line_of_sight": 8,
+      "build_time": 0,
+      "tagline": "Goddess of the Hunt",
+      "godPowers": ["earthquake"],
+      "myth_unit": "chimera",
+      "technologies": ["flaming_arrows"]
+    },
+    "ares": {
+      "name": "Ares",
+      "type": "minorGod",
+      "image": "assets/ares.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "hades",
+      "line_of_sight": 8,
+      "build_time": 0,
+      "tagline": "God of War",
+      "godPowers": ["pestilence"],
+      "myth_unit": "cyclops",
+      "technologies": ["phobos_spear"]
+    },
+    "athena": {
+      "name": "Athena",
+      "type": "minorGod",
+      "image": "assets/athena.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "zeus",
+      "line_of_sight": 8,
+      "build_time": 0,
+      "tagline": "Goddess of Wisdom",
+      "godPowers": ["restoration"],
+      "myth_unit": "minotaur",
+      "technologies": ["aegis_shield"]
+    },
+    "hera": {
+      "name": "Hera",
+      "type": "minorGod",
+      "image": "assets/hera.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "zeus",
+      "line_of_sight": 8,
+      "build_time": 0,
+      "tagline": "Queen of the Gods",
+      "godPowers": ["lightning_storm"],
+      "myth_unit": "medusa",
+      "technologies": ["monstrous_rage"]
+    }
+  },
+  "units": {
+    "villager": {
+      "name": "Villager",
+      "type": "unit",
+      "image": "assets/villager.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "prerequisite_building": "town_center",
+      "line_of_sight": 12,
+      "build_time": 15,
+      "unit_category": "human",
+      "unit_tags": ["is_economic"],
+      "population_cost": 1,
+      "hitpoints": 65,
+      "speed": 3.6,
+      "cost": { "food": 50 },
+      "defensive_stats": {
+        "hack_armor": 5,
+        "pierce_armor": 5,
+        "crush_armor": 5
       },
-      "hades": {
-        "name": "Hades",
-        "type": "majorGod",
-        "image": "assets/hades.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 10,
-        "build_time": 0,
-        "tagline": "God of the Underworld",
-        "godPowers": ["sentinels"],
-        "passive_bonuses": ["archer_damage_boost"],
-        "minorGods": ["ares"]
+      "attack": {
+        "hack_damage": 5,
+        "pierce_damage": 5,
+        "crush_damage": 5,
+        "attack_speed": 1
       },
-      "zeus": {
-        "name": "Zeus",
-        "type": "majorGod",
-        "image": "assets/zeus.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 10,
-        "build_time": 0,
-        "tagline": "God of the Sky",
-        "godPowers": ["bolt"],
-        "passive_bonuses": ["infantry_hp_boost"],
-        "minorGods": ["hermes", "apollo", "athena", "hera"]
+      "gather_rate": { "food": 0.8, "wood": 0.8, "gold": 0.8, "favor": 0 }
+    },
+    "fishing_ship": {
+      "name": "Fishing Ship",
+      "type": "unit",
+      "image": "assets/fishing_ship.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "prerequisite_building": "dock",
+      "line_of_sight": 16,
+      "build_time": 8,
+      "unit_category": "human",
+      "unit_tags": ["is_ship", "is_economic"],
+      "population_cost": 1,
+      "hitpoints": 80,
+      "speed": 5.0,
+      "cost": { "wood": 50 },
+      "defensive_stats": {
+        "hack_armor": 10,
+        "pierce_armor": 25,
+        "crush_armor": 5
+      },
+      "gather_rate": { "food": 1.6, "wood": 0, "gold": 0, "favor": 0 }
+    },
+    "caravan": {
+      "name": "Caravan",
+      "type": "unit",
+      "image": "assets/caravan.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_building": "market",
+      "line_of_sight": 12,
+      "build_time": 15,
+      "unit_category": "human",
+      "unit_tags": ["is_economic"],
+      "population_cost": 1,
+      "hitpoints": 90,
+      "speed": 5.0,
+      "cost": { "wood": 50, "gold": 50 },
+      "defensive_stats": {
+        "hack_armor": 20,
+        "pierce_armor": 20,
+        "crush_armor": 10
+      },
+      "gather_rate": { "food": 0, "wood": 0, "gold": 1, "favor": 0 }
+    },
+    "hoplite": {
+      "name": "Hoplite",
+      "type": "unit",
+      "image": "assets/hoplite.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "prerequisite_building": "barracks",
+      "line_of_sight": 12,
+      "build_time": 10,
+      "unit_category": "human",
+      "unit_tags": ["is_infantry"],
+      "population_cost": 2,
+      "hitpoints": 120,
+      "speed": 4.0,
+      "cost": { "food": 60, "gold": 40 },
+      "defensive_stats": {
+        "hack_armor": 30,
+        "pierce_armor": 20,
+        "crush_armor": 10
+      },
+      "attack": {
+        "hack_damage": 8,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "attack_speed": 1.5,
+        "vs_building": 2.5
       }
     },
-    "minorGods": {
-      "hermes": {
-        "name": "Hermes",
-        "type": "minorGod",
-        "image": "assets/hermes.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "zeus",
-        "line_of_sight": 8,
-        "build_time": 0,
-        "tagline": "Messenger of the Gods",
-        "godPowers": ["ceasefire"],
-        "myth_unit": "centaur",
-        "technologies": ["winged_messenger"]
+    "myrmidon": {
+      "name": "Myrmidon",
+      "type": "unit",
+      "image": "assets/myrmidon.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "zeus",
+      "prerequisite_building": "barracks",
+      "line_of_sight": 12,
+      "build_time": 12,
+      "unit_category": "human",
+      "unit_tags": ["is_infantry"],
+      "population_cost": 3,
+      "hitpoints": 130,
+      "speed": 4.3,
+      "cost": { "food": 70, "gold": 50 },
+      "defensive_stats": {
+        "hack_armor": 35,
+        "pierce_armor": 20,
+        "crush_armor": 15
       },
-      "apollo": {
-        "name": "Apollo",
-        "type": "minorGod",
-        "image": "assets/apollo.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "poseidon",
-        "line_of_sight": 8,
-        "build_time": 0,
-        "tagline": "God of Prophecy",
-        "godPowers": ["oracle"],
-        "myth_unit": "manticore",
-        "technologies": ["sun_ray"]
-      },
-      "artemis": {
-        "name": "Artemis",
-        "type": "minorGod",
-        "image": "assets/artemis.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "hades",
-        "line_of_sight": 8,
-        "build_time": 0,
-        "tagline": "Goddess of the Hunt",
-        "godPowers": ["earthquake"],
-        "myth_unit": "chimera",
-        "technologies": ["flaming_arrows"]
-      },
-      "ares": {
-        "name": "Ares",
-        "type": "minorGod",
-        "image": "assets/ares.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "hades",
-        "line_of_sight": 8,
-        "build_time": 0,
-        "tagline": "God of War",
-        "godPowers": ["pestilence"],
-        "myth_unit": "cyclops",
-        "technologies": ["phobos_spear"]
-      },
-      "athena": {
-        "name": "Athena",
-        "type": "minorGod",
-        "image": "assets/athena.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "zeus",
-        "line_of_sight": 8,
-        "build_time": 0,
-        "tagline": "Goddess of Wisdom",
-        "godPowers": ["restoration"],
-        "myth_unit": "minotaur",
-        "technologies": ["aegis_shield"]
-      },
-      "hera": {
-        "name": "Hera",
-        "type": "minorGod",
-        "image": "assets/hera.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "zeus",
-        "line_of_sight": 8,
-        "build_time": 0,
-        "tagline": "Queen of the Gods",
-        "godPowers": ["lightning_storm"],
-        "myth_unit": "medusa",
-        "technologies": ["monstrous_rage"]
+      "attack": {
+        "hack_damage": 12,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "attack_speed": 1.0,
+        "vs_human": 2.25
       }
     },
-    "units": {
-        "villager": {
-        "name": "Villager",
-        "type": "unit",
-        "image": "assets/villager.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "prerequisite_building": "town_center",
-        "line_of_sight": 12,
-        "build_time": 15,
-        "unit_category": "human",
-        "unit_tags": ["is_economic"],
-        "population_cost": 1,
-        "hitpoints": 65,
-        "speed": 3.6,
-        "cost": { "food": 50 },
-        "defensive_stats": { "hack_armor": 5, "pierce_armor": 5, "crush_armor": 5 },
-        "gather_rate": { "food": 0.8, "wood": 0.8, "gold": 0.8, "favor": 0 }
-        },
-        "fishing_ship": {
-        "name": "Fishing Ship",
-        "type": "unit",
-        "image": "assets/fishing_ship.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "prerequisite_building": "dock",
-        "line_of_sight": 16,
-        "build_time": 8,
-        "unit_category": "human",
-        "unit_tags": ["is_ship", "is_economic"],
-        "population_cost": 1,
-        "hitpoints": 80,
-        "speed": 5.0,
-        "cost": { "wood": 50 },
-        "defensive_stats": { "hack_armor": 10, "pierce_armor": 25, "crush_armor": 5 },
-        "gather_rate": { "food": 1.6, "wood": 0, "gold": 0, "favor": 0 }
-        },
-        "caravan": {
-            "name": "Caravan",
-            "type": "unit",
-            "image": "assets/caravan.jpg",
-            "age_required": "Classical",
-            "civ": "Greek",
-            "prerequisite_building": "market",
-            "line_of_sight": 12,
-            "build_time": 15,
-            "unit_category": "human",
-            "unit_tags": ["is_economic"],
-            "population_cost": 1,
-            "hitpoints": 90,
-            "speed": 5.0,
-            "cost": { "wood": 50, "gold": 50 },
-            "defensive_stats": { "hack_armor": 20, "pierce_armor": 20, "crush_armor": 10 },
-            "gather_rate": { "food": 0, "wood": 0, "gold": 1, "favor": 0 }
-        },
-        "hoplite": {
-        "name": "Hoplite",
-        "type": "unit",
-        "image": "assets/hoplite.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "prerequisite_building": "barracks",
-        "line_of_sight": 12,
-        "build_time": 10,
-        "unit_category": "human",
-        "unit_tags": ["is_infantry"],
-        "population_cost": 2,
-        "hitpoints": 120,
-        "speed": 4.0,
-        "cost": { "food": 60, "gold": 40 },
-        "defensive_stats": { "hack_armor": 30, "pierce_armor": 20, "crush_armor": 10 },
-        "attack": {
-            "hack_damage": 8,
-            "pierce_damage": 0,
-            "crush_damage": 0,
-            "type": "melee",
-            "reload_time": 1.5,
-            "vs_building": 2.5
-        }
-        },
-        "myrmidon": {
-            "name": "Myrmidon",
-            "type": "unit",
-            "image": "assets/myrmidon.jpg",
-            "age_required": "Heroic",
-            "civ": "Greek",
-            "prerequisite_god": "zeus",
-            "prerequisite_building": "barracks",
-            "line_of_sight": 12,
-            "build_time": 12,
-            "unit_category": "human",
-            "unit_tags": ["is_infantry"],
-            "population_cost": 3,
-            "hitpoints": 130,
-            "speed": 4.3,
-            "cost": { "food": 70, "gold": 50 },
-            "defensive_stats": { "hack_armor": 35, "pierce_armor": 20, "crush_armor": 15 },
-            "attack": {
-                "hack_damage": 12,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "reload_time": 1.0,
-                "vs_human": 2.25
-            }
-        },
-        "hypaspist": {
-            "name": "Hypaspist",
-            "type": "unit",
-            "image": "assets/hypaspist.jpg",
-            "age_required": "Heroic",
-            "civ": "Greek",
-            "prerequisite_god": "hades",
-            "prerequisite_building": "barracks",
-            "line_of_sight": 12,
-            "build_time": 11,
-            "unit_category": "human",
-            "unit_tags": ["is_infantry"],
-            "population_cost": 2,
-            "hitpoints": 110,
-            "speed": 4.8,
-            "cost": { "food": 50, "gold": 40 },
-            "defensive_stats": { "hack_armor": 20, "pierce_armor": 30, "crush_armor": 10 },
-            "attack": {
-                "hack_damage": 7,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "reload_time": 1.5,
-                "vs_hero": 4.0
-            }
-        },
-        "toxotes": {
-        "name": "Toxotes",
-        "type": "unit",
-        "image": "assets/toxotes.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_building": "archery_range",
-        "line_of_sight": 16,
-        "build_time": 12,
-        "unit_category": "human",
-        "unit_tags": ["is_archer"],
-        "population_cost": 2,
-        "hitpoints": 80,
-        "speed": 3.6,
-        "cost": { "food": 60, "gold": 40 },
-        "defensive_stats": { "hack_armor": 10, "pierce_armor": 15, "crush_armor": 5 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 8,
-            "crush_damage": 0,
-            "type": "ranged",
-            "reload_time": 2.0,
-            "range": 16,
-            "vs_infantry": 1.2
-        }
-        },
-        "peltast": {
-        "name": "Peltast",
-        "type": "unit",
-        "image": "assets/peltast.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_building": "archery_range",
-        "line_of_sight": 17,
-        "build_time": 13,
-        "unit_category": "human",
-        "unit_tags": ["is_archer"],
-        "population_cost": 2,
-        "hitpoints": 90,
-        "speed": 3.8,
-        "cost": { "wood": 50, "gold": 30 },
-        "defensive_stats": { "hack_armor": 15, "pierce_armor": 20, "crush_armor": 10 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 7,
-            "crush_damage": 0,
-            "type": "ranged",
-            "reload_time": 2.0,
-            "range": 17,
-            "vs_archer": 3.0
-        }
-        },
-        "gastraphetes": {
-            "name": "Gastraphetes",
-            "type": "unit",
-            "image": "assets/gastraphetes.jpg",
-            "age_required": "Heroic",
-            "civ": "Greek",
-            "prerequisite_god": "hades",
-            "prerequisite_building": "archery_range",
-            "line_of_sight": 18,
-            "build_time": 15,
-            "unit_category": "human",
-            "unit_tags": ["is_archer"],
-            "population_cost": 3,
-            "hitpoints": 90,
-            "speed": 3.8,
-            "cost": { "wood": 80, "gold": 60 },
-            "defensive_stats": { "hack_armor": 10, "pierce_armor": 20, "crush_armor": 10 },
-            "attack": {
-                "hack_damage": 0,
-                "pierce_damage": 12,
-                "crush_damage": 0,
-                "type": "ranged",
-                "reload_time": 2.0,
-                "range": 18,
-                "vs_building": 2.0
-            }
-        },
-        "hippikon": {
-        "name": "Hippikon",
-        "type": "unit",
-        "image": "assets/hippikon.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_building": "stable",
-        "line_of_sight": 14,
-        "build_time": 14,
-        "unit_category": "human",
-        "unit_tags": ["is_cavalry"],
-        "population_cost": 3,
-        "hitpoints": 150,
-        "speed": 5.5,
-        "cost": { "food": 40, "gold": 80 },
-        "defensive_stats": { "hack_armor": 25, "pierce_armor": 20, "crush_armor": 10 },
-        "attack": {
-            "hack_damage": 10,
-            "pierce_damage": 0,
-            "crush_damage": 0,
-            "type": "melee",
-            "reload_time": 1.5,
-            "vs_archer": 3.0
-        }
-        },
-        "prodromos": {
-        "name": "Prodromos",
-        "type": "unit",
-        "image": "assets/prodromos.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_building": "stable",
-        "line_of_sight": 15,
-        "build_time": 16,
-        "unit_category": "human",
-        "unit_tags": ["is_cavalry"],
-        "population_cost": 3,
-        "hitpoints": 130,
-        "speed": 5.8,
-        "cost": { "food": 60, "gold": 60 },
-        "defensive_stats": { "hack_armor": 15, "pierce_armor": 30, "crush_armor": 15 },
-        "attack": {
-            "hack_damage": 8,
-            "pierce_damage": 0,
-            "crush_damage": 0,
-            "type": "melee",
-            "reload_time": 1.5,
-            "vs_cavalry": 3.0
-        }
-        },
-        "hetairoi": {
-            "name": "Hetairoi",
-            "type": "unit",
-            "image": "assets/hetairoi.jpg",
-            "age_required": "Mythic",
-            "civ": "Greek",
-            "prerequisite_god": "poseidon",
-            "prerequisite_building": "stable",
-            "line_of_sight": 15,
-            "build_time": 18,
-            "unit_category": "human",
-            "unit_tags": ["is_cavalry"],
-            "population_cost": 4,
-            "hitpoints": 180,
-            "speed": 5.5,
-            "cost": { "food": 80, "gold": 120 },
-            "defensive_stats": { "hack_armor": 30, "pierce_armor": 25, "crush_armor": 15 },
-            "attack": {
-                "hack_damage": 15,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "reload_time": 1.5,
-                "vs_building": 3.5
-            }
-        },
-        "petrobolos": {
-            "name": "Petrobolos",
-            "type": "unit",
-            "image": "assets/petrobolos.jpg",
-            "age_required": "Heroic",
-            "civ": "Greek",
-            "prerequisite_building": "fortress",
-            "line_of_sight": 28,
-            "build_time": 25,
-            "unit_category": "human",
-            "unit_tags": ["is_siege"],
-            "population_cost": 4,
-            "hitpoints": 135,
-            "speed": 3.0,
-            "cost": { "wood": 150, "gold": 150 },
-            "defensive_stats": { "hack_armor": 5, "pierce_armor": 80, "crush_armor": 5 },
-            "attack": {
-                "hack_damage": 0,
-                "pierce_damage": 0,
-                "crush_damage": 40,
-                "type": "ranged",
-                "reload_time": 5.0,
-                "range": 26,
-                "vs_building": 4.0
-            }
-        },
-        "helepolis": {
-            "name": "Helepolis",
-            "type": "unit",
-            "image": "assets/helepolis.jpg",
-            "age_required": "Mythic",
-            "civ": "Greek",
-            "prerequisite_building": "fortress",
-            "line_of_sight": 20,
-            "build_time": 30,
-            "unit_category": "human",
-            "unit_tags": ["is_siege"],
-            "population_cost": 5,
-            "hitpoints": 500,
-            "speed": 2.9,
-            "cost": { "wood": 200, "gold": 200 },
-            "defensive_stats": { "hack_armor": 10, "pierce_armor": 95, "crush_armor": 5 },
-            "attack": {
-                "hack_damage": 0,
-                "pierce_damage": 50,
-                "crush_damage": 0,
-                "type": "ranged",
-                "reload_time": 2.0,
-                "range": 18,
-                "vs_building": 0.5
-            }
-        },
-        "bireme": {
-            "name": "Bireme",
-            "type": "unit",
-            "image": "assets/bireme.jpg",
-            "age_required": "Classical",
-            "civ": "Greek",
-            "prerequisite_building": "dock",
-            "line_of_sight": 20,
-            "build_time": 15,
-            "unit_category": "human",
-            "unit_tags": ["is_ship"],
-            "population_cost": 3,
-            "hitpoints": 300,
-            "speed": 6.0,
-            "cost": { "wood": 150, "gold": 80 },
-            "defensive_stats": { "hack_armor": 10, "pierce_armor": 35, "crush_armor": 10 },
-            "attack": {
-                "hack_damage": 0,
-                "pierce_damage": 12,
-                "crush_damage": 0,
-                "type": "ranged",
-                "reload_time": 1.5,
-                "range": 18,
-                "vs_ship": 1.5
-            }
-        },
-        "trireme": {
-        "name": "Trireme",
-        "type": "unit",
-        "image": "assets/trireme.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_building": "dock",
-        "line_of_sight": 20,
-        "build_time": 25,
-        "unit_category": "human",
-        "unit_tags": ["is_ship"],
-        "population_cost": 3,
-        "hitpoints": 400,
-        "speed": 6.0,
-        "cost": { "wood": 150, "gold": 100 },
-        "defensive_stats": { "hack_armor": 30, "pierce_armor": 40, "crush_armor": 20 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 30,
-            "crush_damage": 0,
-            "type": "ranged",
-            "reload_time": 3.0,
-            "range": 22,
-            "vs_ship": 1.5
-        }
-        },
-        "juggernaut": {
-            "name": "Juggernaut",
-            "type": "unit",
-            "image": "assets/juggernaut.jpg",
-            "age_required": "Mythic",
-            "civ": "Greek",
-            "prerequisite_building": "dock",
-            "line_of_sight": 32,
-            "build_time": 30,
-            "unit_category": "human",
-            "unit_tags": ["is_ship", "is_siege"],
-            "population_cost": 5,
-            "hitpoints": 350,
-            "speed": 4.0,
-            "cost": { "wood": 200, "gold": 200 },
-            "defensive_stats": { "hack_armor": 10, "pierce_armor": 70, "crush_armor": 10 },
-            "attack": {
-                "hack_damage": 0,
-                "pierce_damage": 0,
-                "crush_damage": 50,
-                "type": "ranged",
-                "reload_time": 5.0,
-                "range": 30,
-                "vs_building": 4.0
-            }
-        },
-        "fire_ship": {
-            "name": "Fire Ship",
-            "type": "unit",
-            "image": "assets/fire_ship.jpg",
-            "age_required": "Heroic",
-            "civ": "Greek",
-            "prerequisite_building": "dock",
-            "line_of_sight": 18,
-            "build_time": 20,
-            "unit_category": "human",
-            "unit_tags": ["is_ship"],
-            "population_cost": 4,
-            "hitpoints": 450,
-            "speed": 5.5,
-            "cost": { "wood": 100, "gold": 150 },
-            "defensive_stats": { "hack_armor": 20, "pierce_armor": 40, "crush_armor": 10 },
-            "attack": {
-                "hack_damage": 12,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "reload_time": 1.0,
-                "range": 0,
-                "vs_ship": 4.0
-            }
-        },
-        "transport_ship": {
-            "name": "Transport Ship",
-            "type": "unit",
-            "image": "assets/transport_ship.jpg",
-            "age_required": "Archaic",
-            "civ": "Greek",
-            "prerequisite_building": "dock",
-            "line_of_sight": 16,
-            "build_time": 10,
-            "unit_category": "human",
-            "unit_tags": ["is_ship", "is_transport"],
-            "population_cost": 2,
-            "hitpoints": 250,
-            "speed": 6.0,
-            "cost": { "wood": 125 },
-            "defensive_stats": { "hack_armor": 10, "pierce_armor": 30, "crush_armor": 5 }
-        },
-        "ajax": {
-        "name": "Ajax",
-        "type": "unit",
-        "image": "assets/ajax.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "prerequisite_building": "town_center",
-        "line_of_sight": 14,
-        "build_time": 15,
-        "unit_category": "hero",
-        "unit_tags": ["is_hero", "is_infantry"],
-        "population_cost": 1,
-        "hitpoints": 220,
-        "speed": 4.2,
-        "cost": { "food": 120, "gold": 100 },
-        "defensive_stats": { "hack_armor": 40, "pierce_armor": 30, "crush_armor": 20 },
-        "attack": {
-            "hack_damage": 19,
-            "pierce_damage": 0,
-            "crush_damage": 0,
-            "type": "melee",
-            "vs_myth": 3.0
-        }
-        },
-        "centaur": {
-        "name": "Centaur",
-        "type": "unit",
-        "image": "assets/centaur.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "hermes",
-        "prerequisite_building": "temple",
-        "line_of_sight": 18,
-        "build_time": 20,
-        "unit_category": "myth",
-        "unit_tags": ["is_myth", "is_ranged"],
-        "population_cost": 3,
-        "hitpoints": 200,
-        "speed": 5.0,
-        "cost": { "food": 150, "favor": 12 },
-        "defensive_stats": { "hack_armor": 20, "pierce_armor": 25, "crush_armor": 15 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 10,
-            "crush_damage": 0,
-            "type": "ranged",
-            "reload_time": 2,
-            "range": 18,
-            "vs_human": 1.5
-        },
-        "abilities": ["swift_shot"]
-        },
-        "minotaur": {
-        "name": "Minotaur",
-        "type": "unit",
-        "image": "assets/minotaur.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "athena",
-        "prerequisite_building": "temple",
-        "line_of_sight": 15,
-        "build_time": 23,
-        "unit_category": "myth",
-        "unit_tags": ["is_myth", "is_infantry"],
-        "population_cost": 3,
-        "hitpoints": 270,
-        "speed": 4.2,
-        "cost": { "food": 200, "favor": 12 },
-        "defensive_stats": { "hack_armor": 50, "pierce_armor": 25, "crush_armor": 20 },
-        "attack": {
-            "hack_damage": 12,
-            "pierce_damage": 0,
-            "crush_damage": 0,
-            "type": "melee",
-            "vs_human": 1.5
-        },
-        "abilities": ["gore_charge"]
-        },
-        "cyclops": {
-        "name": "Cyclops",
-        "type": "unit",
-        "image": "assets/cyclops.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "ares",
-        "prerequisite_building": "temple",
-        "line_of_sight": 14,
-        "build_time": 20,
-        "unit_category": "myth",
-        "unit_tags": ["is_myth", "is_infantry"],
-        "population_cost": 4,
-        "hitpoints": 400,
-        "speed": 4.0,
-        "cost": { "food": 250, "favor": 15 },
-        "defensive_stats": { "hack_armor": 50, "pierce_armor": 30, "crush_armor": 15 },
-        "attack": {
-            "hack_damage": 25,
-            "pierce_damage": 0,
-            "crush_damage": 0,
-            "type": "melee",
-            "vs_building": 2.0
-        },
-        "abilities": ["boulder_throw"]
-        },
-        "hydra": {
-            "name": "Hydra",
-            "type": "unit",
-            "image": "assets/hydra.jpg",
-            "age_required": "Classical",
-            "civ": "Greek",
-            "prerequisite_god": "hera",
-            "prerequisite_building": "temple",
-            "line_of_sight": 14,
-            "build_time": 28,
-            "unit_category": "myth",
-            "unit_tags": ["is_myth", "is_infantry"],
-            "population_cost": 5,
-            "hitpoints": 800,
-            "speed": 3.5,
-            "cost": { "food": 300, "favor": 25 },
-            "defensive_stats": { "hack_armor": 70, "pierce_armor": 70, "crush_armor": 80 },
-            "attack": {
-                "hack_damage": 30,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "vs_human": 1.5
-            },
-            "abilities": ["grow_heads"]
-        },
-        "manticore": {
-        "name": "Manticore",
-        "type": "unit",
-        "image": "assets/manticore.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "apollo",
-        "prerequisite_building": "temple",
-        "line_of_sight": 16,
-        "build_time": 22,
-        "unit_category": "myth",
-        "unit_tags": ["is_myth", "is_ranged"],
-        "population_cost": 4,
-        "hitpoints": 375,
-        "speed": 4.5,
-        "cost": { "wood": 250, "favor": 20 },
-        "defensive_stats": { "hack_armor": 30, "pierce_armor": 50, "crush_armor": 20 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 20,
-            "crush_damage": 0,
-            "type": "ranged",
-            "reload_time": 2.5,
-            "range": 20,
-            "vs_human": 1.3
-        },
-        "abilities": ["spike_volley"]
-        },
-        "nemean_lion": {
-            "name": "Nemean Lion",
-            "type": "unit",
-            "image": "assets/nemean_lion.jpg",
-            "age_required": "Heroic",
-            "civ": "Greek",
-            "prerequisite_god": "dionysus",
-            "prerequisite_building": "temple",
-            "line_of_sight": 16,
-            "build_time": 24,
-            "unit_category": "myth",
-            "unit_tags": ["is_myth", "is_infantry"],
-            "population_cost": 4,
-            "hitpoints": 480,
-            "speed": 5.0,
-            "cost": { "gold": 300, "favor": 20 },
-            "defensive_stats": { "hack_armor": 40, "pierce_armor": 10, "crush_armor": 80 },
-            "attack": {
-                "hack_damage": 20,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "vs_building": 2.0
-            },
-            "abilities": ["roaring_leap"]
-        },
-        "colossus": {
-            "name": "Colossus",
-            "type": "unit",
-            "image": "assets/colossus.jpg",
-            "age_required": "Mythic",
-            "civ": "Greek",
-            "prerequisite_god": "hephaestus",
-            "prerequisite_building": "temple",
-            "line_of_sight": 16,
-            "build_time": 30,
-            "unit_category": "myth",
-            "unit_tags": ["is_myth", "is_infantry"],
-            "population_cost": 5,
-            "hitpoints": 800,
-            "speed": 3.0,
-            "cost": { "gold": 400, "favor": 25 },
-            "defensive_stats": { "hack_armor": 80, "pierce_armor": 80, "crush_armor": 80 },
-            "attack": {
-                "hack_damage": 25,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "vs_building": 3.0
-            },
-            "abilities": ["self_repair"]
-        },
-        "scylla": {
-            "name": "Scylla",
-            "type": "unit",
-            "image": "assets/scylla.jpg",
-            "age_required": "Mythic",
-            "civ": "Greek",
-            "prerequisite_god": "aphrodite",
-            "prerequisite_building": "dock",
-            "line_of_sight": 22,
-            "build_time": 25,
-            "unit_category": "myth",
-            "unit_tags": ["is_myth", "is_ship"],
-            "population_cost": 5,
-            "hitpoints": 900,
-            "speed": 5.0,
-            "cost": { "wood": 300, "favor": 25 },
-            "defensive_stats": { "hack_armor": 60, "pierce_armor": 60, "crush_armor": 80 },
-            "attack": {
-                "hack_damage": 50,
-                "pierce_damage": 0,
-                "crush_damage": 0,
-                "type": "melee",
-                "vs_ship": 4.0
-            },
-            "abilities": ["grow_heads"]
-        },
-        "chimera": {
-        "name": "Chimera",
-        "type": "unit",
-        "image": "assets/chimera.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "artemis",
-        "prerequisite_building": "temple",
-        "line_of_sight": 14,
-        "build_time": 25,
-        "unit_category": "myth",
-        "unit_tags": ["is_myth", "is_infantry"],
-        "population_cost": 4,
-        "hitpoints": 500,
-        "speed": 4.8,
-        "cost": { "gold": 300, "favor": 25 },
-        "defensive_stats": { "hack_armor": 50, "pierce_armor": 30, "crush_armor": 25 },
-        "attack": {
-            "hack_damage": 40,
-            "pierce_damage": 0,
-            "crush_damage": 0,
-            "type": "melee",
-            "vs_human": 1.5
-        },
-        "abilities": ["fire_breath"]
-        },
-        "medusa": {
-        "name": "Medusa",
-        "type": "unit",
-        "image": "assets/medusa.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "hera",
-        "prerequisite_building": "temple",
-        "line_of_sight": 16,
-        "build_time": 25,
-        "unit_category": "myth",
-        "unit_tags": ["is_myth", "is_ranged"],
-        "population_cost": 4,
-        "hitpoints": 360,
-        "speed": 4.0,
-        "cost": { "wood": 250, "favor": 28 },
-        "defensive_stats": { "hack_armor": 40, "pierce_armor": 40, "crush_armor": 15 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 25,
-            "crush_damage": 0,
-            "type": "ranged",
-            "reload_time": 2.0,
-            "range": 16,
-            "vs_human": 1.4
-        },
-        "abilities": ["stone_gaze"]
-        }
-    
+    "hypaspist": {
+      "name": "Hypaspist",
+      "type": "unit",
+      "image": "assets/hypaspist.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "hades",
+      "prerequisite_building": "barracks",
+      "line_of_sight": 12,
+      "build_time": 11,
+      "unit_category": "human",
+      "unit_tags": ["is_infantry"],
+      "population_cost": 2,
+      "hitpoints": 110,
+      "speed": 4.8,
+      "cost": { "food": 50, "gold": 40 },
+      "defensive_stats": {
+        "hack_armor": 20,
+        "pierce_armor": 30,
+        "crush_armor": 10
+      },
+      "attack": {
+        "hack_damage": 7,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "attack_speed": 1.5,
+        "vs_hero": 4.0
+      }
     },
-    "buildings": {
-        "town_center": {
-        "name": "Town Center",
-        "type": "building",
-        "image": "assets/town_center.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 24,
-        "build_time": 60,
-        "hitpoints": 2000,
-        "cost": { "wood": 250, "gold": 250 },
-        "defensive_stats": { "hack_armor": 50, "pierce_armor": 50, "crush_armor": 40 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 8,
-            "crush_damage": 0,
-            "type": "ranged",
-            "range": 20
-        },
-        "functions": {
-            "trains_units": ["villager", "ajax", "achilles", "odysseus", "jason", "polyphemus", "theseus", "hippolyta", "atalanta", "bellerophon", "chiron"],
-            "researches_techs": ["age_advance_classical", "age_advance_heroic", "age_advance_mythic", "masons", "architects"]
-        }
-        },
-        "house": {
-        "name": "House",
-        "type": "building",
-        "image": "assets/house.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 15,
-        "build_time": 20,
-        "hitpoints": 550,
-        "cost": { "wood": 30 },
-        "defensive_stats": { "hack_armor": 20, "pierce_armor": 20, "crush_armor": 10 },
-        "functions": {
-            "provides_population": 10,
-            "trains_units": [],
-            "researches_techs": []
-        }
-        },
-        "barracks": {
-        "name": "Barracks",
-        "type": "building",
-        "image": "assets/barracks.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 20,
-        "build_time": 30,
-        "hitpoints": 1200,
-        "cost": { "wood": 100 },
-        "defensive_stats": { "hack_armor": 30, "pierce_armor": 30, "crush_armor": 20 },
-        "functions": {
-            "trains_units": ["hoplite", "myrmidon", "hypaspist"],
-            "researches_techs": ["medium_infantry", "heavy_infantry", "champion_infantry"]
-        }
-        },
-        "archery_range": {
-        "name": "Archery Range",
-        "type": "building",
-        "image": "assets/archery_range.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 20,
-        "build_time": 30,
-        "hitpoints": 1200,
-        "cost": { "wood": 100 },
-        "defensive_stats": { "hack_armor": 30, "pierce_armor": 30, "crush_armor": 20 },
-        "functions": {
-            "trains_units": ["toxotes", "peltast", "gastraphetes"],
-            "researches_techs": ["medium_archers", "heavy_archers", "champion_archers"]
-        }
-        },
-        "stable": {
-        "name": "Stable",
-        "type": "building",
-        "image": "assets/stable.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 20,
-        "build_time": 35,
-        "hitpoints": 1200,
-        "cost": { "wood": 100 },
-        "defensive_stats": { "hack_armor": 30, "pierce_armor": 30, "crush_armor": 20 },
-        "functions": {
-            "trains_units": ["hippikon", "prodromos", "hetairoi"],
-            "researches_techs": ["medium_cavalry", "heavy_cavalry", "champion_cavalry"]
-        }
-        },
-        "temple": {
-        "name": "Temple",
-        "type": "building",
-        "image": "assets/temple.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 18,
-        "build_time": 25,
-        "hitpoints": 1200,
-        "cost": { "wood": 100, "gold": 50 },
-        "defensive_stats": { "hack_armor": 25, "pierce_armor": 25, "crush_armor": 15 },
-        "functions": {
-            "trains_units": ["centaur", "minotaur", "cyclops", "hydra", "manticore", "nemean_lion", "colossus", "scylla", "chimera", "medusa"],
-            "researches_techs": ["winged_messenger", "sun_ray", "flaming_arrows", "phobos_spear", "aegis_shield", "monstrous_rage"]
-        }
-        },
-        "fortress": {
-        "name": "Fortress",
-        "type": "building",
-        "image": "assets/fortress.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "line_of_sight": 28,
-        "build_time": 50,
-        "hitpoints": 2400,
-        "cost": { "wood": 250, "gold": 250 },
-        "defensive_stats": { "hack_armor": 50, "pierce_armor": 50, "crush_armor": 40 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 15,
-            "crush_damage": 0,
-            "type": "ranged",
-            "range": 28
-        },
-        "functions": {
-            "trains_units": ["petrobolos", "helepolis"],
-            "researches_techs": ["siege_works"]
-        }
-        },
-        "armory": {
-        "name": "Armory",
-        "type": "building",
-        "image": "assets/armory.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 18,
-        "build_time": 30,
-        "hitpoints": 1200,
-        "cost": { "wood": 150 },
-        "defensive_stats": { "hack_armor": 25, "pierce_armor": 25, "crush_armor": 15 },
-        "functions": {
-            "trains_units": [],
-            "researches_techs": ["copper_weapons", "bronze_weapons", "iron_weapons", "copper_mail", "bronze_mail", "iron_mail", "copper_shields", "bronze_shields", "iron_shields"]
-        }
-        },
-        "market": {
-        "name": "Market",
-        "type": "building",
-        "image": "assets/market.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 18,
-        "build_time": 35,
-        "hitpoints": 1200,
-        "cost": { "wood": 150 },
-        "defensive_stats": { "hack_armor": 25, "pierce_armor": 25, "crush_armor": 15 },
-        "functions": {
-            "trains_units": ["caravan"],
-            "researches_techs": ["coinage", "banking"]
-        }
-        },
-        "dock": {
-        "name": "Dock",
-        "type": "building",
-        "image": "assets/dock.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 22,
-        "build_time": 40,
-        "hitpoints": 1800,
-        "cost": { "wood": 100 },
-        "defensive_stats": { "hack_armor": 25, "pierce_armor": 25, "crush_armor": 15 },
-        "functions": {
-            "trains_units": ["fishing_ship", "transport_ship", "bireme", "trireme", "juggernaut", "fire_ship"],
-            "researches_techs": ["naval_warfare"]
-        }
-        },
-        "tower": {
-        "name": "Tower",
-        "type": "building",
-        "image": "assets/tower.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 30,
-        "build_time": 40,
-        "hitpoints": 400,
-        "cost": { "wood": 50, "gold": 50 },
-        "defensive_stats": { "hack_armor": 40, "pierce_armor": 50, "crush_armor": 30 },
-        "attack": {
-            "hack_damage": 0,
-            "pierce_damage": 10,
-            "crush_damage": 0,
-            "type": "ranged",
-            "range": 25
-        },
-        "functions": {
-            "trains_units": [],
-            "researches_techs": ["watch_tower", "guard_tower", "ballista_tower"]
-        }
-        },
-        "wall": {
-        "name": "Wall",
-        "type": "building",
-        "image": "assets/wall.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 16,
-        "build_time": 15,
-        "hitpoints": 700,
-        "cost": { "gold": 5 },
-        "defensive_stats": { "hack_armor": 60, "pierce_armor": 60, "crush_armor": 50 },
-        "functions": {
-            "trains_units": [],
-            "researches_techs": []
-        }
-        },
-        "wonder": {
-        "name": "Wonder",
-        "type": "building",
-        "image": "assets/wonder.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "line_of_sight": 20,
-        "build_time": 100,
-        "hitpoints": 8000,
-        "cost": { "wood": 1000, "gold": 1000, "food": 1000, "favor": 1000 },
-        "defensive_stats": { "hack_armor": 70, "pierce_armor": 70, "crush_armor": 60 },
-        "functions": {
-            "trains_units": [],
-            "researches_techs": []
-        }
-        }
+    "toxotes": {
+      "name": "Toxotes",
+      "type": "unit",
+      "image": "assets/toxotes.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_building": "archery_range",
+      "line_of_sight": 16,
+      "build_time": 12,
+      "unit_category": "human",
+      "unit_tags": ["is_archer"],
+      "population_cost": 2,
+      "hitpoints": 80,
+      "speed": 3.6,
+      "cost": { "food": 60, "gold": 40 },
+      "defensive_stats": {
+        "hack_armor": 10,
+        "pierce_armor": 15,
+        "crush_armor": 5
+      },
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 8,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 2.0,
+        "range": 16,
+        "vs_infantry": 1.2
+      }
     },
-    "technologies": {
-      "medium_infantry": {
-        "name": "Medium Infantry",
-        "type": "technology",
-        "image": "assets/medium_infantry.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "barracks",
-        "cost": { "wood": 50, "gold": 50 },
-        "prerequisites": [
-          { "building": "barracks" },
-          { "age": "Classical" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_infantry"] },
-            "verb": "add",
-            "adjective": "hack_armor",
-            "value": 10
-          }
-        ]
+    "peltast": {
+      "name": "Peltast",
+      "type": "unit",
+      "image": "assets/peltast.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_building": "archery_range",
+      "line_of_sight": 17,
+      "build_time": 13,
+      "unit_category": "human",
+      "unit_tags": ["is_archer"],
+      "population_cost": 2,
+      "hitpoints": 90,
+      "speed": 3.8,
+      "cost": { "wood": 50, "gold": 30 },
+      "defensive_stats": {
+        "hack_armor": 15,
+        "pierce_armor": 20,
+        "crush_armor": 10
       },
-      "heavy_infantry": {
-        "name": "Heavy Infantry",
-        "type": "technology",
-        "image": "assets/heavy_infantry.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 25,
-        "research_location": "barracks",
-        "cost": { "wood": 50, "gold": 50 },
-        "prerequisites": [
-          { "building": "barracks" },
-          { "tech": "medium_infantry" },
-          { "age": "Heroic" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_infantry"] },
-            "verb": "add",
-            "adjective": "hack_armor",
-            "value": 15
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 7,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 2.0,
+        "range": 17,
+        "vs_archer": 3.0
+      }
+    },
+    "gastraphetes": {
+      "name": "Gastraphetes",
+      "type": "unit",
+      "image": "assets/gastraphetes.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "hades",
+      "prerequisite_building": "archery_range",
+      "line_of_sight": 18,
+      "build_time": 15,
+      "unit_category": "human",
+      "unit_tags": ["is_archer"],
+      "population_cost": 3,
+      "hitpoints": 90,
+      "speed": 3.8,
+      "cost": { "wood": 80, "gold": 60 },
+      "defensive_stats": {
+        "hack_armor": 10,
+        "pierce_armor": 20,
+        "crush_armor": 10
       },
-      "winged_messenger": {
-        "name": "Winged Messenger",
-        "type": "technology",
-        "image": "assets/winged_messenger.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "hermes",
-        "line_of_sight": 0,
-        "build_time": 15,
-        "research_location": "temple",
-        "cost": { "wood": 50, "gold": 50, "favor": 10 },
-        "prerequisites": [
-          { "building": "temple" },
-          { "god": "hermes" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_myth"] },
-            "verb": "multiply",
-            "adjective": "speed",
-            "value": 1.2
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 12,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 2.0,
+        "range": 18,
+        "vs_building": 2.0
+      }
+    },
+    "hippikon": {
+      "name": "Hippikon",
+      "type": "unit",
+      "image": "assets/hippikon.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_building": "stable",
+      "line_of_sight": 14,
+      "build_time": 14,
+      "unit_category": "human",
+      "unit_tags": ["is_cavalry"],
+      "population_cost": 3,
+      "hitpoints": 150,
+      "speed": 5.5,
+      "cost": { "food": 40, "gold": 80 },
+      "defensive_stats": {
+        "hack_armor": 25,
+        "pierce_armor": 20,
+        "crush_armor": 10
       },
-      "sun_ray": {
-        "name": "Sun Ray",
-        "type": "technology",
-        "image": "assets/sun_ray.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "apollo",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "temple",
-        "cost": { "wood": 50, "gold": 50, "favor": 20 },
-        "prerequisites": [
-          { "building": "temple" },
-          { "god": "apollo" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_archer"] },
-            "verb": "add",
-            "adjective": "pierce_damage",
-            "value": 5
-          }
-        ]
+      "attack": {
+        "hack_damage": 10,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "attack_speed": 1.5,
+        "vs_archer": 3.0
+      }
+    },
+    "prodromos": {
+      "name": "Prodromos",
+      "type": "unit",
+      "image": "assets/prodromos.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_building": "stable",
+      "line_of_sight": 15,
+      "build_time": 16,
+      "unit_category": "human",
+      "unit_tags": ["is_cavalry"],
+      "population_cost": 3,
+      "hitpoints": 130,
+      "speed": 5.8,
+      "cost": { "food": 60, "gold": 60 },
+      "defensive_stats": {
+        "hack_armor": 15,
+        "pierce_armor": 30,
+        "crush_armor": 15
       },
-      "flaming_arrows": {
-        "name": "Flaming Arrows",
-        "type": "technology",
-        "image": "assets/flaming_arrows.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "artemis",
-        "line_of_sight": 0,
-        "build_time": 25,
-        "research_location": "temple",
-        "cost": { "wood": 50, "gold": 50, "favor": 30 },
-        "prerequisites": [
-          { "building": "temple" },
-          { "god": "artemis" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_archer"] },
-            "verb": "multiply",
-            "adjective": "pierce_damage",
-            "value": 1.15
-          }
-        ]
+      "attack": {
+        "hack_damage": 8,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "attack_speed": 1.5,
+        "vs_cavalry": 3.0
+      }
+    },
+    "hetairoi": {
+      "name": "Hetairoi",
+      "type": "unit",
+      "image": "assets/hetairoi.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "poseidon",
+      "prerequisite_building": "stable",
+      "line_of_sight": 15,
+      "build_time": 18,
+      "unit_category": "human",
+      "unit_tags": ["is_cavalry"],
+      "population_cost": 4,
+      "hitpoints": 180,
+      "speed": 5.5,
+      "cost": { "food": 80, "gold": 120 },
+      "defensive_stats": {
+        "hack_armor": 30,
+        "pierce_armor": 25,
+        "crush_armor": 15
       },
-      "phobos_spear": {
-        "name": "Phobos' Spear",
-        "type": "technology",
-        "image": "assets/phobos_spear.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "ares",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "temple",
-        "cost": { "wood": 50, "gold": 50, "favor": 15},
-        "prerequisites": [
-          { "building": "temple" },
-          { "god": "ares" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_infantry"] },
-            "verb": "add",
-            "adjective": "hack_damage",
-            "value": 5
-          }
-        ]
+      "attack": {
+        "hack_damage": 15,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "attack_speed": 1.5,
+        "vs_building": 3.5
+      }
+    },
+    "petrobolos": {
+      "name": "Petrobolos",
+      "type": "unit",
+      "image": "assets/petrobolos.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_building": "fortress",
+      "line_of_sight": 28,
+      "build_time": 25,
+      "unit_category": "human",
+      "unit_tags": ["is_siege"],
+      "population_cost": 4,
+      "hitpoints": 135,
+      "speed": 3.0,
+      "cost": { "wood": 150, "gold": 150 },
+      "defensive_stats": {
+        "hack_armor": 5,
+        "pierce_armor": 80,
+        "crush_armor": 5
       },
-      "aegis_shield": {
-        "name": "Aegis Shield",
-        "type": "technology",
-        "image": "assets/aegis_shield.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "athena",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "temple",
-        "cost": { "wood": 50, "gold": 50, "favor": 20},
-        "prerequisites": [
-          { "building": "temple" },
-          { "god": "athena" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_infantry"] },
-            "verb": "add",
-            "adjective": "hack_armor",
-            "value": 10
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 0,
+        "crush_damage": 40,
+        "type": "ranged",
+        "attack_speed": 5.0,
+        "range": 26,
+        "vs_building": 4.0
+      }
+    },
+    "helepolis": {
+      "name": "Helepolis",
+      "type": "unit",
+      "image": "assets/helepolis.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_building": "fortress",
+      "line_of_sight": 20,
+      "build_time": 30,
+      "unit_category": "human",
+      "unit_tags": ["is_siege"],
+      "population_cost": 5,
+      "hitpoints": 500,
+      "speed": 2.9,
+      "cost": { "wood": 200, "gold": 200 },
+      "defensive_stats": {
+        "hack_armor": 10,
+        "pierce_armor": 95,
+        "crush_armor": 5
       },
-      "monstrous_rage": {
-        "name": "Monstrous Rage",
-        "type": "technology",
-        "image": "assets/monstrous_rage.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "hera",
-        "line_of_sight": 0,
-        "build_time": 25,
-        "research_location": "temple",
-        "cost": { "wood": 50, "gold": 50, "favor": 25},
-        "prerequisites": [
-          { "building": "temple" },
-          { "god": "hera" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_myth"] },
-            "verb": "multiply",
-            "adjective": "hack_damage",
-            "value": 1.2
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 50,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 2.0,
+        "range": 18,
+        "vs_building": 0.5
+      }
+    },
+    "bireme": {
+      "name": "Bireme",
+      "type": "unit",
+      "image": "assets/bireme.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_building": "dock",
+      "line_of_sight": 20,
+      "build_time": 15,
+      "unit_category": "human",
+      "unit_tags": ["is_ship"],
+      "population_cost": 3,
+      "hitpoints": 300,
+      "speed": 6.0,
+      "cost": { "wood": 150, "gold": 80 },
+      "defensive_stats": {
+        "hack_armor": 10,
+        "pierce_armor": 35,
+        "crush_armor": 10
       },
-      "watch_tower": {
-        "name": "Watch Tower",
-        "type": "technology",
-        "image": "assets/watch_tower.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "tower",
-        "cost": { "wood": 50, "gold": 50},
-        "prerequisites": [
-          { "building": "tower" },
-          { "age": "Classical" }
-        ],
-        "effects": [
-          {
-            "noun": { "building_name": "Tower" },
-            "verb": "add",
-            "adjective": "pierce_damage",
-            "value": 5
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 12,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 1.5,
+        "range": 18,
+        "vs_ship": 1.5
+      }
+    },
+    "trireme": {
+      "name": "Trireme",
+      "type": "unit",
+      "image": "assets/trireme.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_building": "dock",
+      "line_of_sight": 20,
+      "build_time": 25,
+      "unit_category": "human",
+      "unit_tags": ["is_ship"],
+      "population_cost": 3,
+      "hitpoints": 400,
+      "speed": 6.0,
+      "cost": { "wood": 150, "gold": 100 },
+      "defensive_stats": {
+        "hack_armor": 30,
+        "pierce_armor": 40,
+        "crush_armor": 20
       },
-      "age_advance_classical": {
-        "name": "Classical Age",
-        "type": "technology",
-        "image": "assets/age_classical.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 40,
-        "research_location": "town_center",
-        "cost": { "food":400},
-        "prerequisites": [
-          { "building": "town_center" }
-        ],
-        "effects": [
-          {
-            "noun": { "tech_name": "Classical Age" },
-            "verb": "add",
-            "adjective": "age_unlock",
-            "value": 1
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 30,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 3.0,
+        "range": 22,
+        "vs_ship": 1.5
+      }
+    },
+    "juggernaut": {
+      "name": "Juggernaut",
+      "type": "unit",
+      "image": "assets/juggernaut.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_building": "dock",
+      "line_of_sight": 32,
+      "build_time": 30,
+      "unit_category": "human",
+      "unit_tags": ["is_ship", "is_siege"],
+      "population_cost": 5,
+      "hitpoints": 350,
+      "speed": 4.0,
+      "cost": { "wood": 200, "gold": 200 },
+      "defensive_stats": {
+        "hack_armor": 10,
+        "pierce_armor": 70,
+        "crush_armor": 10
       },
-      "age_advance_heroic": {
-        "name": "Heroic Age",
-        "type": "technology",
-        "image": "assets/age_heroic.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 50,
-        "research_location": "town_center",
-        "cost": { "food":600,"wood":600},
-        "prerequisites": [
-          { "building": "town_center" },
-          { "tech": "age_advance_classical" }
-        ],
-        "effects": [
-          {
-            "noun": { "tech_name": "Heroic Age" },
-            "verb": "add",
-            "adjective": "age_unlock",
-            "value": 1
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 0,
+        "crush_damage": 50,
+        "type": "ranged",
+        "attack_speed": 5.0,
+        "range": 30,
+        "vs_building": 4.0
+      }
+    },
+    "fire_ship": {
+      "name": "Fire Ship",
+      "type": "unit",
+      "image": "assets/fire_ship.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_building": "dock",
+      "line_of_sight": 18,
+      "build_time": 20,
+      "unit_category": "human",
+      "unit_tags": ["is_ship"],
+      "population_cost": 4,
+      "hitpoints": 450,
+      "speed": 5.5,
+      "cost": { "wood": 100, "gold": 150 },
+      "defensive_stats": {
+        "hack_armor": 20,
+        "pierce_armor": 40,
+        "crush_armor": 10
       },
-      "age_advance_mythic": {
-        "name": "Mythic Age",
-        "type": "technology",
-        "image": "assets/age_mythic.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 60,
-        "research_location": "town_center",
-        "cost": { "gold":1200, "wood":1200},
-
-        "prerequisites": [
-          { "building": "town_center" },
-          { "tech": "age_advance_heroic" }
-        ],
-        "effects": [
-          {
-            "noun": { "tech_name": "Mythic Age" },
-            "verb": "add",
-            "adjective": "age_unlock",
-            "value": 1
-          }
-        ]
+      "attack": {
+        "hack_damage": 12,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "attack_speed": 1.0,
+        "range": 0,
+        "vs_ship": 4.0
+      }
+    },
+    "transport_ship": {
+      "name": "Transport Ship",
+      "type": "unit",
+      "image": "assets/transport_ship.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "prerequisite_building": "dock",
+      "line_of_sight": 16,
+      "build_time": 10,
+      "unit_category": "human",
+      "unit_tags": ["is_ship", "is_transport"],
+      "population_cost": 2,
+      "hitpoints": 250,
+      "speed": 6.0,
+      "cost": { "wood": 125 },
+      "defensive_stats": {
+        "hack_armor": 10,
+        "pierce_armor": 30,
+        "crush_armor": 5
+      }
+    },
+    "ajax": {
+      "name": "Ajax",
+      "type": "unit",
+      "image": "assets/ajax.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "prerequisite_building": "town_center",
+      "line_of_sight": 14,
+      "build_time": 15,
+      "unit_category": "hero",
+      "unit_tags": ["is_hero", "is_infantry"],
+      "population_cost": 1,
+      "hitpoints": 220,
+      "speed": 4.2,
+      "cost": { "food": 120, "gold": 100 },
+      "defensive_stats": {
+        "hack_armor": 40,
+        "pierce_armor": 30,
+        "crush_armor": 20
       },
-      "medium_cavalry": {
-        "name": "Medium Cavalry",
-        "type": "technology",
-        "image": "assets/medium_cavalry.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "stable",
-        "cost": { "wood": 50, "gold": 50},
-        "prerequisites": [
-          { "building": "stable" },
-          { "age": "Classical" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_cavalry"] },
-            "verb": "add",
-            "adjective": "hack_armor",
-            "value": 10
-          }
-        ]
+      "attack": {
+        "hack_damage": 19,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_myth": 3.0
+      }
+    },
+    "centaur": {
+      "name": "Centaur",
+      "type": "unit",
+      "image": "assets/centaur.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "hermes",
+      "prerequisite_building": "temple",
+      "line_of_sight": 18,
+      "build_time": 20,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_ranged"],
+      "population_cost": 3,
+      "hitpoints": 200,
+      "speed": 5.0,
+      "cost": { "food": 150, "favor": 12 },
+      "defensive_stats": {
+        "hack_armor": 20,
+        "pierce_armor": 25,
+        "crush_armor": 15
       },
-      "heroic_fleet": {
-        "name": "Heroic Fleet",
-        "type": "technology",
-        "image": "assets/heroic_fleet.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 25,
-        "research_location": "dock",
-        "cost": { "wood": 50, "gold": 50, "favor": 15},
-        "prerequisites": [
-          { "building": "dock" },
-          { "age": "Heroic" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_ship"] },
-            "verb": "add",
-            "adjective": "pierce_damage",
-            "value": 10
-          }
-        ]
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 10,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 2,
+        "range": 18,
+        "vs_human": 1.5
       },
-      "siege_works": {
-        "name": "Siege Works",
-        "type": "technology",
-        "image": "assets/siege_works.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 30,
-        "research_location": "fortress",
-        "cost": { "wood": 50, "gold": 55},
-        "prerequisites": [
-          { "building": "fortress" },
-          { "age": "Mythic" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_siege"] },
-            "verb": "multiply",
-            "adjective": "crush_damage",
-            "value": 1.2
-          }
-        ]
+      "abilities": ["swift_shot"]
+    },
+    "minotaur": {
+      "name": "Minotaur",
+      "type": "unit",
+      "image": "assets/minotaur.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "athena",
+      "prerequisite_building": "temple",
+      "line_of_sight": 15,
+      "build_time": 23,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_infantry"],
+      "population_cost": 3,
+      "hitpoints": 270,
+      "speed": 4.2,
+      "cost": { "food": 200, "favor": 12 },
+      "defensive_stats": {
+        "hack_armor": 50,
+        "pierce_armor": 25,
+        "crush_armor": 20
       },
-      "trade_route": {
-        "name": "Trade Route",
-        "type": "technology",
-        "image": "assets/trade_route.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "market",
-        "cost": { "wood": 50, "gold": 55},
-        "prerequisites": [
-          { "building": "market" },
-          { "age": "Heroic" }
-        ],
-        "effects": [
-          {
-            "noun": { "building_name": "Market" },
-            "verb": "multiply",
-            "adjective": "gold_gather_rate",
-            "value": 1.3
-          }
-        ]
+      "attack": {
+        "hack_damage": 12,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_human": 1.5
       },
-      "burning_pitch": {
-        "name": "Burning Pitch",
-        "type": "technology",
-        "image": "assets/burning_pitch.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 25,
-        "research_location": "armory",
-        "cost": { "wood": 50, "gold": 55},
-        "prerequisites": [
-          { "building": "armory" },
-          { "age": "Heroic" }
-        ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_siege"] },
-            "verb": "add",
-            "adjective": "crush_damage",
-            "value": 10
-          }
-        ]
+      "abilities": ["gore_charge"]
+    },
+    "cyclops": {
+      "name": "Cyclops",
+      "type": "unit",
+      "image": "assets/cyclops.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "ares",
+      "prerequisite_building": "temple",
+      "line_of_sight": 14,
+      "build_time": 20,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_infantry"],
+      "population_cost": 4,
+      "hitpoints": 400,
+      "speed": 4.0,
+      "cost": { "food": 250, "favor": 15 },
+      "defensive_stats": {
+        "hack_armor": 50,
+        "pierce_armor": 30,
+        "crush_armor": 15
       },
-      "copper_weapons": {
-        "name": "Copper Weapons",
-        "type": "technology",
-        "image": "assets/copper_weapons.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 20,
-        "research_location": "armory",
-        "cost": { "wood": 50, "gold": 55},
-        "prerequisites": [
-          { "building": "armory" },
-          { "age": "Classical" }
+      "attack": {
+        "hack_damage": 25,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_building": 2.0
+      },
+      "abilities": ["boulder_throw"]
+    },
+    "hydra": {
+      "name": "Hydra",
+      "type": "unit",
+      "image": "assets/hydra.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "hera",
+      "prerequisite_building": "temple",
+      "line_of_sight": 14,
+      "build_time": 28,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_infantry"],
+      "population_cost": 5,
+      "hitpoints": 800,
+      "speed": 3.5,
+      "cost": { "food": 300, "favor": 25 },
+      "defensive_stats": {
+        "hack_armor": 70,
+        "pierce_armor": 70,
+        "crush_armor": 80
+      },
+      "attack": {
+        "hack_damage": 30,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_human": 1.5
+      },
+      "abilities": ["grow_heads"]
+    },
+    "manticore": {
+      "name": "Manticore",
+      "type": "unit",
+      "image": "assets/manticore.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "apollo",
+      "prerequisite_building": "temple",
+      "line_of_sight": 16,
+      "build_time": 22,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_ranged"],
+      "population_cost": 4,
+      "hitpoints": 375,
+      "speed": 4.5,
+      "cost": { "wood": 250, "favor": 20 },
+      "defensive_stats": {
+        "hack_armor": 30,
+        "pierce_armor": 50,
+        "crush_armor": 20
+      },
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 20,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 2.5,
+        "range": 20,
+        "vs_human": 1.3
+      },
+      "abilities": ["spike_volley"]
+    },
+    "nemean_lion": {
+      "name": "Nemean Lion",
+      "type": "unit",
+      "image": "assets/nemean_lion.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "dionysus",
+      "prerequisite_building": "temple",
+      "line_of_sight": 16,
+      "build_time": 24,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_infantry"],
+      "population_cost": 4,
+      "hitpoints": 480,
+      "speed": 5.0,
+      "cost": { "gold": 300, "favor": 20 },
+      "defensive_stats": {
+        "hack_armor": 40,
+        "pierce_armor": 10,
+        "crush_armor": 80
+      },
+      "attack": {
+        "hack_damage": 20,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_building": 2.0
+      },
+      "abilities": ["roaring_leap"]
+    },
+    "colossus": {
+      "name": "Colossus",
+      "type": "unit",
+      "image": "assets/colossus.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "hephaestus",
+      "prerequisite_building": "temple",
+      "line_of_sight": 16,
+      "build_time": 30,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_infantry"],
+      "population_cost": 5,
+      "hitpoints": 800,
+      "speed": 3.0,
+      "cost": { "gold": 400, "favor": 25 },
+      "defensive_stats": {
+        "hack_armor": 80,
+        "pierce_armor": 80,
+        "crush_armor": 80
+      },
+      "attack": {
+        "hack_damage": 25,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_building": 3.0
+      },
+      "abilities": ["self_repair"]
+    },
+    "scylla": {
+      "name": "Scylla",
+      "type": "unit",
+      "image": "assets/scylla.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "aphrodite",
+      "prerequisite_building": "dock",
+      "line_of_sight": 22,
+      "build_time": 25,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_ship"],
+      "population_cost": 5,
+      "hitpoints": 900,
+      "speed": 5.0,
+      "cost": { "wood": 300, "favor": 25 },
+      "defensive_stats": {
+        "hack_armor": 60,
+        "pierce_armor": 60,
+        "crush_armor": 80
+      },
+      "attack": {
+        "hack_damage": 50,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_ship": 4.0
+      },
+      "abilities": ["grow_heads"]
+    },
+    "chimera": {
+      "name": "Chimera",
+      "type": "unit",
+      "image": "assets/chimera.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "artemis",
+      "prerequisite_building": "temple",
+      "line_of_sight": 14,
+      "build_time": 25,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_infantry"],
+      "population_cost": 4,
+      "hitpoints": 500,
+      "speed": 4.8,
+      "cost": { "gold": 300, "favor": 25 },
+      "defensive_stats": {
+        "hack_armor": 50,
+        "pierce_armor": 30,
+        "crush_armor": 25
+      },
+      "attack": {
+        "hack_damage": 40,
+        "pierce_damage": 0,
+        "crush_damage": 0,
+        "type": "melee",
+        "vs_human": 1.5
+      },
+      "abilities": ["fire_breath"]
+    },
+    "medusa": {
+      "name": "Medusa",
+      "type": "unit",
+      "image": "assets/medusa.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "hera",
+      "prerequisite_building": "temple",
+      "line_of_sight": 16,
+      "build_time": 25,
+      "unit_category": "myth",
+      "unit_tags": ["is_myth", "is_ranged"],
+      "population_cost": 4,
+      "hitpoints": 360,
+      "speed": 4.0,
+      "cost": { "wood": 250, "favor": 28 },
+      "defensive_stats": {
+        "hack_armor": 40,
+        "pierce_armor": 40,
+        "crush_armor": 15
+      },
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 25,
+        "crush_damage": 0,
+        "type": "ranged",
+        "attack_speed": 2.0,
+        "range": 16,
+        "vs_human": 1.4
+      },
+      "abilities": ["stone_gaze"]
+    }
+  },
+  "buildings": {
+    "town_center": {
+      "name": "Town Center",
+      "type": "building",
+      "image": "assets/town_center.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 24,
+      "build_time": 60,
+      "hitpoints": 2000,
+      "cost": { "wood": 250, "gold": 250 },
+      "defensive_stats": {
+        "hack_armor": 50,
+        "pierce_armor": 50,
+        "crush_armor": 40
+      },
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 8,
+        "crush_damage": 0,
+        "type": "ranged",
+        "range": 20
+      },
+      "functions": {
+        "trains_units": [
+          "villager",
+          "ajax",
+          "achilles",
+          "odysseus",
+          "jason",
+          "polyphemus",
+          "theseus",
+          "hippolyta",
+          "atalanta",
+          "bellerophon",
+          "chiron"
         ],
-        "effects": [
-          {
-            "noun": { "unit_tags": ["is_infantry", "is_cavalry"] },
-            "verb": "add",
-            "adjective": "hack_damage",
-            "value": 5
-          }
+        "researches_techs": [
+          "age_advance_classical",
+          "age_advance_heroic",
+          "age_advance_mythic",
+          "masons",
+          "architects"
         ]
       }
     },
-    "abilities": {
-      "swift_shot": {
-        "name": "Swift Shot",
-        "type": "ability",
-        "image": "assets/swift_shot.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "hermes",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "cooldown": 30,
-        "description": "Increases attack speed temporarily"
+    "house": {
+      "name": "House",
+      "type": "building",
+      "image": "assets/house.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 15,
+      "build_time": 20,
+      "hitpoints": 550,
+      "cost": { "wood": 30 },
+      "defensive_stats": {
+        "hack_armor": 20,
+        "pierce_armor": 20,
+        "crush_armor": 10
       },
-      "spike_volley": {
-        "name": "Spike Volley",
-        "type": "ability",
-        "image": "assets/spike_volley.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "apollo",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "cooldown": 40,
-        "description": "Fires a volley of spikes, damaging multiple enemies"
-      },
-      "fire_breath": {
-        "name": "Fire Breath",
-        "type": "ability",
-        "image": "assets/fire_breath.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "artemis",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "cooldown": 45,
-        "description": "Breathes fire, dealing area damage"
-      },
-      "boulder_throw": {
-        "name": "Boulder Throw",
-        "type": "ability",
-        "image": "assets/boulder_throw.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "ares",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "cooldown": 35,
-        "description": "Throws a boulder, dealing high crush damage"
-      },
-      "gore_charge": {
-        "name": "Gore Charge",
-        "type": "ability",
-        "image": "assets/gore_charge.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "athena",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "cooldown": 40,
-        "description": "Charges with horns, knocking back enemies"
-      },
-      "stone_gaze": {
-        "name": "Stone Gaze",
-        "type": "ability",
-        "image": "assets/stone_gaze.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "hera",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "cooldown": 50,
-        "description": "Turns an enemy unit to stone temporarily"
+      "functions": {
+        "provides_population": 10,
+        "trains_units": [],
+        "researches_techs": []
       }
     },
-    "godPowers": {
-      "lure": {
-        "name": "Lure",
-        "type": "godPower",
-        "image": "assets/lure.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Attracts animals to a location for easy hunting",
-        "cooldown": 60,
-        "area_of_effect": 20
+    "barracks": {
+      "name": "Barracks",
+      "type": "building",
+      "image": "assets/barracks.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 20,
+      "build_time": 30,
+      "hitpoints": 1200,
+      "cost": { "wood": 100 },
+      "defensive_stats": {
+        "hack_armor": 30,
+        "pierce_armor": 30,
+        "crush_armor": 20
       },
-      "sentinels": {
-        "name": "Sentinels",
-        "type": "godPower",
-        "image": "assets/sentinels.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Creates defensive statues at a Town Center",
-        "cooldown": 120,
-        "area_of_effect": 15
+      "functions": {
+        "trains_units": ["hoplite", "myrmidon", "hypaspist"],
+        "researches_techs": [
+          "medium_infantry",
+          "heavy_infantry",
+          "champion_infantry"
+        ]
+      }
+    },
+    "archery_range": {
+      "name": "Archery Range",
+      "type": "building",
+      "image": "assets/archery_range.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 20,
+      "build_time": 30,
+      "hitpoints": 1200,
+      "cost": { "wood": 100 },
+      "defensive_stats": {
+        "hack_armor": 30,
+        "pierce_armor": 30,
+        "crush_armor": 20
       },
-      "bolt": {
-        "name": "Bolt",
-        "type": "godPower",
-        "image": "assets/bolt.jpg",
-        "age_required": "Archaic",
-        "civ": "Greek",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Instantly kills a single enemy unit",
-        "cooldown": 180,
-        "area_of_effect": 1
+      "functions": {
+        "trains_units": ["toxotes", "peltast", "gastraphetes"],
+        "researches_techs": [
+          "medium_archers",
+          "heavy_archers",
+          "champion_archers"
+        ]
+      }
+    },
+    "stable": {
+      "name": "Stable",
+      "type": "building",
+      "image": "assets/stable.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 20,
+      "build_time": 35,
+      "hitpoints": 1200,
+      "cost": { "wood": 100 },
+      "defensive_stats": {
+        "hack_armor": 30,
+        "pierce_armor": 30,
+        "crush_armor": 20
       },
-      "ceasefire": {
-        "name": "Ceasefire",
-        "type": "godPower",
-        "image": "assets/ceasefire.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "hermes",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Pauses combat for a short time",
-        "cooldown": 90,
-        "area_of_effect": 0,
-        "is_passive": true
+      "functions": {
+        "trains_units": ["hippikon", "prodromos", "hetairoi"],
+        "researches_techs": [
+          "medium_cavalry",
+          "heavy_cavalry",
+          "champion_cavalry"
+        ]
+      }
+    },
+    "temple": {
+      "name": "Temple",
+      "type": "building",
+      "image": "assets/temple.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 18,
+      "build_time": 25,
+      "hitpoints": 1200,
+      "cost": { "wood": 100, "gold": 50 },
+      "defensive_stats": {
+        "hack_armor": 25,
+        "pierce_armor": 25,
+        "crush_armor": 15
       },
-      "oracle": {
-        "name": "Oracle",
-        "type": "godPower",
-        "image": "assets/oracle.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "apollo",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Reveals a portion of the map",
-        "cooldown": 90,
-        "area_of_effect": 30
+      "functions": {
+        "trains_units": [
+          "centaur",
+          "minotaur",
+          "cyclops",
+          "hydra",
+          "manticore",
+          "nemean_lion",
+          "colossus",
+          "scylla",
+          "chimera",
+          "medusa"
+        ],
+        "researches_techs": [
+          "winged_messenger",
+          "sun_ray",
+          "flaming_arrows",
+          "phobos_spear",
+          "aegis_shield",
+          "monstrous_rage"
+        ]
+      }
+    },
+    "fortress": {
+      "name": "Fortress",
+      "type": "building",
+      "image": "assets/fortress.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "line_of_sight": 28,
+      "build_time": 50,
+      "hitpoints": 2400,
+      "cost": { "wood": 250, "gold": 250 },
+      "defensive_stats": {
+        "hack_armor": 50,
+        "pierce_armor": 50,
+        "crush_armor": 40
       },
-      "earthquake": {
-        "name": "Earthquake",
-        "type": "godPower",
-        "image": "assets/earthquake.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "artemis",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Damages enemy buildings in an area",
-        "cooldown": 120,
-        "area_of_effect": 25
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 15,
+        "crush_damage": 0,
+        "type": "ranged",
+        "range": 28
       },
-      "pestilence": {
-        "name": "Pestilence",
-        "type": "godPower",
-        "image": "assets/pestilence.jpg",
-        "age_required": "Classical",
-        "civ": "Greek",
-        "prerequisite_god": "ares",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Prevents enemy buildings from producing units temporarily",
-        "cooldown": 100,
-        "area_of_effect": 20
+      "functions": {
+        "trains_units": ["petrobolos", "helepolis"],
+        "researches_techs": ["siege_works"]
+      }
+    },
+    "armory": {
+      "name": "Armory",
+      "type": "building",
+      "image": "assets/armory.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 18,
+      "build_time": 30,
+      "hitpoints": 1200,
+      "cost": { "wood": 150 },
+      "defensive_stats": {
+        "hack_armor": 25,
+        "pierce_armor": 25,
+        "crush_armor": 15
       },
-      "restoration": {
-        "name": "Restoration",
-        "type": "godPower",
-        "image": "assets/restoration.jpg",
-        "age_required": "Heroic",
-        "civ": "Greek",
-        "prerequisite_god": "athena",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Heals friendly units in an area",
-        "cooldown": 90,
-        "area_of_effect": 15
+      "functions": {
+        "trains_units": [],
+        "researches_techs": [
+          "copper_weapons",
+          "bronze_weapons",
+          "iron_weapons",
+          "copper_mail",
+          "bronze_mail",
+          "iron_mail",
+          "copper_shields",
+          "bronze_shields",
+          "iron_shields"
+        ]
+      }
+    },
+    "market": {
+      "name": "Market",
+      "type": "building",
+      "image": "assets/market.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 18,
+      "build_time": 35,
+      "hitpoints": 1200,
+      "cost": { "wood": 150 },
+      "defensive_stats": {
+        "hack_armor": 25,
+        "pierce_armor": 25,
+        "crush_armor": 15
       },
-      "lightning_storm": {
-        "name": "Lightning Storm",
-        "type": "godPower",
-        "image": "assets/lightning_storm.jpg",
-        "age_required": "Mythic",
-        "civ": "Greek",
-        "prerequisite_god": "hera",
-        "line_of_sight": 0,
-        "build_time": 0,
-        "description": "Strikes multiple enemies with lightning",
-        "cooldown": 150,
-        "area_of_effect": 25
+      "functions": {
+        "trains_units": ["caravan"],
+        "researches_techs": ["coinage", "banking"]
+      }
+    },
+    "dock": {
+      "name": "Dock",
+      "type": "building",
+      "image": "assets/dock.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 22,
+      "build_time": 40,
+      "hitpoints": 1800,
+      "cost": { "wood": 100 },
+      "defensive_stats": {
+        "hack_armor": 25,
+        "pierce_armor": 25,
+        "crush_armor": 15
+      },
+      "functions": {
+        "trains_units": [
+          "fishing_ship",
+          "transport_ship",
+          "bireme",
+          "trireme",
+          "juggernaut",
+          "fire_ship"
+        ],
+        "researches_techs": ["naval_warfare"]
+      }
+    },
+    "tower": {
+      "name": "Tower",
+      "type": "building",
+      "image": "assets/tower.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 30,
+      "build_time": 40,
+      "hitpoints": 400,
+      "cost": { "wood": 50, "gold": 50 },
+      "defensive_stats": {
+        "hack_armor": 40,
+        "pierce_armor": 50,
+        "crush_armor": 30
+      },
+      "attack": {
+        "hack_damage": 0,
+        "pierce_damage": 10,
+        "crush_damage": 0,
+        "type": "ranged",
+        "range": 25
+      },
+      "functions": {
+        "trains_units": [],
+        "researches_techs": ["watch_tower", "guard_tower", "ballista_tower"]
+      }
+    },
+    "wall": {
+      "name": "Wall",
+      "type": "building",
+      "image": "assets/wall.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 16,
+      "build_time": 15,
+      "hitpoints": 700,
+      "cost": { "gold": 5 },
+      "defensive_stats": {
+        "hack_armor": 60,
+        "pierce_armor": 60,
+        "crush_armor": 50
+      },
+      "functions": {
+        "trains_units": [],
+        "researches_techs": []
+      }
+    },
+    "wonder": {
+      "name": "Wonder",
+      "type": "building",
+      "image": "assets/wonder.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "line_of_sight": 20,
+      "build_time": 100,
+      "hitpoints": 8000,
+      "cost": { "wood": 1000, "gold": 1000, "food": 1000, "favor": 1000 },
+      "defensive_stats": {
+        "hack_armor": 70,
+        "pierce_armor": 70,
+        "crush_armor": 60
+      },
+      "functions": {
+        "trains_units": [],
+        "researches_techs": []
       }
     }
+  },
+  "technologies": {
+    "medium_infantry": {
+      "name": "Medium Infantry",
+      "type": "technology",
+      "image": "assets/medium_infantry.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "barracks",
+      "cost": { "wood": 50, "gold": 50 },
+      "prerequisites": [{ "building": "barracks" }, { "age": "Classical" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_infantry"] },
+          "verb": "add",
+          "adjective": "hack_armor",
+          "value": 10
+        }
+      ]
+    },
+    "heavy_infantry": {
+      "name": "Heavy Infantry",
+      "type": "technology",
+      "image": "assets/heavy_infantry.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 25,
+      "research_location": "barracks",
+      "cost": { "wood": 50, "gold": 50 },
+      "prerequisites": [
+        { "building": "barracks" },
+        { "tech": "medium_infantry" },
+        { "age": "Heroic" }
+      ],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_infantry"] },
+          "verb": "add",
+          "adjective": "hack_armor",
+          "value": 15
+        }
+      ]
+    },
+    "winged_messenger": {
+      "name": "Winged Messenger",
+      "type": "technology",
+      "image": "assets/winged_messenger.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "hermes",
+      "line_of_sight": 0,
+      "build_time": 15,
+      "research_location": "temple",
+      "cost": { "wood": 50, "gold": 50, "favor": 10 },
+      "prerequisites": [{ "building": "temple" }, { "god": "hermes" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_myth"] },
+          "verb": "multiply",
+          "adjective": "speed",
+          "value": 1.2
+        }
+      ]
+    },
+    "sun_ray": {
+      "name": "Sun Ray",
+      "type": "technology",
+      "image": "assets/sun_ray.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "apollo",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "temple",
+      "cost": { "wood": 50, "gold": 50, "favor": 20 },
+      "prerequisites": [{ "building": "temple" }, { "god": "apollo" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_archer"] },
+          "verb": "add",
+          "adjective": "pierce_damage",
+          "value": 5
+        }
+      ]
+    },
+    "flaming_arrows": {
+      "name": "Flaming Arrows",
+      "type": "technology",
+      "image": "assets/flaming_arrows.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "artemis",
+      "line_of_sight": 0,
+      "build_time": 25,
+      "research_location": "temple",
+      "cost": { "wood": 50, "gold": 50, "favor": 30 },
+      "prerequisites": [{ "building": "temple" }, { "god": "artemis" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_archer"] },
+          "verb": "multiply",
+          "adjective": "pierce_damage",
+          "value": 1.15
+        }
+      ]
+    },
+    "phobos_spear": {
+      "name": "Phobos' Spear",
+      "type": "technology",
+      "image": "assets/phobos_spear.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "ares",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "temple",
+      "cost": { "wood": 50, "gold": 50, "favor": 15 },
+      "prerequisites": [{ "building": "temple" }, { "god": "ares" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_infantry"] },
+          "verb": "add",
+          "adjective": "hack_damage",
+          "value": 5
+        }
+      ]
+    },
+    "aegis_shield": {
+      "name": "Aegis Shield",
+      "type": "technology",
+      "image": "assets/aegis_shield.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "athena",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "temple",
+      "cost": { "wood": 50, "gold": 50, "favor": 20 },
+      "prerequisites": [{ "building": "temple" }, { "god": "athena" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_infantry"] },
+          "verb": "add",
+          "adjective": "hack_armor",
+          "value": 10
+        }
+      ]
+    },
+    "monstrous_rage": {
+      "name": "Monstrous Rage",
+      "type": "technology",
+      "image": "assets/monstrous_rage.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "hera",
+      "line_of_sight": 0,
+      "build_time": 25,
+      "research_location": "temple",
+      "cost": { "wood": 50, "gold": 50, "favor": 25 },
+      "prerequisites": [{ "building": "temple" }, { "god": "hera" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_myth"] },
+          "verb": "multiply",
+          "adjective": "hack_damage",
+          "value": 1.2
+        }
+      ]
+    },
+    "watch_tower": {
+      "name": "Watch Tower",
+      "type": "technology",
+      "image": "assets/watch_tower.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "tower",
+      "cost": { "wood": 50, "gold": 50 },
+      "prerequisites": [{ "building": "tower" }, { "age": "Classical" }],
+      "effects": [
+        {
+          "noun": { "building_name": "Tower" },
+          "verb": "add",
+          "adjective": "pierce_damage",
+          "value": 5
+        }
+      ]
+    },
+    "age_advance_classical": {
+      "name": "Classical Age",
+      "type": "technology",
+      "image": "assets/age_classical.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 40,
+      "research_location": "town_center",
+      "cost": { "food": 400 },
+      "prerequisites": [{ "building": "town_center" }],
+      "effects": [
+        {
+          "noun": { "tech_name": "Classical Age" },
+          "verb": "add",
+          "adjective": "age_unlock",
+          "value": 1
+        }
+      ]
+    },
+    "age_advance_heroic": {
+      "name": "Heroic Age",
+      "type": "technology",
+      "image": "assets/age_heroic.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 50,
+      "research_location": "town_center",
+      "cost": { "food": 600, "wood": 600 },
+      "prerequisites": [
+        { "building": "town_center" },
+        { "tech": "age_advance_classical" }
+      ],
+      "effects": [
+        {
+          "noun": { "tech_name": "Heroic Age" },
+          "verb": "add",
+          "adjective": "age_unlock",
+          "value": 1
+        }
+      ]
+    },
+    "age_advance_mythic": {
+      "name": "Mythic Age",
+      "type": "technology",
+      "image": "assets/age_mythic.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 60,
+      "research_location": "town_center",
+      "cost": { "gold": 1200, "wood": 1200 },
+
+      "prerequisites": [
+        { "building": "town_center" },
+        { "tech": "age_advance_heroic" }
+      ],
+      "effects": [
+        {
+          "noun": { "tech_name": "Mythic Age" },
+          "verb": "add",
+          "adjective": "age_unlock",
+          "value": 1
+        }
+      ]
+    },
+    "medium_cavalry": {
+      "name": "Medium Cavalry",
+      "type": "technology",
+      "image": "assets/medium_cavalry.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "stable",
+      "cost": { "wood": 50, "gold": 50 },
+      "prerequisites": [{ "building": "stable" }, { "age": "Classical" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_cavalry"] },
+          "verb": "add",
+          "adjective": "hack_armor",
+          "value": 10
+        }
+      ]
+    },
+    "heroic_fleet": {
+      "name": "Heroic Fleet",
+      "type": "technology",
+      "image": "assets/heroic_fleet.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 25,
+      "research_location": "dock",
+      "cost": { "wood": 50, "gold": 50, "favor": 15 },
+      "prerequisites": [{ "building": "dock" }, { "age": "Heroic" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_ship"] },
+          "verb": "add",
+          "adjective": "pierce_damage",
+          "value": 10
+        }
+      ]
+    },
+    "siege_works": {
+      "name": "Siege Works",
+      "type": "technology",
+      "image": "assets/siege_works.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 30,
+      "research_location": "fortress",
+      "cost": { "wood": 50, "gold": 55 },
+      "prerequisites": [{ "building": "fortress" }, { "age": "Mythic" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_siege"] },
+          "verb": "multiply",
+          "adjective": "crush_damage",
+          "value": 1.2
+        }
+      ]
+    },
+    "trade_route": {
+      "name": "Trade Route",
+      "type": "technology",
+      "image": "assets/trade_route.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "market",
+      "cost": { "wood": 50, "gold": 55 },
+      "prerequisites": [{ "building": "market" }, { "age": "Heroic" }],
+      "effects": [
+        {
+          "noun": { "building_name": "Market" },
+          "verb": "multiply",
+          "adjective": "gold_gather_rate",
+          "value": 1.3
+        }
+      ]
+    },
+    "burning_pitch": {
+      "name": "Burning Pitch",
+      "type": "technology",
+      "image": "assets/burning_pitch.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 25,
+      "research_location": "armory",
+      "cost": { "wood": 50, "gold": 55 },
+      "prerequisites": [{ "building": "armory" }, { "age": "Heroic" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_siege"] },
+          "verb": "add",
+          "adjective": "crush_damage",
+          "value": 10
+        }
+      ]
+    },
+    "copper_weapons": {
+      "name": "Copper Weapons",
+      "type": "technology",
+      "image": "assets/copper_weapons.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 20,
+      "research_location": "armory",
+      "cost": { "wood": 50, "gold": 55 },
+      "prerequisites": [{ "building": "armory" }, { "age": "Classical" }],
+      "effects": [
+        {
+          "noun": { "unit_tags": ["is_infantry", "is_cavalry"] },
+          "verb": "add",
+          "adjective": "hack_damage",
+          "value": 5
+        }
+      ]
+    }
+  },
+  "abilities": {
+    "swift_shot": {
+      "name": "Swift Shot",
+      "type": "ability",
+      "image": "assets/swift_shot.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "hermes",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "cooldown": 30,
+      "description": "Increases attack speed temporarily"
+    },
+    "spike_volley": {
+      "name": "Spike Volley",
+      "type": "ability",
+      "image": "assets/spike_volley.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "apollo",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "cooldown": 40,
+      "description": "Fires a volley of spikes, damaging multiple enemies"
+    },
+    "fire_breath": {
+      "name": "Fire Breath",
+      "type": "ability",
+      "image": "assets/fire_breath.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "artemis",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "cooldown": 45,
+      "description": "Breathes fire, dealing area damage"
+    },
+    "boulder_throw": {
+      "name": "Boulder Throw",
+      "type": "ability",
+      "image": "assets/boulder_throw.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "ares",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "cooldown": 35,
+      "description": "Throws a boulder, dealing high crush damage"
+    },
+    "gore_charge": {
+      "name": "Gore Charge",
+      "type": "ability",
+      "image": "assets/gore_charge.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "athena",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "cooldown": 40,
+      "description": "Charges with horns, knocking back enemies"
+    },
+    "stone_gaze": {
+      "name": "Stone Gaze",
+      "type": "ability",
+      "image": "assets/stone_gaze.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "hera",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "cooldown": 50,
+      "description": "Turns an enemy unit to stone temporarily"
+    }
+  },
+  "godPowers": {
+    "lure": {
+      "name": "Lure",
+      "type": "godPower",
+      "image": "assets/lure.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Attracts animals to a location for easy hunting",
+      "cooldown": 60,
+      "area_of_effect": 20
+    },
+    "sentinels": {
+      "name": "Sentinels",
+      "type": "godPower",
+      "image": "assets/sentinels.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Creates defensive statues at a Town Center",
+      "cooldown": 120,
+      "area_of_effect": 15
+    },
+    "bolt": {
+      "name": "Bolt",
+      "type": "godPower",
+      "image": "assets/bolt.jpg",
+      "age_required": "Archaic",
+      "civ": "Greek",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Instantly kills a single enemy unit",
+      "cooldown": 180,
+      "area_of_effect": 1
+    },
+    "ceasefire": {
+      "name": "Ceasefire",
+      "type": "godPower",
+      "image": "assets/ceasefire.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "hermes",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Pauses combat for a short time",
+      "cooldown": 90,
+      "area_of_effect": 0,
+      "is_passive": true
+    },
+    "oracle": {
+      "name": "Oracle",
+      "type": "godPower",
+      "image": "assets/oracle.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "apollo",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Reveals a portion of the map",
+      "cooldown": 90,
+      "area_of_effect": 30
+    },
+    "earthquake": {
+      "name": "Earthquake",
+      "type": "godPower",
+      "image": "assets/earthquake.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "artemis",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Damages enemy buildings in an area",
+      "cooldown": 120,
+      "area_of_effect": 25
+    },
+    "pestilence": {
+      "name": "Pestilence",
+      "type": "godPower",
+      "image": "assets/pestilence.jpg",
+      "age_required": "Classical",
+      "civ": "Greek",
+      "prerequisite_god": "ares",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Prevents enemy buildings from producing units temporarily",
+      "cooldown": 100,
+      "area_of_effect": 20
+    },
+    "restoration": {
+      "name": "Restoration",
+      "type": "godPower",
+      "image": "assets/restoration.jpg",
+      "age_required": "Heroic",
+      "civ": "Greek",
+      "prerequisite_god": "athena",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Heals friendly units in an area",
+      "cooldown": 90,
+      "area_of_effect": 15
+    },
+    "lightning_storm": {
+      "name": "Lightning Storm",
+      "type": "godPower",
+      "image": "assets/lightning_storm.jpg",
+      "age_required": "Mythic",
+      "civ": "Greek",
+      "prerequisite_god": "hera",
+      "line_of_sight": 0,
+      "build_time": 0,
+      "description": "Strikes multiple enemies with lightning",
+      "cooldown": 150,
+      "area_of_effect": 25
+    }
   }
+}

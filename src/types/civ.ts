@@ -70,9 +70,10 @@ export interface AttackStats extends DamageMultipliers {
   pierce_damage: number;
   crush_damage: number;
   divine_damage?: number;
+  attack_speed: number;
   type?: 'melee' | 'ranged';
-  reload_time?: number;
   range?: number;
+  number_projectiles?: number;
 }
 
 // === ENTITIES === //
