@@ -127,28 +127,44 @@ const technologiesTemplate = (technologies: Record<string, Technology>) => html`
       )}
 `;
 
+const buildingGridLayout = [
+  ['house', null, null, null, 'temple', 'dock'],
+  ['barracks', 'stable', null, null, 'market', 'armory'],
+  ['town_center', 'wall', 'tower', 'fortress', null, 'wonder']
+];
+
 const buildingsTemplate = (buildings: Record<string, Building>) => html`
-    ${Object.values(buildings).map(
-      building => html`
-        <div
-          class="tile building ${activeBuilding === building.name ? 'active' : ''}"
-          @click=${() => {
-            setActiveBuilding(building.name);
-            showPreview(building);
-          }}
-          tabindex="0"
-        >
-          <img src="${building.image || 'assets/placeholder.jpg'}" alt="${building.name} Sprite" class="sprite" width="64" height="64" />
-          <h5>${building.name}</h5>
-          ${building.functions.trains_units?.length
-            ? html`<p>Trains: ${building.functions.trains_units.join(', ')}</p>`
-            : ''}
-          ${building.functions.researches_techs?.length
-            ? html`<p>Researches: ${building.functions.researches_techs.join(', ')}</p>`
-            : ''}
-        </div>
-      `
-    )}
+  ${buildingGridLayout.map(row => row.map(buildingKey => {
+    if (!buildingKey) {
+      return html`<div class="tile placeholder" @click=${() => openAddBuildingModal()} tabindex="0" role="button" aria-label="Add new building">
+      <span class="plus-icon">+</span>
+    </div>`
+    }
+    const building = buildings[buildingKey];
+    if (!building) {
+      console.warn(`Building ${buildingKey} not found in data.buildings`);
+      return html`<div class="tile empty"></div>`;
+    }
+    return html`
+      <div
+        class="tile building ${activeBuilding === building.name ? 'active' : ''}"
+        @click=${() => {
+          setActiveBuilding(building.name);
+          showPreview(building);
+        }}
+        tabindex="0"
+      >
+        <img src="${building.image || 'assets/placeholder.jpg'}" alt="${building.name} Sprite" class="sprite" width="64" height="64" />
+        <h5>${building.name}</h5>
+        ${building.functions.trains_units?.length
+          ? html`<p>Trains: ${building.functions.trains_units.join(', ')}</p>`
+          : ''}
+        ${building.functions.researches_techs?.length
+          ? html`<p>Researches: ${building.functions.researches_techs.join(', ')}</p>`
+          : ''}
+      </div>
+    `;
+  }))}
 `;
 
 const abilitiesTemplate = (abilities: Record<string, Ability>) => html`
@@ -322,7 +338,11 @@ function showPreview(entity: Entity) {
 // Stub for edit modal
 function openEditModal(_entity: Entity) {
   console.log('Open edit modal for:', _entity.name);
-}
+}  // TODO: Implement modal form to edit a thing
+
+function openAddBuildingModal() {
+  console.log('Open add building modal');
+}  // TODO: Implement modal form to add a building
 
 // Render all sections
 function renderAll() {

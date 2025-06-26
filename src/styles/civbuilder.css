@@ -131,6 +131,12 @@ section {
   overflow: hidden;
 }
 
+.tile.empty { /*add plus button here later*/
+  background-color: #e0e0e0; /* Light gray to show empty slot */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
 .tile:hover, .tile:focus {
   background-color: #e0e0e0;
   transform: translateY(-2px);
