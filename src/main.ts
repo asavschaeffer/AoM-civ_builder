@@ -98,7 +98,6 @@ const minorGodsTemplate = (gods: Record<string, MinorGod>) => html`
 `;
 
 const unitsTemplate = (units: Record<string, Unit>) => html`
-  <div class="grid">
     ${Object.values(units)
       .filter(unit => !activeBuilding || findRelatedBuildings(unit.name, data.buildings, 'trains_units').includes(activeBuilding))
       .map(
@@ -112,11 +111,9 @@ const unitsTemplate = (units: Record<string, Unit>) => html`
           </div>
         `
       )}
-  </div>
 `;
 
 const technologiesTemplate = (technologies: Record<string, Technology>) => html`
-  <div class="grid">
     ${Object.values(technologies)
       .filter(tech => !activeBuilding || findRelatedBuildings(tech.name, data.buildings, 'researches_techs').includes(activeBuilding))
       .map(
@@ -128,11 +125,9 @@ const technologiesTemplate = (technologies: Record<string, Technology>) => html`
           </div>
         `
       )}
-  </div>
 `;
 
 const buildingsTemplate = (buildings: Record<string, Building>) => html`
-  <div class="grid">
     ${Object.values(buildings).map(
       building => html`
         <div
@@ -154,7 +149,6 @@ const buildingsTemplate = (buildings: Record<string, Building>) => html`
         </div>
       `
     )}
-  </div>
 `;
 
 const abilitiesTemplate = (abilities: Record<string, Ability>) => html`

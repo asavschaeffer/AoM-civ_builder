@@ -143,6 +143,8 @@ export interface Ability extends Entity {
   type: 'ability';
   cooldown: number;
   description?: string;
+  area_of_effect?: number;
+  duration?: number;
 }
 
 export interface GodPower extends Entity {
@@ -151,6 +153,7 @@ export interface GodPower extends Entity {
   is_passive?: boolean;
   cooldown?: number;
   area_of_effect?: number;
+  duration?: number;
 }
 
 // === CIVILIZATION === //
