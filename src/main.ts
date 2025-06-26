@@ -6,8 +6,14 @@ import { Civ,Entity, MajorGod, MinorGod, Unit, Building, Technology, Ability, Go
 const data = civData as Civ;
 
 // State management
+let activeEntity: string | null = null;
 let activeMajorGod = localStorage.getItem('activeMajorGod') || 'zeus';
 let activeBuilding: string | null = null;
+
+function setActiveEntity(entity: string | null) {
+  activeEntity = entity;
+  localStorage.setItem('activeEntity', entity || '');
+}
 
 function setActiveMajorGod(god: string) {
   activeMajorGod = god;
@@ -97,34 +103,134 @@ const minorGodsTemplate = (gods: Record<string, MinorGod>) => html`
   </div>
 `;
 
-const unitsTemplate = (units: Record<string, Unit>) => html`
-    ${Object.values(units)
-      .filter(unit => !activeBuilding || findRelatedBuildings(unit.name, data.buildings, 'trains_units').includes(activeBuilding))
-      .map(
-        unit => html`
-          <div class="tile unit" data-unit="${unit.name}" @click=${() => showPreview(unit)} tabindex="0">
-            <img src="${unit.image || 'assets/placeholderunit.jpg'}" alt="${unit.name} Sprite" class="sprite" width="64" height="64" />
-            <h5>${unit.name}</h5>
-            <p>Category: ${unit.unit_category}</p>
-            <p>Trained at: ${findRelatedBuildings(unit.name, data.buildings, 'trains_units').join(', ') || 'None'}</p>
-            ${unit.abilities?.length ? html`<p>Abilities: ${unit.abilities.join(', ')}</p>` : ''}
-          </div>
-        `
-      )}
-`;
+function createUnitsTechsGridLayout(
+  units: Record<string, Unit>,
+  technologies: Record<string, Technology>,
+  activeBuilding: string | null,
+  activeMajorGod: string
+): (string | null)[][] {
+  const layout: (string | null)[][] = [
+    [null, null, null, null, null, null], // Units
+    [null, null, null, null, null, null], // Upgrade techs
+    [null, null, null, null, null, null]  // Mythic/generic techs
+  ];
 
-const technologiesTemplate = (technologies: Record<string, Technology>) => html`
-    ${Object.values(technologies)
-      .filter(tech => !activeBuilding || findRelatedBuildings(tech.name, data.buildings, 'researches_techs').includes(activeBuilding))
-      .map(
-        tech => html`
-          <div class="tile technology" @click=${() => showPreview(tech)} tabindex="0">
-            <img src="${tech.image || 'assets/placeholder.jpg'}" alt="${tech.name} Sprite" class="sprite" width="64" height="64" />
-            <h5>${tech.name}</h5>
-            <p>Research at: ${findRelatedBuildings(tech.name, data.buildings, 'researches_techs').join(', ') || tech.research_location}</p>
-          </div>
-        `
-      )}
+  if (!activeBuilding) {
+    return layout; // Empty grid if no building selected
+  }
+
+  // Get units trainable at the selected building
+  const trainableUnits = Object.values(units)
+    .filter(unit => findRelatedBuildings(unit.name, data.buildings, 'trains_units').includes(activeBuilding))
+    .slice(0, 6); // Limit to 6 units
+
+  // Place units in the top row
+  trainableUnits.forEach((unit, index) => {
+    if (index < 6) {
+      layout[0][index] = unit.name.toLowerCase();
+    }
+  });
+
+  // Get techs researchable at the selected building
+  const researchableTechs = Object.values(technologies)
+    .filter(tech => findRelatedBuildings(tech.name, data.buildings, 'researches_techs').includes(activeBuilding));
+
+  // Separate upgrade techs (e.g., medium_cavalry for cavalry units) and mythic/generic techs
+  const upgradeTechs: Technology[] = [];
+  const mythicGenericTechs: Technology[] = [];
+
+  researchableTechs.forEach(tech => {
+    const isUpgrade = tech.name.toLowerCase().includes('medium') || tech.name.toLowerCase().includes('heavy');
+    if (isUpgrade) {
+      upgradeTechs.push(tech);
+    } else {
+      mythicGenericTechs.push(tech);
+    }
+  });
+
+  // Place upgrade techs in the middle row, trying to align with units
+  trainableUnits.forEach((unit, index) => {
+    if (index >= 6) return;
+    const unitCategory = unit.unit_category.toLowerCase();
+    const matchingTech = upgradeTechs.find(tech =>
+      tech.name.toLowerCase().includes(unitCategory) ||
+      (unitCategory === 'infantry' && tech.name.toLowerCase().includes('infantry')) ||
+      (unitCategory === 'cavalry' && tech.name.toLowerCase().includes('cavalry'))
+    );
+    if (matchingTech) {
+      layout[1][index] = matchingTech.name.toLowerCase();
+    }
+  });
+
+  // Place mythic/generic techs in the bottom row, filtered by activeMajorGod
+  const minorGods = data.majorGods[activeMajorGod]?.minorGods || [];
+  const validTechs = mythicGenericTechs.filter(tech =>
+    !tech.prerequisite_god || minorGods.includes(tech.prerequisite_god)
+  );
+  validTechs.slice(0, 6).forEach((tech, index) => {
+    if (index < 6) {
+      layout[2][index] = tech.name.toLowerCase();
+    }
+  });
+
+  return layout;
+}
+
+
+const unitsTechsTemplate = (
+  units: Record<string, Unit>,
+  technologies: Record<string, Technology>,
+  activeBuilding: string | null,
+  activeMajorGod: string
+) => html`
+  ${createUnitsTechsGridLayout(units, technologies, activeBuilding, activeMajorGod).map(row => row.map(entityKey => {
+    if (!entityKey) {
+      return html`
+        <div class="tile placeholder" @click=${() => console.log('Add unit/tech')} tabindex="0" role="button" aria-label="Add new unit or technology">
+          <span class="plus-icon">+</span>
+        </div>
+      `;
+    }
+    const unit = units[entityKey];
+    const tech = technologies[entityKey];
+    if (!unit && !tech) {
+      console.warn(`Entity ${entityKey} not found in units or technologies`);
+      return html`<div class="tile empty"></div>`;
+    }
+    if (unit) {
+      return html`
+        <div
+          class="tile unit ${activeEntity === unit.name ? 'active' : ''}"
+          data-unit="${unit.name}"
+          @click=${() => {
+            setActiveEntity(unit.name);
+            showPreview(unit);
+          }}
+          tabindex="0"
+        >
+          <img src="${unit.image || 'assets/placeholderunit.jpg'}" alt="${unit.name} Sprite" class="sprite" width="64" height="64" />
+          <h5>${unit.name}</h5>
+          <p>Category: ${unit.unit_category}</p>
+          <p>Trained at: ${findRelatedBuildings(unit.name, data.buildings, 'trains_units').join(', ') || 'None'}</p>
+          ${unit.abilities?.length ? html`<p>Abilities: ${unit.abilities.join(', ')}</p>` : ''}
+        </div>
+      `;
+    }
+    return html`
+      <div
+        class="tile technology ${activeEntity === tech.name ? 'active' : ''}"
+        @click=${() => {
+          setActiveEntity(tech.name);
+          showPreview(tech);
+        }}
+        tabindex="0"
+      >
+        <img src="${tech.image || 'assets/placeholder.jpg'}" alt="${tech.name} Sprite" class="sprite" width="64" height="64" />
+        <h5>${tech.name}</h5>
+        <p>Research at: ${findRelatedBuildings(tech.name, data.buildings, 'researches_techs').join(', ') || tech.research_location}</p>
+      </div>
+    `;
+  }))}
 `;
 
 const buildingGridLayout = [
@@ -198,7 +304,6 @@ const godPowersTemplate = (godPowers: Record<string, GodPower>) => html`
 // Preview template
 function showPreview(entity: Entity) {
   const template = html`
-    <div class="preview-content" role="region" aria-label="${entity.type} Preview">
       <h4>${entity.name}</h4>
       <img src="${entity.image || 'assets/placeholder.jpg'}" alt="${entity.name} Preview" class="preview-image" width="200" height="200" />
       <dl class="stats">
@@ -324,10 +429,11 @@ function showPreview(entity: Entity) {
         ` : ''}
       </dl>
       <button class="edit-btn" @click=${() => openEditModal(entity)}>Edit Details</button>
-    </div>
   `;
-  const previewContainer = document.querySelector('.units-techs .preview-content .preview') ||
-                          document.querySelector('.buildings .preview-content .preview');
+  const isBuilding = entity.type === 'building';
+  const previewContainer = document.querySelector(
+    isBuilding ? '.buildings .preview-content .preview' : '.units-techs .preview-content .preview'
+  );
   if (previewContainer instanceof HTMLElement) {
     render(template, previewContainer);
   } else {
@@ -360,25 +466,18 @@ function renderAll() {
     console.error('Minor gods container not found or not an HTMLElement');
   }
 
-  const unitsContainer = document.querySelector('.units-techs .units-grid');
-  if (unitsContainer instanceof HTMLElement) {
-    render(unitsTemplate(data.units), unitsContainer);
-  } else {
-    console.error('Units container not found or not an HTMLElement');
-  }
-
-  const technologiesContainer = document.querySelector('.units-techs .technologies-grid');
-  if (technologiesContainer instanceof HTMLElement) {
-    render(technologiesTemplate(data.technologies), technologiesContainer);
-  } else {
-    console.error('Technologies container not found or not an HTMLElement');
-  }
-
-  const buildingsContainer = document.querySelector('.buildings .grid');
+  const buildingsContainer = document.querySelector('.buildings .buildings-grid');
   if (buildingsContainer instanceof HTMLElement) {
     render(buildingsTemplate(data.buildings), buildingsContainer);
   } else {
     console.error('Buildings container not found or not an HTMLElement');
+  }
+
+  const unitsTechsContainer = document.querySelector('.units-techs .units-techs-grid');
+  if (unitsTechsContainer instanceof HTMLElement) {
+    render(unitsTechsTemplate(data.units, data.technologies, activeBuilding, activeMajorGod), unitsTechsContainer);
+  } else {
+    console.error('Units/Techs container not found or not an HTMLElement');
   }
 
   const abilitiesContainer = document.querySelector('.abilities .grid');

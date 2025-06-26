@@ -20,8 +20,8 @@ export interface Entity {
   civ?: CivName;
   prerequisite_god?: string; // Optional god requirement
   prerequisite_building?: string; // Optional building requirement
-  line_of_sight: number;
-  build_time: number;
+  line_of_sight?:number;
+  build_time?:number;
 }
 
 // === COMMON TRAITS === //
@@ -105,6 +105,7 @@ export interface Building extends Entity {
 export interface Technology extends Entity {
   type: 'technology';
   research_location: string; // Building name
+  cost: Cost;
   prerequisites?: {
     building?: string;
     age?: Age;
@@ -129,6 +130,7 @@ export interface MajorGod extends Entity {
   tagline: string;
   godPowers: string[];
   passive_bonuses?: string[];
+  minorGods: string[];
 }
 
 export interface MinorGod extends Entity {

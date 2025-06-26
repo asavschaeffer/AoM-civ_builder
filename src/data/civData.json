@@ -11,7 +11,8 @@
         "build_time": 0,
         "tagline": "God of the Sea",
         "godPowers": ["lure"],
-        "passive_bonuses": ["cavalry_speed_boost"]
+        "passive_bonuses": ["cavalry_speed_boost"],
+        "minorGods": ["hermes"]
       },
       "hades": {
         "name": "Hades",
@@ -23,7 +24,8 @@
         "build_time": 0,
         "tagline": "God of the Underworld",
         "godPowers": ["sentinels"],
-        "passive_bonuses": ["archer_damage_boost"]
+        "passive_bonuses": ["archer_damage_boost"],
+        "minorGods": ["ares"]
       },
       "zeus": {
         "name": "Zeus",
@@ -35,7 +37,8 @@
         "build_time": 0,
         "tagline": "God of the Sky",
         "godPowers": ["bolt"],
-        "passive_bonuses": ["infantry_hp_boost"]
+        "passive_bonuses": ["infantry_hp_boost"],
+        "minorGods": ["hermes", "apollo", "athena", "hera"]
       }
     },
     "minorGods": {
@@ -722,6 +725,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "barracks",
+        "cost": { "wood": 50, "gold": 50 },
         "prerequisites": [
           { "building": "barracks" },
           { "age": "Classical" }
@@ -744,6 +748,7 @@
         "line_of_sight": 0,
         "build_time": 25,
         "research_location": "barracks",
+        "cost": { "wood": 50, "gold": 50 },
         "prerequisites": [
           { "building": "barracks" },
           { "tech": "medium_infantry" },
@@ -768,6 +773,7 @@
         "line_of_sight": 0,
         "build_time": 15,
         "research_location": "temple",
+        "cost": { "wood": 50, "gold": 50, "favor": 10 },
         "prerequisites": [
           { "building": "temple" },
           { "god": "hermes" }
@@ -791,6 +797,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "temple",
+        "cost": { "wood": 50, "gold": 50, "favor": 20 },
         "prerequisites": [
           { "building": "temple" },
           { "god": "apollo" }
@@ -814,6 +821,7 @@
         "line_of_sight": 0,
         "build_time": 25,
         "research_location": "temple",
+        "cost": { "wood": 50, "gold": 50, "favor": 30 },
         "prerequisites": [
           { "building": "temple" },
           { "god": "artemis" }
@@ -837,6 +845,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "temple",
+        "cost": { "wood": 50, "gold": 50, "favor": 15},
         "prerequisites": [
           { "building": "temple" },
           { "god": "ares" }
@@ -860,6 +869,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "temple",
+        "cost": { "wood": 50, "gold": 50, "favor": 20},
         "prerequisites": [
           { "building": "temple" },
           { "god": "athena" }
@@ -883,6 +893,7 @@
         "line_of_sight": 0,
         "build_time": 25,
         "research_location": "temple",
+        "cost": { "wood": 50, "gold": 50, "favor": 25},
         "prerequisites": [
           { "building": "temple" },
           { "god": "hera" }
@@ -905,6 +916,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "tower",
+        "cost": { "wood": 50, "gold": 50},
         "prerequisites": [
           { "building": "tower" },
           { "age": "Classical" }
@@ -927,6 +939,7 @@
         "line_of_sight": 0,
         "build_time": 40,
         "research_location": "town_center",
+        "cost": { "food":400},
         "prerequisites": [
           { "building": "town_center" }
         ],
@@ -948,6 +961,7 @@
         "line_of_sight": 0,
         "build_time": 50,
         "research_location": "town_center",
+        "cost": { "food":600,"wood":600},
         "prerequisites": [
           { "building": "town_center" },
           { "tech": "age_advance_classical" }
@@ -970,6 +984,8 @@
         "line_of_sight": 0,
         "build_time": 60,
         "research_location": "town_center",
+        "cost": { "gold":1200, "wood":1200},
+
         "prerequisites": [
           { "building": "town_center" },
           { "tech": "age_advance_heroic" }
@@ -992,6 +1008,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "stable",
+        "cost": { "wood": 50, "gold": 50},
         "prerequisites": [
           { "building": "stable" },
           { "age": "Classical" }
@@ -1005,15 +1022,16 @@
           }
         ]
       },
-      "naval_warfare": {
-        "name": "Naval Warfare",
+      "heroic_fleet": {
+        "name": "Heroic Fleet",
         "type": "technology",
-        "image": "assets/naval_warfare.jpg",
+        "image": "assets/heroic_fleet.jpg",
         "age_required": "Heroic",
         "civ": "Greek",
         "line_of_sight": 0,
         "build_time": 25,
         "research_location": "dock",
+        "cost": { "wood": 50, "gold": 50, "favor": 15},
         "prerequisites": [
           { "building": "dock" },
           { "age": "Heroic" }
@@ -1036,6 +1054,7 @@
         "line_of_sight": 0,
         "build_time": 30,
         "research_location": "fortress",
+        "cost": { "wood": 50, "gold": 55},
         "prerequisites": [
           { "building": "fortress" },
           { "age": "Mythic" }
@@ -1058,6 +1077,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "market",
+        "cost": { "wood": 50, "gold": 55},
         "prerequisites": [
           { "building": "market" },
           { "age": "Heroic" }
@@ -1080,6 +1100,7 @@
         "line_of_sight": 0,
         "build_time": 25,
         "research_location": "armory",
+        "cost": { "wood": 50, "gold": 55},
         "prerequisites": [
           { "building": "armory" },
           { "age": "Heroic" }
@@ -1102,6 +1123,7 @@
         "line_of_sight": 0,
         "build_time": 20,
         "research_location": "armory",
+        "cost": { "wood": 50, "gold": 55},
         "prerequisites": [
           { "building": "armory" },
           { "age": "Classical" }
