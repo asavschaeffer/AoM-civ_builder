@@ -394,7 +394,7 @@
             "image": "assets/hetairoi.jpg",
             "age_required": "Mythic",
             "civ": "Greek",
-            "prerequisite_god": "zeus",
+            "prerequisite_god": "poseidon",
             "prerequisite_building": "stable",
             "line_of_sight": 15,
             "build_time": 18,

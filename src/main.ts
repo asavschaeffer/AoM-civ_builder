@@ -11,6 +11,7 @@ let activeMajorGod = localStorage.getItem('activeMajorGod') || 'zeus';
 let activeBuilding: string | null = null;
 
 function setActiveEntity(entity: string | null) {
+  console.log('Setting activeEntity:', entity);
   activeEntity = entity;
   localStorage.setItem('activeEntity', entity || '');
 }
@@ -22,7 +23,9 @@ function setActiveMajorGod(god: string) {
 }
 
 function setActiveBuilding(building: string | null) {
-  activeBuilding = building;
+  console.log('Setting activeBuilding:', building);
+  activeBuilding = building ? building.toLowerCase() : null;
+  activeEntity = null;
   localStorage.setItem('activeBuilding', building || '');
   renderAll();
 }
@@ -33,9 +36,12 @@ function findRelatedBuildings(
   buildings: Record<string, Building>,
   relation: 'trains_units' | 'researches_techs'
 ): string[] {
-  return Object.values(buildings)
+  console.log(`Checking ${relation} for ${entityName}`);
+  const related = Object.values(buildings)
     .filter(building => building.functions[relation]?.includes(entityName))
     .map(building => building.name);
+  console.log(`Found related buildings: ${related.join(', ')}`);
+  return related;
 }
 
 // Helper to find god powers
@@ -58,12 +64,12 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => html`
           tabindex="0"
           @click=${() => {
             setActiveMajorGod(key);
-            showPreview(god);
+            //owPreview(god);
           }}
           @keydown=${(e: KeyboardEvent) => {
             if (e.key === 'Enter' || e.key === ' ') {
               setActiveMajorGod(key);
-              showPreview(god);
+              //owPreview(god);
             }
           }}
         >
@@ -111,68 +117,89 @@ function createUnitsTechsGridLayout(
 ): (string | null)[][] {
   const layout: (string | null)[][] = [
     [null, null, null, null, null, null], // Units
-    [null, null, null, null, null, null], // Upgrade techs
+    [null, null, null, null, null, null], // Unit-based techs
     [null, null, null, null, null, null]  // Mythic/generic techs
   ];
 
   if (!activeBuilding) {
-    return layout; // Empty grid if no building selected
+    console.log('No activeBuilding, returning empty layout');
+    return layout;
   }
 
-  // Get units trainable at the selected building
-  const trainableUnits = Object.values(units)
-    .filter(unit => findRelatedBuildings(unit.name, data.buildings, 'trains_units').includes(activeBuilding))
-    .slice(0, 6); // Limit to 6 units
+  // Find the building
+  const building = Object.values(data.buildings).find(b => b.name.toLowerCase() === activeBuilding);
+  if (!building) {
+    console.warn(`Building ${activeBuilding} not found in data.buildings`);
+    return layout;
+  }
 
-  // Place units in the top row
+  // Row 1: Units from trains_units
+  const trainableUnits = (building.functions.trains_units || [])
+    .map(unitKey => units[unitKey])
+    .filter((unit): unit is Unit => !!unit)
+    .slice(0, 6);
+  console.log('Trainable Units:', trainableUnits.map(u => u.name));
   trainableUnits.forEach((unit, index) => {
     if (index < 6) {
       layout[0][index] = unit.name.toLowerCase();
     }
   });
 
-  // Get techs researchable at the selected building
-  const researchableTechs = Object.values(technologies)
-    .filter(tech => findRelatedBuildings(tech.name, data.buildings, 'researches_techs').includes(activeBuilding));
+  // Get all researchable techs
+  const researchableTechs = (building.functions.researches_techs || [])
+    .map(techKey => technologies[techKey])
+    .filter((tech): tech is Technology => !!tech);
+  console.log('Researchable Techs:', researchableTechs.map(t => t.name));
 
-  // Separate upgrade techs (e.g., medium_cavalry for cavalry units) and mythic/generic techs
-  const upgradeTechs: Technology[] = [];
+  // Separate unit-based and mythic/generic techs
+  const unitBasedTechs: Technology[] = [];
   const mythicGenericTechs: Technology[] = [];
-
   researchableTechs.forEach(tech => {
-    const isUpgrade = tech.name.toLowerCase().includes('medium') || tech.name.toLowerCase().includes('heavy');
-    if (isUpgrade) {
-      upgradeTechs.push(tech);
+    const hasUnitEffect = tech.effects.some(effect => effect.noun.unit_name || effect.noun.unit_tags?.length);
+    if (hasUnitEffect) {
+      unitBasedTechs.push(tech);
     } else {
       mythicGenericTechs.push(tech);
     }
   });
 
-  // Place upgrade techs in the middle row, trying to align with units
+  // Row 2: Unit-based techs, aligned with units
   trainableUnits.forEach((unit, index) => {
     if (index >= 6) return;
-    const unitCategory = unit.unit_category.toLowerCase();
-    const matchingTech = upgradeTechs.find(tech =>
-      tech.name.toLowerCase().includes(unitCategory) ||
-      (unitCategory === 'infantry' && tech.name.toLowerCase().includes('infantry')) ||
-      (unitCategory === 'cavalry' && tech.name.toLowerCase().includes('cavalry'))
+    const matchingTech = unitBasedTechs.find(tech =>
+      tech.effects.some(effect =>
+        (effect.noun.unit_name === unit.name) ||
+        (effect.noun.unit_tags?.some(tag => unit.unit_tags.includes(tag) || unit.unit_category.toLowerCase() === tag.replace('is_', '')))
+      )
     );
     if (matchingTech) {
       layout[1][index] = matchingTech.name.toLowerCase();
+      // Remove used tech to prevent repetition
+      const techIndex = unitBasedTechs.indexOf(matchingTech);
+      unitBasedTechs.splice(techIndex, 1);
     }
   });
 
-  // Place mythic/generic techs in the bottom row, filtered by activeMajorGod
+  // Row 3: Mythic/generic techs, filtered by minor gods
   const minorGods = data.majorGods[activeMajorGod]?.minorGods || [];
-  const validTechs = mythicGenericTechs.filter(tech =>
-    !tech.prerequisite_god || minorGods.includes(tech.prerequisite_god)
-  );
-  validTechs.slice(0, 6).forEach((tech, index) => {
+  const validTechs = mythicGenericTechs
+    .filter(tech => !tech.prerequisite_god || minorGods.includes(tech.prerequisite_god))
+    .slice(0, 6);
+  validTechs.forEach((tech, index) => {
     if (index < 6) {
       layout[2][index] = tech.name.toLowerCase();
     }
   });
 
+  // Add any remaining unit-based techs to row 3 if they weren't matched
+  unitBasedTechs.slice(0, 6 - validTechs.length).forEach((tech, index) => {
+    const nextFreeIndex = validTechs.length + index;
+    if (nextFreeIndex < 6) {
+      layout[2][nextFreeIndex] = tech.name.toLowerCase();
+    }
+  });
+
+  console.log('Units/Techs Layout:', layout);
   return layout;
 }
 
@@ -183,59 +210,61 @@ const unitsTechsTemplate = (
   activeBuilding: string | null,
   activeMajorGod: string
 ) => html`
-  ${createUnitsTechsGridLayout(units, technologies, activeBuilding, activeMajorGod).map(row => row.map(entityKey => {
-    if (!entityKey) {
-      return html`
-        <div class="tile placeholder" @click=${() => console.log('Add unit/tech')} tabindex="0" role="button" aria-label="Add new unit or technology">
-          <span class="plus-icon">+</span>
-        </div>
-      `;
-    }
-    const unit = units[entityKey];
-    const tech = technologies[entityKey];
-    if (!unit && !tech) {
-      console.warn(`Entity ${entityKey} not found in units or technologies`);
-      return html`<div class="tile empty"></div>`;
-    }
-    if (unit) {
-      return html`
-        <div
-          class="tile unit ${activeEntity === unit.name ? 'active' : ''}"
-          data-unit="${unit.name}"
-          @click=${() => {
-            setActiveEntity(unit.name);
-            showPreview(unit);
-          }}
-          tabindex="0"
-        >
-          <img src="${unit.image || 'assets/placeholderunit.jpg'}" alt="${unit.name} Sprite" class="sprite" width="64" height="64" />
-          <h5>${unit.name}</h5>
-          <p>Category: ${unit.unit_category}</p>
-          <p>Trained at: ${findRelatedBuildings(unit.name, data.buildings, 'trains_units').join(', ') || 'None'}</p>
-          ${unit.abilities?.length ? html`<p>Abilities: ${unit.abilities.join(', ')}</p>` : ''}
-        </div>
-      `;
-    }
-    return html`
-      <div
-        class="tile technology ${activeEntity === tech.name ? 'active' : ''}"
-        @click=${() => {
-          setActiveEntity(tech.name);
-          showPreview(tech);
-        }}
-        tabindex="0"
-      >
-        <img src="${tech.image || 'assets/placeholder.jpg'}" alt="${tech.name} Sprite" class="sprite" width="64" height="64" />
-        <h5>${tech.name}</h5>
-        <p>Research at: ${findRelatedBuildings(tech.name, data.buildings, 'researches_techs').join(', ') || tech.research_location}</p>
-      </div>
-    `;
-  }))}
+  ${createUnitsTechsGridLayout(units, technologies, activeBuilding, activeMajorGod).map(row => html`
+      ${row.map(entityKey => {
+        if (!entityKey) {
+          return html`
+            <div class="tile placeholder" @click=${() => console.log('Add unit/tech')} tabindex="0" role="button" aria-label="Add new unit or technology">
+              <span class="plus-icon">+</span>
+            </div>
+          `;
+        }
+        const unit = units[entityKey];
+        const tech = technologies[entityKey];
+        if (!unit && !tech) {
+          console.warn(`Entity ${entityKey} not found in units or technologies`);
+          return html`<div class="tile empty"></div>`;
+        }
+        if (unit) {
+          return html`
+            <div
+              class="tile unit ${activeEntity === unit.name ? 'active' : ''}"
+              data-unit="${unit.name}"
+              @click=${() => {
+                setActiveEntity(unit.name);
+                showPreview(unit);
+              }}
+              tabindex="0"
+            >
+              <img src="${unit.image || 'assets/placeholderunit.jpg'}" alt="${unit.name} Sprite" class="sprite" width="64" height="64" />
+              <h5>${unit.name}</h5>
+              <p>Category: ${unit.unit_category}</p>
+              <p>Trained at: ${findRelatedBuildings(unit.name, data.buildings, 'trains_units').join(', ') || 'None'}</p>
+              ${unit.abilities?.length ? html`<p>Abilities: ${unit.abilities.join(', ')}</p>` : ''}
+            </div>
+          `;
+        }
+        return html`
+          <div
+            class="tile technology ${activeEntity === tech.name ? 'active' : ''}"
+            @click=${() => {
+              setActiveEntity(tech.name);
+              showPreview(tech);
+            }}
+            tabindex="0"
+          >
+            <img src="${tech.image || 'assets/placeholder.jpg'}" alt="${tech.name} Sprite" class="sprite" width="64" height="64" />
+            <h5>${tech.name}</h5>
+            <p>Research at: ${findRelatedBuildings(tech.name, data.buildings, 'researches_techs').join(', ') || tech.research_location}</p>
+          </div>
+        `;
+      })}
+  `)}
 `;
 
 const buildingGridLayout = [
   ['house', null, null, null, 'temple', 'dock'],
-  ['barracks', 'stable', null, null, 'market', 'armory'],
+  ['barracks', 'archery_range', 'stable', null, 'market', 'armory'],
   ['town_center', 'wall', 'tower', 'fortress', null, 'wonder']
 ];
 
