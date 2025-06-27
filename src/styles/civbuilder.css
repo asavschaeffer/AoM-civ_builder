@@ -1,26 +1,18 @@
 /* ================================================== */
-/* == Thematic Redesign - Final Polish (Commit 3/3) == */
+/* == Thematic Redesign - Step 1: Title Effects == */
 /* ================================================== */
 
 :root {
   --font-heading: 'Cinzel', serif;
   --font-body: 'Roboto', sans-serif;
-
-  /* Color Palette - Sampled from reference images */
   --color-background-dark: #120e0b;
   --color-background-panel: #1a1613;
   --color-text-parchment: #e4d8c7;
   --color-text-muted: #9e9488;
-  
-  /* Gold & Bronze Tones */
   --color-gold-bright: #fde882;
   --color-gold-median: #e6bf47;
-  --color-gold-dark: #a17b23;
   --color-bronze-border: #4a4130;
-
-  /* Accent & State Colors */
   --color-accent-blue: #69a5e4;
-  --color-accent-green: #9fefa9;
 }
 
 /* Reset and base styles */
@@ -36,33 +28,69 @@ body {
   margin: 0 auto;
 }
 
-/* --- Special H1 Title Effect --- */
-h1 {
+/* --- Intelligent Title Selectors --- */
+
+/* 1. Exclusive Starry Effect for the Main H1 */
+header > h1 {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 700;
+  font-weight: 900;
+  font-stretch: expanded;
+  font-size: clamp(2.5rem, 10vw, 6rem);
   text-align: center;
   line-height: 1.1;
   margin-bottom: 1rem;
-  
-  /* The magic starts here */
   background: url(https://www.transparenttextures.com/patterns/stardust.png), linear-gradient(180deg, #3c4468 0%, #1a1f36 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  color: #1a1f36;
   -webkit-text-stroke: 1px var(--color-gold-median);
-
-  /* 3D Gold Border Effect */
   text-shadow: 
-      /* Outer orange glow */
       0 0 15px rgba(224, 169, 44, 0.4),
-      /* Hard orange edge */
       0 0 5px rgba(224, 169, 44, 0.5),
-      /* Inner dark shadow for depth */
       2px 2px 2px rgba(0,0,0,0.8),
-      /* White highlight on top edge */
       0 -1px 1px rgba(255, 255, 255, 0.2);
 }
+
+/* 2. Gold Glow Effect for ONLY Major and Minor God Names within tiles */
+.major-god h4,
+.minor-god h5 {
+  font-family: var(--font-heading) !important;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #fff;
+  -webkit-text-stroke: 0.1px var(--color-gold-median);
+  text-shadow: 
+      0 0 15px rgba(224, 169, 44, 0.4),
+      0 0 5px rgba(224, 169, 44, 0.5),
+      2px 2px 2px rgba(0,0,0,0.8),
+      0 -1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* 3. Simple, readable style for all other headers (h2, h3) */
+h2#civ-name,
+section > h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-text-parchment); /* Simple parchment color */
+  text-shadow: 1px 1px 2px #000; /* Basic shadow for depth */
+  -webkit-text-stroke: 0; /* Remove any stroke */
+  background: none; /* Remove any background */
+}
+
+/* Apply sizes to the elements */
+h2#civ-name {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  text-align: center;
+}
+section > h3 {
+  font-size: 1.5rem;
+}
+/* End of Title Effects Section */
+
 
 header {
   text-align: center;
@@ -74,10 +102,8 @@ nav a { text-decoration: none; color: var(--color-gold-median); font-family: var
 nav a:hover { color: var(--color-gold-bright); }
 nav ul { list-style: none; display: flex; justify-content: center; gap: 1rem; }
 
+/* Generic h2/h3 rules are now just for layout */
 h2, h3 {
-  font-family: var(--font-heading);
-  color: var(--color-gold-bright);
-  text-shadow: 1px 1px 2px #000;
   margin-bottom: 1rem;
   border-bottom: 1px solid var(--color-bronze-border);
   padding-bottom: 0.5rem;
@@ -92,15 +118,12 @@ section { margin-bottom: 2rem; }
   border-top-color: var(--color-bronze-border);
   border-radius: 4px;
   box-shadow: 
-      /* Inset dark shadow for depth */
       inset 0 0 15px rgba(0,0,0,0.7),
-      /* Outer bronze highlight */
       0 0 0 1px var(--color-bronze-border);
 }
 .carousel { display: flex; gap: 1rem; overflow-x: auto; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
 
-/* Main content layout */
 .content-with-preview { display: flex; gap: 1rem; align-items: flex-start; }
 .units-techs-grid, .buildings-grid { display: grid; gap: 0.5rem; flex-grow: 1; grid-template-columns: repeat(6, 1fr); }
 .units-techs-grid { grid-template-rows: repeat(3, 1fr); }
@@ -125,7 +148,6 @@ section { margin-bottom: 2rem; }
   min-height: 120px;
 }
 
-/* UX: Hover State - Subtle glow indicates interactivity */
 .tile:hover, .tile:focus {
   transform: scale(1.05);
   border-color: var(--color-gold-median);
@@ -133,7 +155,6 @@ section { margin-bottom: 2rem; }
   outline: none;
   z-index: 10;
 }
-/* UX: Active State - Bright, clear feedback confirms selection */
 .tile.active {
   border-color: var(--color-accent-blue);
   background: linear-gradient(145deg, #3a332d, #25201c);
@@ -143,61 +164,47 @@ section { margin-bottom: 2rem; }
 
 .tile.placeholder { background: rgba(0,0,0,0.2); border-style: dashed; border-color: #444; }
 .tile img.sprite { width: 64px; height: 64px; object-fit: contain; margin-bottom: 0.25rem; filter: brightness(1.1); }
-.tile h5 { font-family: var(--font-body); font-weight: 500; font-size: 0.9rem; margin: 0.25rem 0; color: var(--color-text-parchment); }
+/* This rule now only controls font-family/size for tile names */
+.tile h5 { 
+  font-family: var(--font-body); 
+  font-weight: 500; 
+  font-size: 0.9rem; 
+  margin: 0.25rem 0; 
+}
+.card.major-god h4 {
+  font-size: 1.1rem;
+}
 .tile p { font-size: 0.8rem; color: var(--color-text-muted); }
 
 /* --- High-Fidelity Preview Card --- */
 .preview-content-container { width: 420px; flex-shrink: 0; }
 .preview-card {
-  position: relative;
-  padding: 1rem;
-  font-family: var(--font-body);
-  color: var(--color-text-parchment);
+  position: relative; padding: 1rem; font-family: var(--font-body); color: var(--color-text-parchment);
   background: linear-gradient(160deg, #352F2A, #1E1916);
-  border: 1px solid #000;
-  border-top: 1px solid var(--color-gold-median);
-  border-left: 1px solid var(--color-bronze-border);
-  border-right: 1px solid var(--color-bronze-border);
-  border-radius: 6px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.7);
+  border: 1px solid #000; border-top: 1px solid var(--color-gold-median); border-left: 1px solid var(--color-bronze-border);
+  border-right: 1px solid var(--color-bronze-border); border-radius: 6px; box-shadow: 0 5px 20px rgba(0,0,0,0.7);
 }
 .preview-card .bg-god-logo { position: absolute; bottom: 1rem; right: 1rem; font-size: 6rem; opacity: 0.1; user-select: none; z-index: 1; color: var(--color-gold-bright); }
-
 .preview-card-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--color-bronze-border); padding-bottom: 0.75rem; margin-bottom: 0.75rem; position: relative; z-index: 2; }
-.preview-card-header .title-group h2 { margin: 0; font-size: 1.5rem; border: none; color: var(--color-gold-bright); }
+.preview-card-header .title-group h2 { margin: 0; font-family: var(--font-heading); font-size: 1.5rem; border: none; color: var(--color-gold-bright); }
 .preview-card-header .title-group .user { font-size: 0.85rem; color: var(--color-text-muted); }
 .preview-card-header .toolbar { text-align: right; }
 .preview-card-header .level { background: var(--color-accent-blue); color: #fff; padding: 0.1rem 0.5rem; border-radius: 4px; font-weight: bold; font-size: 1rem; margin-bottom: 0.25rem; border: 1px solid #c1dfff; text-shadow: 1px 1px 2px #000; }
 .preview-card-header .toolbar button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #ccc; transition: color 0.2s; }
 .preview-card-header .toolbar button:hover { color: var(--color-gold-bright); }
-
 .preview-card-stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-bronze-border); position: relative; z-index: 2; }
 .preview-card-stats span { display: flex; align-items: center; gap: 0.3rem; }
-
 .preview-card-body { display: flex; gap: 0.75rem; position: relative; z-index: 2; }
 .preview-card-body .portrait img { width: 90px; height: 120px; object-fit: cover; border: 2px solid var(--color-bronze-border); border-radius: 4px; background: #111; }
 .attack-details h3 { margin: 0 0 0.5rem 0; font-size: 1rem; font-family: var(--font-heading); letter-spacing: 1px; border: none; padding: 0; color: var(--color-gold-median); }
 .attack-details .stats-grid { display: grid; grid-template-columns: auto 1fr; row-gap: 4px; column-gap: 12px; font-size: 0.9rem; }
 .attack-details .stats-grid .label { color: var(--color-text-muted); display: flex; align-items: center; gap: 0.4rem; }
 .attack-details .stats-grid .value { font-weight: 500; color: #fff; }
-.attack-details .multipliers { grid-column: 1 / -1; margin-top: 0.5rem; font-size: 0.8rem; color: var(--color-accent-green); }
+.attack-details .multipliers { grid-column: 1 / -1; margin-top: 0.5rem; font-size: 0.8rem; color: #9fefa9; }
 
 /* Modal and Responsive styles */
-.modal-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px);
-}
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
 .modal-content { position: relative; padding: 0; width: calc(100% - 2rem); max-width: 420px; }
-.modal-close-btn {
-  position: absolute; top: -10px; right: -10px; background: var(--color-gold-bright); color: black; border: 2px solid black; border-radius: 50%;
-  width: 30px; height: 30px; font-size: 1.5rem; line-height: 26px; text-align: center; cursor: pointer; z-index: 1001;
-}
-
-@media (max-width: 1200px) {
-  .content-with-preview { flex-direction: column; }
-  .preview-content-container { width: 100%; margin-top: 1rem; }
-}
-@media (max-width: 768px) {
-  .units-techs-grid, .buildings-grid { grid-template-columns: repeat(3, 1fr); }
-  .preview-content-container { display: none; }
-}
+.modal-close-btn { position: absolute; top: -10px; right: -10px; background: var(--color-gold-bright); color: black; border: 2px solid black; border-radius: 50%; width: 30px; height: 30px; font-size: 1.5rem; line-height: 26px; text-align: center; cursor: pointer; z-index: 1001; }
+@media (max-width: 1200px) { .content-with-preview { flex-direction: column; } .preview-content-container { width: 100%; margin-top: 1rem; } }
+@media (max-width: 768px) { .units-techs-grid, .buildings-grid { grid-template-columns: repeat(3, 1fr); } .preview-content-container { display: none; } }
