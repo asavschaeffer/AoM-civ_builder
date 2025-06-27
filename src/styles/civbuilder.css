@@ -1,342 +1,124 @@
-/* Reset and base styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* Reset and base styles from original */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; line-height: 1.6; padding: 1rem; max-width: 1400px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2rem; }
+nav ul { list-style: none; display: flex; justify-content: center; gap: 1rem; }
+nav a { text-decoration: none; color: #333; }
+h1, h2, h3 { margin-bottom: 1rem; }
+section { margin-bottom: 2rem; }
+footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd; }
 
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  padding: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #f4f4f4;
-}
+/* Grids and Carousels */
+.carousel, .grid { padding: 1rem; background-color: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.carousel { display: flex; gap: 1rem; overflow-x: auto; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
 
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
+/* Main content layout */
+.content-with-preview { display: flex; gap: 1rem; align-items: flex-start; }
+.units-techs-grid, .buildings-grid { display: grid; gap: 0.5rem; flex-grow: 1; grid-template-columns: repeat(6, 1fr); }
+.units-techs-grid { grid-template-rows: repeat(3, 150px); }
+.buildings-grid { grid-template-rows: repeat(3, 150px); }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
+/* Tile styles */
+.tile { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; transition: all 0.2s; text-align: center; }
+.tile:hover, .tile:focus { background-color: #e9e9e9; transform: translateY(-2px); outline: 2px solid #007bff; }
+.tile.active { border-color: #28a745; background-color: #d4edda; }
+.tile.placeholder { background-color: #f0f0f0; border-style: dashed; }
+.tile.placeholder .plus-icon { font-size: 2rem; color: #ccc; }
+.tile img.sprite { width: 64px; height: 64px; object-fit: contain; margin-bottom: 0.25rem; }
+.tile h5 { font-size: 0.9rem; margin: 0.25rem 0; }
+.tile p { font-size: 0.8rem; color: #555; }
 
-nav a {
-  text-decoration: none;
-  color: #333;
-}
-
-h1, h2, h3, h4, h5 {
-  margin-bottom: 0.5rem;
-}
-
-section {
-  margin-bottom: 2rem;
-}
-
-/* Carousel for major gods */
-.carousel {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding: 1rem;
-  scroll-snap-type: x mandatory;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.card.major-god {
-  flex: 0 0 250px;
-  padding: 1rem;
-  background-size: cover;
-  background-position: center;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  scroll-snap-align: start;
-  transition: opacity 0.3s, transform 0.3s;
-}
-
-.card.major-god.active {
-  transform: scale(1.05);
-  opacity: 1;
-}
-
-.card.major-god.ghosted {
-  opacity: 0.5;
-}
-
-.card.major-god:focus {
-  outline: 2px solid #007bff;
-}
-
-/* Grids for minor gods, abilities, god powers */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Units/Technologies and Buildings layout */
-.content-with-preview {
-  display: flex;
-  gap: 1rem;
-  align-items: start;
-}
-
-.units-techs-grid,.buildings-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(3, 150px);
-  gap: 0.5rem;
-  width: 66.67%;
-  padding: 1rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  text-align: center;
-  overflow: hidden;
-}
-
-.tile.empty { /*add plus button here later*/
-  background-color: #e0e0e0; /* Light gray to show empty slot */
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tile:hover, .tile:focus {
-  background-color: #e0e0e0;
-  transform: translateY(-2px);
-  outline: 2px solid #007bff;
-}
-
-.tile.active {
-  background-color: #d4edda;
-  border-color: #28a745;
-}
-
-.tile img.sprite {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  margin-bottom: 0.25rem;
-}
-
-.tile h5 {
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
-}
-
-.tile p {
-  font-size: 0.8rem;
-  color: #555;
-}
+/* Major God Card Specifics */
+.card.major-god { flex: 0 0 250px; padding: 1rem; background-size: cover; background-position: center; color: white; border-radius: 8px; text-shadow: 1px 1px 2px black; }
+.card.major-god.ghosted { opacity: 0.6; }
+.card.major-god.active { transform: scale(1.05); opacity: 1; }
 
 /* ============================================= */
-/* == CSS for New Preview Card (Commit 1/3) == */
+/* == CSS for New Preview Card (From Commit 1) == */
 /* ============================================= */
+.preview-content-container { width: 420px; flex-shrink: 0; }
+.preview-card { position: relative; padding: 1rem; width: 100%; font-family: 'Helvetica Neue', sans-serif; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #333; }
+.preview-card .bg-god-logo { position: absolute; bottom: 1rem; right: 1rem; font-size: 6rem; opacity: 0.1; user-select: none; z-index: 1; }
+.preview-card-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #eee; padding-bottom: 0.75rem; margin-bottom: 0.75rem; position: relative; z-index: 2; }
+.preview-card-header .title-group h2 { margin: 0; font-size: 1.5rem; border: none; }
+.preview-card-header .title-group .user { font-size: 0.85rem; color: #777; }
+.preview-card-header .toolbar { text-align: right; }
+.preview-card-header .level { background: #007bff; color: #fff; padding: 0.1rem 0.5rem; border-radius: 4px; font-weight: bold; font-size: 1rem; margin-bottom: 0.25rem; }
+.preview-card-header .toolbar button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #555; }
+.preview-card-stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #eee; position: relative; z-index: 2; }
+.preview-card-stats span { display: flex; align-items: center; gap: 0.3rem; }
+.preview-card-body { display: flex; gap: 0.75rem; position: relative; z-index: 2; }
+.preview-card-body .portrait img { width: 90px; height: 120px; object-fit: cover; border: 2px solid #ddd; border-radius: 4px; background: #f0f0f0; }
+.preview-card-body .attack-details { flex-grow: 1; }
+.attack-details h3 { margin: 0 0 0.5rem 0; font-size: 1rem; letter-spacing: 1px; border: none; padding: 0; color: #007bff; }
+.attack-details .stats-grid { display: grid; grid-template-columns: auto 1fr; row-gap: 4px; column-gap: 12px; font-size: 0.9rem; }
+.attack-details .stats-grid .label { color: #555; display: flex; align-items: center; gap: 0.4rem; }
+.attack-details .stats-grid .value { font-weight: bold; }
+.attack-details .multipliers { grid-column: 1 / -1; margin-top: 0.5rem; font-size: 0.8rem; color: #28a745; }
 
-/* This container gives the preview panel a fixed width on desktop. */
-.preview-content-container {
-  width: 420px; 
-  flex-shrink: 0;
-}
+/* ================================================== */
+/* == CSS for Responsiveness (Commit 2/3) == */
+/* ================================================== */
 
-/* The main card container. Using a sans-serif font for UI readability. */
-.preview-card {
-  position: relative;
-  padding: 1rem;
-  width: 100%;
-  font-family: 'Helvetica Neue', sans-serif;
-  /* Adding a basic background/border to see the layout */
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  color: #333;
+/* Modal styles for mobile preview */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex; /* Changed from none to flex by JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
 }
-
-/* Faint god logo in the background */
-.preview-card .bg-god-logo {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  font-size: 6rem;
-  opacity: 0.1;
-  user-select: none;
-  z-index: 1;
+.modal-content {
+    position: relative;
+    padding: 0; /* The card inside will have padding */
+    width: calc(100% - 2rem);
+    max-width: 420px; 
 }
-
-/* Card Header: Name, User, Toolbar */
-.preview-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
-  position: relative;
-  z-index: 2;
-}
-.preview-card-header .title-group h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  border: none;
-}
-.preview-card-header .title-group .user {
-  font-size: 0.85rem;
-  color: #777;
-}
-.preview-card-header .toolbar {
-  text-align: right;
-}
-.preview-card-header .level {
-  background: #007bff;
-  color: #fff;
-  padding: 0.1rem 0.5rem;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
-.preview-card-header .toolbar button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: #555;
+.modal-close-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: white;
+    color: black;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.5rem;
+    line-height: 26px; /* Adjust for border */
+    text-align: center;
+    cursor: pointer;
+    z-index: 1001;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
-
-/* Top-level stats bar (HP, Armor, Speed) */
-.preview-card-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #eee;
-  position: relative;
-  z-index: 2;
-}
-.preview-card-stats span {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+/* Responsive media queries */
+@media (max-width: 1200px) {
+    /* On medium screens, stack the preview below the grid */
+    .content-with-preview {
+        flex-direction: column;
+    }
+    .preview-content-container {
+        width: 100%;
+        margin-top: 1rem;
+    }
 }
 
-/* Card Body: Portrait and Attack Details */
-.preview-card-body {
-  display: flex;
-  gap: 0.75rem;
-  position: relative;
-  z-index: 2;
-}
-.preview-card-body .portrait img {
-  width: 90px;
-  height: 120px;
-  object-fit: cover;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  background: #f0f0f0;
-}
-.preview-card-body .attack-details {
-  flex-grow: 1;
-}
-
-/* Attack Section inside the Body */
-.attack-details h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  border: none;
-  padding: 0;
-  color: #007bff;
-}
-.attack-details .stats-grid {
-  display: grid;
-  /* Two columns: one for the label, one for the value */
-  grid-template-columns: auto 1fr; 
-  row-gap: 4px;
-  column-gap: 12px;
-  font-size: 0.9rem;
-}
-.attack-details .stats-grid .label {
-  color: #555;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.attack-details .stats-grid .value {
-  font-weight: bold;
-}
-/* Multipliers span both columns */
-.attack-details .multipliers {
-  grid-column: 1 / -1;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-  color: #28a745; /* Green for bonus */
-}
-
-
-/* Accessibility */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
-/* Responsive design */
 @media (max-width: 768px) {
-  .content-with {
-    flex-direction: column;
+    /* On small screens, use a 3-column grid and a modal */
+    .units-techs-grid, .buildings-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
-    .unit-grid, .tech-grid, .building-grid .grid {
-      grid-template-columns: repeat(3, auto 1fr);
-      width: auto;
+
+    /* Hide the desktop preview container entirely */
+    .preview-content-container {
+        display: none;
     }
-    .preview-content {
-      width: auto;
-    }
-  }
-
-
-/* Footer */
-footer {
-  text-align: center;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid #ddd;
-}
-
-footer nav ul {
-  justify-content: center;
 }
