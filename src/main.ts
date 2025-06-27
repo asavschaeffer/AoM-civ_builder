@@ -1,14 +1,37 @@
 // src/main.ts
 import { html, render } from 'lit-html';
 import civData from './data/civData.json';
-import { Civ,Entity, MajorGod, MinorGod, Unit, Building, Technology, Ability, GodPower } from './types/civ';
+import { Civ, Entity, MajorGod, MinorGod, Unit, Building, Technology, Ability, GodPower } from './types/civ';
 
-const data = civData as unknown as Civ;
+const data = civData as Civ;
 
 // State management
 let activeEntity: string | null = null;
 let activeMajorGod = localStorage.getItem('activeMajorGod') || 'zeus';
 let activeBuilding: string | null = null;
+
+// --- HELPERS ---
+const STAT_ICONS = {
+  hitpoints: '❤️',
+  hack_armor: '🦺',
+  pierce_armor: '🛡️',
+  crush_armor: '🪨',
+  speed: '👟',
+  hack_damage: '⚔️',
+  pierce_damage: '🏹',
+  crush_damage: '💥',
+  divine_damage: '⚡',
+  reload_time: '〽️',
+  range: '🎯',
+  garrison: '🏰'
+};
+
+const GOD_ICONS = {
+  zeus: '⚡',
+  poseidon: '🔱',
+  hades: '💀',
+  default: '❓'
+};
 
 function setActiveEntity(entity: string | null) {
   console.log('Setting activeEntity:', entity);
@@ -330,145 +353,104 @@ const godPowersTemplate = (godPowers: Record<string, GodPower>) => html`
   </div>
 `;
 
-// Preview template
-function showPreview(entity: Entity) {
-  const template = html`
-      <h4>${entity.name}</h4>
-      <img src="${entity.image || 'assets/placeholder.jpg'}" alt="${entity.name} Preview" class="preview-image" width="200" height="200" />
-      <dl class="stats">
-        <dt>Age Required</dt>
-        <dd>${entity.age_required}</dd>
-        <dt>Civilization</dt>
-        <dd>${entity.civ || 'None'}</dd>
-        <dt>Line of Sight</dt>
-        <dd>${entity.line_of_sight}</dd>
-        <dt>Build Time</dt>
-        <dd>${entity.build_time}s</dd>
-        ${entity.prerequisite_god ? html`
-          <dt>Prerequisite God</dt>
-          <dd>${entity.prerequisite_god}</dd>
-        ` : ''}
-        ${entity.prerequisite_building ? html`
-          <dt>Prerequisite Building</dt>
-          <dd>${entity.prerequisite_building}</dd>
-        ` : ''}
-        ${'cost' in entity && Object.entries((entity as Unit | Building).cost).filter(([_, v]) => v).map(
-          ([resource, value]) => html`
-            <dt>${resource.charAt(0).toUpperCase() + resource.slice(1)} Cost</dt>
-            <dd>${value}</dd>
-          `
-        )}
-        ${'hitpoints' in entity ? html`
-          <dt>Hitpoints</dt>
-          <dd>${(entity as Unit).hitpoints}</dd>
-        ` : ''}
-        ${'population_cost' in entity ? html`
-          <dt>Population Cost</dt>
-          <dd>${(entity as Unit).population_cost}</dd>
-        ` : ''}
-        ${'speed' in entity ? html`
-          <dt>Speed</dt>
-          <dd>${(entity as Unit).speed}</dd>
-        ` : ''}
-        ${'unit_category' in entity ? html`
-          <dt>Category</dt>
-          <dd>${(entity as Unit).unit_category}</dd>
-        ` : ''}
-        ${'unit_tags' in entity ? html`
-          <dt>Tags</dt>
-          <dd>${(entity as Unit).unit_tags.join(', ')}</dd>
-        ` : ''}
-        ${'defensive_stats' in entity ? html`
-          <dt>Hack Armor</dt>
-          <dd>${(entity as Unit | Building).defensive_stats.hack_armor}</dd>
-          <dt>Pierce Armor</dt>
-          <dd>${(entity as Unit | Building).defensive_stats.pierce_armor}</dd>
-          <dt>Crush Armor</dt>
-          <dd>${(entity as Unit | Building).defensive_stats.crush_armor}</dd>
-        ` : ''}
-        ${'attack' in entity && (entity as Unit | Building).attack ? html`
-          <dt>Attack Type</dt>
-          <dd>${(entity as Unit | Building).attack?.type || 'melee'}</dd>
-          ${Object.entries((entity as Unit | Building).attack || {})
-            .filter(([k, v]) => ['hack_damage', 'pierce_damage', 'crush_damage', 'divine_damage'].includes(k) && v)
-            .map(([k, v]) => html`
-              <dt>${k.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</dt>
-              <dd>${v}</dd>
-            `)}
-          ${Object.entries((entity as Unit | Building).attack || {})
-            .filter(([k, v]) => k.startsWith('vs_') && v)
-            .map(([k, v]) => html`
-              <dt>${k.replace('vs_', 'Bonus vs ').replace(/\b\w/g, c => c.toUpperCase())}</dt>
-              <dd>${v}</dd>
-            `)}
-        ` : ''}
-        ${'gather_rate' in entity && Object.entries((entity as Unit).gather_rate || {}).filter(([_, v]) => v).map(
-          ([resource, value]) => html`
-            <dt>${resource.charAt(0).toUpperCase() + resource.slice(1)} Gather Rate</dt>
-            <dd>${value}</dd>
-          `
-        )}
-        ${'godPowers' in entity ? html`
-          <dt>God Powers</dt>
-          <dd>${findGodPowers(entity as MajorGod | MinorGod, data.godPowers).map(p => p.name).join(', ')}</dd>
-        ` : ''}
-        ${'abilities' in entity ? html`
-          <dt>Abilities</dt>
-          <dd>${(entity as Unit).abilities?.join(', ') || 'None'}</dd>
-        ` : ''}
-        ${'myth_unit' in entity ? html`
-          <dt>Myth Unit</dt>
-          <dd>${(entity as MinorGod).myth_unit || 'None'}</dd>
-        ` : ''}
-        ${'technologies' in entity ? html`
-          <dt>Technologies</dt>
-          <dd>${(entity as MinorGod).technologies?.join(', ') || 'None'}</dd>
-        ` : ''}
-        ${'functions' in entity ? html`
-          ${Object.entries((entity as Building).functions).filter(([_, v]) => v?.length).map(
-            ([k, v]) => html`
-              <dt>${k.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</dt>
-              <dd>${(v as any).join(', ')}</dd>
-            `
-          )}
-        ` : ''}
-        ${'prerequisites' in entity ? html`
-          <dt>Prerequisites</dt>
-          <dd>${(entity as Technology).prerequisites?.map(p =>
-            Object.entries(p).map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`).join(', ')
-          ).join('; ') || 'None'}</dd>
-        ` : ''}
-        ${'effects' in entity ? html`
-          <dt>Effects</dt>
-          <dd>${(entity as Technology).effects.map(e =>
-            `${e.verb} ${e.adjective} by ${e.value} for ${e.noun.unit_tags?.join(', ') || e.noun.unit_name || e.noun.building_name || e.noun.tech_name || ''}`
-          ).join('; ')}</dd>
-        ` : ''}
-        ${'cooldown' in entity && (entity as Ability | GodPower).cooldown ? html`
-          <dt>Cooldown</dt>
-          <dd>${(entity as Ability | GodPower).cooldown}s</dd>
-        ` : ''}
-        ${'area_of_effect' in entity ? html`
-          <dt>Area of Effect</dt>
-          <dd>${(entity as GodPower).area_of_effect || 'None'}</dd>
-        ` : ''}
-        ${'is_passive' in entity ? html`
-          <dt>Passive</dt>
-          <dd>${(entity as GodPower).is_passive ? 'Yes' : 'No'}</dd>
-        ` : ''}
-      </dl>
-      <button class="edit-btn" @click=${() => openEditModal(entity)}>Edit Details</button>
-  `;
-  const isBuilding = entity.type === 'building';
-  const previewContainer = document.querySelector(
-    isBuilding ? '.buildings .preview-content .preview' : '.units-techs .preview-content .preview'
-  );
-  if (previewContainer instanceof HTMLElement) {
-    render(template, previewContainer);
-  } else {
-    console.error('Preview container not found or not an HTMLElement');
+/**
+ * Main preview template for the new compact card design.
+ * @param {object} entity The entity object to display.
+ */
+const previewCardTemplate = (entity) => {
+  if (!entity) {
+      return html`<div class="preview-card" style="justify-content: center; align-items: center; display: flex; height: 100%; min-height: 200px;">Select an item to see details.</div>`;
   }
+
+  const attack = entity.attack;
+  const isRanged = attack?.type === 'ranged';
+  const isBuilding = entity.type === 'building';
+  const god = entity.prerequisite_god || (entity.type === 'majorGod' ? entity.name.toLowerCase() : activeMajorGod);
+
+  return html`
+  <div class="preview-card">
+      <div class="bg-god-logo">${GOD_ICONS[god] || GOD_ICONS.default}</div>
+
+      <!-- Header -->
+      <header class="preview-card-header">
+          <div class="title-group">
+              <h2>${entity.name}</h2>
+              <span class="user">by TheBradFad</span>
+          </div>
+          <div class="toolbar">
+              <div class="level">1</div>
+              <div>
+                  <button title="Info">ℹ️</button>
+                  <button title="Stats">📈</button>
+              </div>
+          </div>
+      </header>
+
+      <!-- Stats Bar -->
+      <div class="preview-card-stats">
+          ${entity.hitpoints ? html`<span>${STAT_ICONS.hitpoints} ${entity.hitpoints}</span>` : ''}
+          ${entity.defensive_stats ? html`
+              <span>${STAT_ICONS.hack_armor} ${entity.defensive_stats.hack_armor}%</span>
+              <span>${STAT_ICONS.pierce_armor} ${entity.defensive_stats.pierce_armor}%</span>
+              <span>${STAT_ICONS.crush_armor} ${entity.defensive_stats.crush_armor}%</span>
+          ` : ''}
+          ${entity.speed ? html`<span>${STAT_ICONS.speed} ${entity.speed}</span>` : ''}
+      </div>
+
+      <!-- Body -->
+      <div class="preview-card-body">
+          <div class="portrait">
+              <img src="${entity.image || 'https://placehold.co/90x120'}" alt="${entity.name}" 
+                   onerror="this.onerror=null;this.src='https://placehold.co/90x120/222/fff?text=Image%20Not%20Found';"/>
+          </div>
+          ${attack ? html`
+          <div class="attack-details">
+              <h3>${attack.type?.toUpperCase()} ATTACK</h3>
+              <div class="stats-grid">
+                  ${attack.hack_damage ? html`<div class="label">${STAT_ICONS.hack_damage} Hack</div><div class="value">${attack.hack_damage}</div>` : ''}
+                  ${attack.pierce_damage ? html`<div class="label">${STAT_ICONS.pierce_damage} Pierce</div><div class="value">${attack.pierce_damage}</div>` : ''}
+                  ${attack.crush_damage ? html`<div class="label">${STAT_ICONS.crush_damage} Crush</div><div class="value">${attack.crush_damage}</div>` : ''}
+                  ${attack.reload_time ? html`<div class="label">${STAT_ICONS.reload_time} Reload</div><div class="value">${attack.reload_time}s</div>` : ''}
+                  ${isRanged && attack.range ? html`<div class="label">${STAT_ICONS.range} Range</div><div class="value">${attack.range}</div>` : ''}
+                  ${isBuilding && entity.functions?.garrison ? html`<div class="label">${STAT_ICONS.garrison} Garrison</div><div class="value">${entity.functions.garrison}</div>` : ''}
+                  
+                  ${Object.entries(attack).filter(([k, v]) => k.startsWith('vs_') && v > 1).map(([k,v]) => html`
+                      <div class="multipliers" style="grid-column: 1 / -1;">
+                          ${v}x bonus vs ${k.replace('vs_','')}
+                      </div>
+                  `)}
+              </div>
+          </div>
+          ` : ''}
+      </div>
+  </div>`;
+};
+
+/**
+ * Handles showing the preview in the correct location (inline or modal).
+ * @param {object} entity The entity to show.
+ */
+function showPreview(entity) {
+  activeEntity = entity;
+  const template = previewCardTemplate(entity);
+  
+  // Check if we are on a mobile-sized screen
+  if (window.matchMedia("(max-width: 768px)").matches) {
+      const modal = document.getElementById('preview-modal');
+      const content = modal.querySelector('.preview-content');
+      render(template, content);
+      modal.style.display = 'flex';
+  } else {
+      // Find the right preview pane based on the entity type
+      const containerSelector = entity.type === 'building' ? '.buildings .preview-content' : '.units-techs .preview-content';
+      const container = document.querySelector(containerSelector);
+      if (container) {
+          render(template, container);
+      }
+  }
+   renderAll(); // Re-render to update active states
 }
+
 
 // Stub for edit modal
 function openEditModal(_entity: Entity) {
