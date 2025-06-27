@@ -21,7 +21,7 @@ const data = civData as unknown as Civ;
 // --- STATE MANAGEMENT (Preserved from your original code) ---
 
 let activeEntityName: string | null = localStorage.getItem("activeEntity") || null;
-let activeMajorGod: string = localStorage.getItem("activeMajorGod") || "zeus";
+let activeMajorGodKey: string = localStorage.getItem("activeMajorGod") || "zeus";
 let activeBuilding: string | null = localStorage.getItem("activeBuilding") || "town_center";
 
 
@@ -53,12 +53,6 @@ function setActiveEntityName(entityName: string | null) {
   console.log("Setting activeEntityName:", entityName);
   activeEntityName = entityName;
   localStorage.setItem("activeEntity", entityName || "");
-}
-
-function setActiveMajorGod(god: string) {
-  activeMajorGod = god;
-  localStorage.setItem("activeMajorGod", god);
-  renderAll();
 }
 
 function setActiveBuilding(buildingName: string | null) {
@@ -106,26 +100,89 @@ function findEntityByName(entityName: string | null): Entity | null {
 
 // --- TEMPLATES  ---
 
-const majorGodsTemplate = (gods: Record<string, MajorGod>) => html`
-  ${Object.entries(gods).map(
-    ([key, god]) => html`
-      <article
-        class="tile major-god card ${key === activeMajorGod ? "active" : "ghosted"}"
-        data-god="${key}"
-        style="background-image: url('${god.image || "assets/placeholder.jpg"}')"
-        tabindex="0"
-        @click=${() => setActiveMajorGod(key)}
-      >
-        <h4>${god.name}</h4>
-        <p class="tagline">${god.tagline}</p>
-      </article>
-    `
-  )}
-`;
+// In main.ts, REPLACE the existing majorGodsTemplate function with this one.
+
+// In main.ts, REPLACE the existing majorGodsTemplate function with this one.
+
+// In main.ts, REPLACE the existing majorGodsTemplate function with this one.
+
+const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
+  const godKeys = Object.keys(gods);
+  const numGods = godKeys.length;
+  const numTotalCards = numGods + 1; // +1 for the "add" card
+  const activeIndex = godKeys.indexOf(activeMajorGodKey);
+
+  // Event Handlers
+  const selectGod = (key: string) => {
+    activeMajorGodKey = key;
+    localStorage.setItem("activeMajorGod", key);
+    renderAll();
+  };
+  const openAddGodModal = () => console.log("Opening Add God Modal...");
+  const openEditGodModal = (god: MajorGod) => console.log("Editing:", god.name);
+  const removeGod = (key: string) => console.log("Removing god:", key);
+
+  // --- Template Rendering ---
+  return html`
+    ${godKeys.map((key, i) => {
+      const god = gods[key];
+      
+      // --- Wrapping Logic ---
+      // This calculates the shortest distance between cards on a circle
+      let offset = i - activeIndex;
+      if (offset > numTotalCards / 2) {
+        offset -= numTotalCards;
+      }
+      if (offset < -numTotalCards / 2) {
+        offset += numTotalCards;
+      }
+      // --- End of Wrapping Logic ---
+
+      return html`
+        <article
+          class="card major-god"
+          data-offset=${offset}
+          style="background-image: url('${god.image || 'assets/placeholder.jpg'}')"
+          @click=${() => offset !== 0 && selectGod(key)}
+        >
+          <h4>${god.name}</h4>
+          <p>${god.tagline}</p>
+          
+          ${offset === 0 ? html`
+            <div class="card-actions">
+              <button @click=${(e: Event) => { e.stopPropagation(); openEditGodModal(god); }} title="Edit">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button @click=${(e: Event) => { e.stopPropagation(); removeGod(key); }} title="Remove">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          ` : ''}
+        </article>
+      `;
+    })}
+    <!-- The "Add New" card's offset is also calculated with wrapping logic -->
+    ${(() => {
+        let offset = numGods - activeIndex;
+        if (offset > numTotalCards / 2) {
+            offset -= numTotalCards;
+        }
+        return html`
+        <article
+            class="card add-new-god"
+            data-offset=${offset}
+            @click=${openAddGodModal}
+        >
+            <i class="fa-solid fa-plus"></i>
+        </article>
+        `;
+    })()}
+  `;
+};
 
 const minorGodsTemplate = (gods: Record<string, MinorGod>) => html`
   ${Object.values(gods)
-    .filter(god => !god.prerequisite_god || god.prerequisite_god.toLowerCase() === activeMajorGod)
+    .filter(god => !god.prerequisite_god || god.prerequisite_god.toLowerCase() === activeMajorGodKey)
     .map(god => html`
         <div class="tile minor-god" @click=${() => showPreview(god)} tabindex="0">
           <img src="${god.image || "assets/placeholder.jpg"}" alt="${god.name}" class="sprite" />
@@ -194,7 +251,7 @@ function createUnitsTechsGridLayout(
     }
   });
 
-  const minorGods = data.majorGods[activeMajorGod]?.minorGods || [];
+  const minorGods = data.majorGods[activeMajorGodKey]?.minorGods || [];
   const validTechs = mythicGenericTechs
     .filter(tech => !tech.prerequisite_god || minorGods.includes(tech.prerequisite_god));
   
@@ -260,7 +317,7 @@ const previewCardTemplate = (entity: Entity | null) => {
     return html`<div class="preview-card" style="display:flex; align-items:center; justify-content:center; min-height:200px;">Select an item.</div>`;
   }
   
-  const god = entity.prerequisite_god || (entity.type === 'majorGod' ? entity.name.toLowerCase() : activeMajorGod);
+  const god = entity.prerequisite_god || (entity.type === 'majorGod' ? entity.name.toLowerCase() : activeMajorGodKey);
   const isRanged = 'attack' in entity && entity.attack?.type === 'ranged';
 
   return html`
@@ -327,8 +384,10 @@ function showPreview(entity: Entity) {
 // --- RENDER & INITIALIZATION ---
 
 function renderAll() {
-  const majorGodsContainer = document.querySelector(".major-gods .carousel");
-  if(majorGodsContainer instanceof HTMLElement) render(majorGodsTemplate(data.majorGods), majorGodsContainer);
+  const carouselContainer = document.querySelector('.major-gods .carousel');
+    if (carouselContainer instanceof HTMLElement) {
+        render(majorGodsTemplate(data.majorGods), carouselContainer);
+    }
 
   const minorGodsContainer = document.querySelector(".minor-gods .grid");
   if(minorGodsContainer instanceof HTMLElement) render(minorGodsTemplate(data.minorGods), minorGodsContainer);

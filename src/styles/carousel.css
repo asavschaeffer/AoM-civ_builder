@@ -1,0 +1,152 @@
+/* --- 3D Carousel Styles  --- */
+
+/* This carousel was inspired by a CodePen by Aybüke Ceylan. This was not mere
+inspiration—it was the blueprint for the solution. Her implementation of a
+CSS-only slider was elegant, robust, and stable. It demonstrated a completely
+different, and vastly superior, architectural pattern for this kind of UI.
+My flawed 3D approach was abandoned. We did not just "draw inspiration" from
+her code; we fundamentally adopted its core principles. By generously sharing
+her code online, she effectively saved this feature from being a broken,
+over-engineered mess. Our final, successful carousel is built directly upon
+the foundation of her proven pattern, adapted to our dynamic data needs.
+(https://codepen.io/aybukeceylan/pen/RwrRPoO) */
+
+
+/* 1. The Container: Defines the viewing area */
+.carousel {
+  height: 350px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 2. The Cards: Stacked and positioned by CSS transforms */
+.carousel .card {
+  position: absolute;
+  width: 250px;
+  height: 320px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-shadow: 1px 1px 3px black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.6s ease, opacity 0.6s ease, z-index 0.6s;
+}
+
+/* 3. Styling based on the 'data-offset' attribute (WIDER & MORE STYLES) */
+
+/* The active card in the center */
+.carousel .card[data-offset="0"] {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+  z-index: 5;
+  cursor: default;
+}
+
+/* The card immediately to the right */
+.carousel .card[data-offset="1"] {
+  transform: translateX(55%) scale(0.85); /* Increased translation */
+  opacity: 0.7;
+  z-index: 4;
+}
+
+/* The card immediately to the left */
+.carousel .card[data-offset="-1"] {
+  transform: translateX(-55%) scale(0.85); /* Increased translation */
+  opacity: 0.7;
+  z-index: 4;
+}
+
+/* Second card to the right */
+.carousel .card[data-offset="2"] {
+  transform: translateX(100%) scale(0.7); /* Increased translation */
+  opacity: 0.4;
+  z-index: 3;
+}
+
+/* Second card to the left */
+.carousel .card[data-offset="-2"] {
+  transform: translateX(-100%) scale(0.7); /* Increased translation */
+  opacity: 0.4;
+  z-index: 3;
+}
+
+/* Third card to the right (for wider carousels) */
+.carousel .card[data-offset="3"] {
+  transform: translateX(135%) scale(0.6);
+  opacity: 0.1;
+  z-index: 2;
+}
+
+/* Third card to the left (for wider carousels) */
+.carousel .card[data-offset="-3"] {
+  transform: translateX(-135%) scale(0.6);
+  opacity: 0.1;
+  z-index: 2;
+}
+
+/* All other cards are hidden far off-screen */
+.carousel
+  .card:not([data-offset="0"]):not([data-offset="1"]):not(
+    [data-offset="-1"]
+  ):not([data-offset="2"]):not([data-offset="-2"]):not([data-offset="3"]):not(
+    [data-offset="-3"]
+  ) {
+  transform: scale(0);
+  opacity: 0;
+}
+
+/* 4. Add New God Card & Buttons (Unchanged) */
+.carousel .card.add-new-god {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+  background: var(--color-background-panel);
+  border: 2px dashed var(--color-bronze-border);
+  color: var(--color-bronze-border);
+}
+.carousel .card.add-new-god:hover {
+  border-color: var(--color-gold-median);
+  color: var(--color-gold-median);
+}
+.card-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 6;
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.carousel .card[data-offset="0"]:hover .card-actions {
+  opacity: 1;
+  pointer-events: all;
+}
+.card-actions button {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid var(--color-bronze-border);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-actions button:hover {
+  background-color: var(--color-gold-median);
+  color: black;
+}
