@@ -309,13 +309,13 @@ function showPreview(entity: Entity) {
 
   if (window.matchMedia("(max-width: 768px)").matches) {
     const modal = document.getElementById("preview-modal");
-    const content = modal?.querySelector(".preview-content");
+    const content = modal?.querySelector(".preview-pane");
     if (modal && content instanceof HTMLElement) { 
       render(template, content);
       modal.style.display = "flex";
     }
   } else {
-    const containerSelector = entity.type === "building" ? ".buildings .preview-content" : ".units-techs .preview-content";
+    const containerSelector = entity.type === "building" ? ".buildings .preview-pane" : ".units-techs .preview-pane";
     const container = document.querySelector(containerSelector);
     if (container instanceof HTMLElement) { 
       render(template, container);
