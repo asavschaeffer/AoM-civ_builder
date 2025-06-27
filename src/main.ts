@@ -104,7 +104,7 @@ function findEntityByName(entityName: string | null): Entity | null {
 }
 
 
-// --- TEMPLATES (Preserved and adapted for responsiveness) ---
+// --- TEMPLATES  ---
 
 const majorGodsTemplate = (gods: Record<string, MajorGod>) => html`
   ${Object.entries(gods).map(
@@ -136,7 +136,6 @@ const minorGodsTemplate = (gods: Record<string, MinorGod>) => html`
     )}
 `;
 
-// This complex grid logic is PRESERVED from your original code.
 function createUnitsTechsGridLayout(
   units: Record<string, Unit>,
   technologies: Record<string, Technology>
@@ -254,7 +253,7 @@ const buildingsTemplate = (buildings: Record<string, Building>) => html`
   }))}`;
 
 
-// --- PREVIEW LOGIC (Updated for Type Safety & Responsiveness) ---
+// --- PREVIEW LOGIC ---
 
 const previewCardTemplate = (entity: Entity | null) => {
   if (!entity) {
@@ -311,18 +310,17 @@ function showPreview(entity: Entity) {
   if (window.matchMedia("(max-width: 768px)").matches) {
     const modal = document.getElementById("preview-modal");
     const content = modal?.querySelector(".preview-content");
-    if (modal && content instanceof HTMLElement) { // FIX: Added instanceof check
+    if (modal && content instanceof HTMLElement) { 
       render(template, content);
       modal.style.display = "flex";
     }
   } else {
     const containerSelector = entity.type === "building" ? ".buildings .preview-content" : ".units-techs .preview-content";
     const container = document.querySelector(containerSelector);
-    if (container instanceof HTMLElement) { // FIX: Added instanceof check
+    if (container instanceof HTMLElement) { 
       render(template, container);
     }
   }
-  // FIX: Restore renderAll() to update active tile styles
   renderAll();
 }
 

@@ -1,124 +1,203 @@
-/* Reset and base styles from original */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; line-height: 1.6; padding: 1rem; max-width: 1400px; margin: 0 auto; }
-header { text-align: center; margin-bottom: 2rem; }
-nav ul { list-style: none; display: flex; justify-content: center; gap: 1rem; }
-nav a { text-decoration: none; color: #333; }
-h1, h2, h3 { margin-bottom: 1rem; }
-section { margin-bottom: 2rem; }
-footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd; }
+/* ================================================== */
+/* == Thematic Redesign - Final Polish (Commit 3/3) == */
+/* ================================================== */
 
-/* Grids and Carousels */
-.carousel, .grid { padding: 1rem; background-color: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+:root {
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Roboto', sans-serif;
+
+  /* Color Palette - Sampled from reference images */
+  --color-background-dark: #120e0b;
+  --color-background-panel: #1a1613;
+  --color-text-parchment: #e4d8c7;
+  --color-text-muted: #9e9488;
+  
+  /* Gold & Bronze Tones */
+  --color-gold-bright: #fde882;
+  --color-gold-median: #e6bf47;
+  --color-gold-dark: #a17b23;
+  --color-bronze-border: #4a4130;
+
+  /* Accent & State Colors */
+  --color-accent-blue: #69a5e4;
+  --color-accent-green: #9fefa9;
+}
+
+/* Reset and base styles */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  background-color: var(--color-background-dark);
+  background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://www.transparenttextures.com/patterns/dark-leather.png');
+  color: var(--color-text-parchment);
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* --- Special H1 Title Effect --- */
+h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  
+  /* The magic starts here */
+  background: url(https://www.transparenttextures.com/patterns/stardust.png), linear-gradient(180deg, #3c4468 0%, #1a1f36 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-gold-median);
+
+  /* 3D Gold Border Effect */
+  text-shadow: 
+      /* Outer orange glow */
+      0 0 15px rgba(224, 169, 44, 0.4),
+      /* Hard orange edge */
+      0 0 5px rgba(224, 169, 44, 0.5),
+      /* Inner dark shadow for depth */
+      2px 2px 2px rgba(0,0,0,0.8),
+      /* White highlight on top edge */
+      0 -1px 1px rgba(255, 255, 255, 0.2);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-bronze-border);
+}
+nav a { text-decoration: none; color: var(--color-gold-median); font-family: var(--font-heading); transition: color 0.3s; }
+nav a:hover { color: var(--color-gold-bright); }
+nav ul { list-style: none; display: flex; justify-content: center; gap: 1rem; }
+
+h2, h3 {
+  font-family: var(--font-heading);
+  color: var(--color-gold-bright);
+  text-shadow: 1px 1px 2px #000;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--color-bronze-border);
+  padding-bottom: 0.5rem;
+}
+section { margin-bottom: 2rem; }
+
+/* --- High-Fidelity Panels and Grids --- */
+.carousel, .grid, .units-techs-grid, .buildings-grid {
+  padding: 1rem;
+  background-color: var(--color-background-panel);
+  border: 1px solid #000;
+  border-top-color: var(--color-bronze-border);
+  border-radius: 4px;
+  box-shadow: 
+      /* Inset dark shadow for depth */
+      inset 0 0 15px rgba(0,0,0,0.7),
+      /* Outer bronze highlight */
+      0 0 0 1px var(--color-bronze-border);
+}
 .carousel { display: flex; gap: 1rem; overflow-x: auto; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
 
 /* Main content layout */
 .content-with-preview { display: flex; gap: 1rem; align-items: flex-start; }
 .units-techs-grid, .buildings-grid { display: grid; gap: 0.5rem; flex-grow: 1; grid-template-columns: repeat(6, 1fr); }
-.units-techs-grid { grid-template-rows: repeat(3, 150px); }
-.buildings-grid { grid-template-rows: repeat(3, 150px); }
+.units-techs-grid { grid-template-rows: repeat(3, 1fr); }
+.buildings-grid { grid-template-rows: repeat(3, 1fr); }
 
-/* Tile styles */
-.tile { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; transition: all 0.2s; text-align: center; }
-.tile:hover, .tile:focus { background-color: #e9e9e9; transform: translateY(-2px); outline: 2px solid #007bff; }
-.tile.active { border-color: #28a745; background-color: #d4edda; }
-.tile.placeholder { background-color: #f0f0f0; border-style: dashed; }
-.tile.placeholder .plus-icon { font-size: 2rem; color: #ccc; }
-.tile img.sprite { width: 64px; height: 64px; object-fit: contain; margin-bottom: 0.25rem; }
-.tile h5 { font-size: 0.9rem; margin: 0.25rem 0; }
-.tile p { font-size: 0.8rem; color: #555; }
 
-/* Major God Card Specifics */
-.card.major-god { flex: 0 0 250px; padding: 1rem; background-size: cover; background-position: center; color: white; border-radius: 8px; text-shadow: 1px 1px 2px black; }
-.card.major-god.ghosted { opacity: 0.6; }
-.card.major-god.active { transform: scale(1.05); opacity: 1; }
+/* --- High-Fidelity Tiles --- */
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: linear-gradient(145deg, #2c2622, #1a1613);
+  border: 1px solid var(--color-bronze-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+  min-height: 120px;
+}
 
-/* ============================================= */
-/* == CSS for New Preview Card (From Commit 1) == */
-/* ============================================= */
+/* UX: Hover State - Subtle glow indicates interactivity */
+.tile:hover, .tile:focus {
+  transform: scale(1.05);
+  border-color: var(--color-gold-median);
+  box-shadow: 0 0 15px rgba(224, 169, 44, 0.3), inset 0 1px 2px rgba(0,0,0,0.5);
+  outline: none;
+  z-index: 10;
+}
+/* UX: Active State - Bright, clear feedback confirms selection */
+.tile.active {
+  border-color: var(--color-accent-blue);
+  background: linear-gradient(145deg, #3a332d, #25201c);
+  box-shadow: inset 0 0 10px rgba(105, 165, 228, 0.4), 0 0 10px rgba(105, 165, 228, 0.3);
+  transform: scale(1.05);
+}
+
+.tile.placeholder { background: rgba(0,0,0,0.2); border-style: dashed; border-color: #444; }
+.tile img.sprite { width: 64px; height: 64px; object-fit: contain; margin-bottom: 0.25rem; filter: brightness(1.1); }
+.tile h5 { font-family: var(--font-body); font-weight: 500; font-size: 0.9rem; margin: 0.25rem 0; color: var(--color-text-parchment); }
+.tile p { font-size: 0.8rem; color: var(--color-text-muted); }
+
+/* --- High-Fidelity Preview Card --- */
 .preview-content-container { width: 420px; flex-shrink: 0; }
-.preview-card { position: relative; padding: 1rem; width: 100%; font-family: 'Helvetica Neue', sans-serif; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #333; }
-.preview-card .bg-god-logo { position: absolute; bottom: 1rem; right: 1rem; font-size: 6rem; opacity: 0.1; user-select: none; z-index: 1; }
-.preview-card-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #eee; padding-bottom: 0.75rem; margin-bottom: 0.75rem; position: relative; z-index: 2; }
-.preview-card-header .title-group h2 { margin: 0; font-size: 1.5rem; border: none; }
-.preview-card-header .title-group .user { font-size: 0.85rem; color: #777; }
+.preview-card {
+  position: relative;
+  padding: 1rem;
+  font-family: var(--font-body);
+  color: var(--color-text-parchment);
+  background: linear-gradient(160deg, #352F2A, #1E1916);
+  border: 1px solid #000;
+  border-top: 1px solid var(--color-gold-median);
+  border-left: 1px solid var(--color-bronze-border);
+  border-right: 1px solid var(--color-bronze-border);
+  border-radius: 6px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.7);
+}
+.preview-card .bg-god-logo { position: absolute; bottom: 1rem; right: 1rem; font-size: 6rem; opacity: 0.1; user-select: none; z-index: 1; color: var(--color-gold-bright); }
+
+.preview-card-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--color-bronze-border); padding-bottom: 0.75rem; margin-bottom: 0.75rem; position: relative; z-index: 2; }
+.preview-card-header .title-group h2 { margin: 0; font-size: 1.5rem; border: none; color: var(--color-gold-bright); }
+.preview-card-header .title-group .user { font-size: 0.85rem; color: var(--color-text-muted); }
 .preview-card-header .toolbar { text-align: right; }
-.preview-card-header .level { background: #007bff; color: #fff; padding: 0.1rem 0.5rem; border-radius: 4px; font-weight: bold; font-size: 1rem; margin-bottom: 0.25rem; }
-.preview-card-header .toolbar button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #555; }
-.preview-card-stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #eee; position: relative; z-index: 2; }
+.preview-card-header .level { background: var(--color-accent-blue); color: #fff; padding: 0.1rem 0.5rem; border-radius: 4px; font-weight: bold; font-size: 1rem; margin-bottom: 0.25rem; border: 1px solid #c1dfff; text-shadow: 1px 1px 2px #000; }
+.preview-card-header .toolbar button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #ccc; transition: color 0.2s; }
+.preview-card-header .toolbar button:hover { color: var(--color-gold-bright); }
+
+.preview-card-stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-bronze-border); position: relative; z-index: 2; }
 .preview-card-stats span { display: flex; align-items: center; gap: 0.3rem; }
+
 .preview-card-body { display: flex; gap: 0.75rem; position: relative; z-index: 2; }
-.preview-card-body .portrait img { width: 90px; height: 120px; object-fit: cover; border: 2px solid #ddd; border-radius: 4px; background: #f0f0f0; }
-.preview-card-body .attack-details { flex-grow: 1; }
-.attack-details h3 { margin: 0 0 0.5rem 0; font-size: 1rem; letter-spacing: 1px; border: none; padding: 0; color: #007bff; }
+.preview-card-body .portrait img { width: 90px; height: 120px; object-fit: cover; border: 2px solid var(--color-bronze-border); border-radius: 4px; background: #111; }
+.attack-details h3 { margin: 0 0 0.5rem 0; font-size: 1rem; font-family: var(--font-heading); letter-spacing: 1px; border: none; padding: 0; color: var(--color-gold-median); }
 .attack-details .stats-grid { display: grid; grid-template-columns: auto 1fr; row-gap: 4px; column-gap: 12px; font-size: 0.9rem; }
-.attack-details .stats-grid .label { color: #555; display: flex; align-items: center; gap: 0.4rem; }
-.attack-details .stats-grid .value { font-weight: bold; }
-.attack-details .multipliers { grid-column: 1 / -1; margin-top: 0.5rem; font-size: 0.8rem; color: #28a745; }
+.attack-details .stats-grid .label { color: var(--color-text-muted); display: flex; align-items: center; gap: 0.4rem; }
+.attack-details .stats-grid .value { font-weight: 500; color: #fff; }
+.attack-details .multipliers { grid-column: 1 / -1; margin-top: 0.5rem; font-size: 0.8rem; color: var(--color-accent-green); }
 
-/* ================================================== */
-/* == CSS for Responsiveness (Commit 2/3) == */
-/* ================================================== */
-
-/* Modal styles for mobile preview */
+/* Modal and Responsive styles */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex; /* Changed from none to flex by JS */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px);
 }
-.modal-content {
-    position: relative;
-    padding: 0; /* The card inside will have padding */
-    width: calc(100% - 2rem);
-    max-width: 420px; 
-}
+.modal-content { position: relative; padding: 0; width: calc(100% - 2rem); max-width: 420px; }
 .modal-close-btn {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: white;
-    color: black;
-    border: 2px solid black;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 1.5rem;
-    line-height: 26px; /* Adjust for border */
-    text-align: center;
-    cursor: pointer;
-    z-index: 1001;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  position: absolute; top: -10px; right: -10px; background: var(--color-gold-bright); color: black; border: 2px solid black; border-radius: 50%;
+  width: 30px; height: 30px; font-size: 1.5rem; line-height: 26px; text-align: center; cursor: pointer; z-index: 1001;
 }
 
-/* Responsive media queries */
 @media (max-width: 1200px) {
-    /* On medium screens, stack the preview below the grid */
-    .content-with-preview {
-        flex-direction: column;
-    }
-    .preview-content-container {
-        width: 100%;
-        margin-top: 1rem;
-    }
+  .content-with-preview { flex-direction: column; }
+  .preview-content-container { width: 100%; margin-top: 1rem; }
 }
-
 @media (max-width: 768px) {
-    /* On small screens, use a 3-column grid and a modal */
-    .units-techs-grid, .buildings-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    /* Hide the desktop preview container entirely */
-    .preview-content-container {
-        display: none;
-    }
+  .units-techs-grid, .buildings-grid { grid-template-columns: repeat(3, 1fr); }
+  .preview-content-container { display: none; }
 }
