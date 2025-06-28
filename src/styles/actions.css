@@ -1,0 +1,109 @@
+/* ================================================== */
+/* == Action Buttons Styles (Refined) == */
+/* ================================================== */
+
+/* --- Overlay Containers --- */
+/* This container appears on hover over a tile or card */
+.tile-actions-overlay,
+.card-actions-overlay,
+.preview-actions-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* REMOVED: No background or blur needed */
+    opacity: 0;
+    pointer-events: none; /* Important: allows clicking through the overlay */
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+/* Make the overlay visible and interactive on hover */
+.tile:hover .tile-actions-overlay,
+.card:hover .card-actions-overlay,
+.preview-card:hover .preview-actions-overlay {
+    opacity: 1;
+    pointer-events: all; /* Make buttons clickable */
+}
+
+
+/* --- Base Button Styles --- */
+.action-btn {
+    position: absolute; /* Key change: positions buttons relative to the overlay */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.2);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    mix-blend-mode: screen; 
+}
+
+.action-btn:hover {
+    /* NEW: Use translateY for a 'lift' effect instead of scale */
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.3);
+    mix-blend-mode: normal; 
+}
+
+/* --- Edit Button (Blue Pill) --- */
+.edit-btn {
+    /* Positioning: bottom middle */
+    bottom: 0.5rem; /* A little space from the bottom edge */
+    left: 50%;
+    /* UPDATED: combine the hover state with the centering transform */
+    transform: translateX(-50%);
+}
+.edit-btn:hover {
+    /* Ensure the centering transform is maintained on hover */
+    transform: translateX(-50%) translateY(-2px);
+}
+.edit-btn {
+    background: rgba(50, 150, 255, 0.7);
+    border-radius: 50px; /* Pill shape */
+
+    /* Responsive Sizing: Made slightly smaller */
+    font-size: 0.8rem; 
+    padding: 0.35rem 1.1rem;
+}
+
+/* For larger cards, the button can be slightly bigger */
+.card .edit-btn, .preview-card .edit-btn {
+    font-size: 1rem;
+    padding: 0.4rem 1.4rem;
+}
+
+.edit-btn i {
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+}
+
+
+/* --- Delete Button (Red Circle) --- */
+.delete-btn {
+    /* Positioning: top right */
+    top: 0.4rem;
+    right: 0.4rem;
+
+    background: rgba(220, 40, 40, 0.7);
+    border-radius: 50%; /* Circle shape */
+
+    /* Responsive Sizing: Made slightly smaller */
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.8rem;
+}
+
+/* For larger cards, the button can be slightly bigger */
+.card .delete-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.9rem;
+}
+
+.delete-btn i {
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+}
