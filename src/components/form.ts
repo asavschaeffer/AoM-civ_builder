@@ -1,5 +1,5 @@
 import { html, render } from 'lit-html';
-import { Entity, Unit, Building, MajorGod, MinorGod, Technology, Cost, DefensiveStats } from '../types/civ';
+import { Entity, Unit, Cost, DefensiveStats } from '../types/civ';
 // Import the global data and render functions from main.ts
 import { data, renderAll, showPreview } from '../main';
 
@@ -8,7 +8,7 @@ import { data, renderAll, showPreview } from '../main';
 // =================================================================
 
 let editingEntity: Entity | null = null;
-// FIX: Store the original name to find the entity even after it's been renamed in the form
+// Store the original name to find the entity even after it's been renamed in the form
 let originalEntityName: string | null = null;
 let triggerElement: HTMLElement | null = null;
 let editorContainer: HTMLElement | null = null;
@@ -21,6 +21,9 @@ let backgroundOverlay: HTMLElement | null = null;
 
 /**
  * A generic function to update the temporary state of the entity being edited.
+ * It can handle nested properties using dot notation (e.g., 'cost.food').
+ * @param path The dot-notation path to the property to update.
+ * @param value The new value.
  */
 function updateState(path: string, value: any) {
     if (!editingEntity) return;
@@ -28,10 +31,14 @@ function updateState(path: string, value: any) {
     const keys = path.split('.');
     let obj: any = editingEntity;
     while (keys.length > 1) {
-        obj = obj[keys.shift()!];
+        const key = keys.shift();
+        if (key) {
+            obj = obj[key];
+        }
     }
     
-    if (typeof obj[keys[0]] === 'number') {
+    // Coerce to number if the original value was a number, or if it's a number-like string
+    if (typeof obj[keys[0]] === 'number' || !isNaN(Number(value))) {
         obj[keys[0]] = Number(value);
     } else {
         obj[keys[0]] = value;
@@ -46,7 +53,7 @@ function handleSave() {
   const collection = data[collectionKey] as Record<string, Entity> | undefined;
 
   if (collection) {
-      // FIX: Use the original, unmodified name to find the entity key.
+      // Use the original, unmodified name to find the entity key.
       const entityKey = Object.keys(collection).find(key => 
           (collection[key] as Entity).name === originalEntityName
       );
@@ -62,7 +69,7 @@ function handleSave() {
 
         // Re-render the main UI to show the changes
         renderAll();
-        // FIX: Explicitly update the preview panel with the new data
+        // Explicitly update the preview panel with the new data
         showPreview(editingEntity);
 
       } else {
@@ -124,7 +131,7 @@ export function openEditor(entityToEdit: Entity, triggerEl: HTMLElement) {
   console.log("Opening editor for:", entityToEdit.name);
 
   triggerElement = triggerEl;
-  // FIX: Store the original name on open, so we can always find it later.
+  // Store the original name on open, so we can always find it later.
   originalEntityName = entityToEdit.name;
   editingEntity = JSON.parse(JSON.stringify(entityToEdit));
 

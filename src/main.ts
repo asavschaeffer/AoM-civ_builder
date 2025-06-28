@@ -1,5 +1,4 @@
 import { html, render } from "lit-html";
-// FIX: Removed .ts extensions from imports
 import {
   Civ,
   Entity,
@@ -54,7 +53,6 @@ export function showPreview(entity: Entity) {
 
 
 // --- STATE MANAGEMENT ---
-
 let activeEntityName: string | null = localStorage.getItem("activeEntity") || null;
 let activeMajorGodKey: string = localStorage.getItem("activeMajorGod") || "zeus";
 let activeBuilding: string | null = localStorage.getItem("activeBuilding") || "town_center";
