@@ -9,23 +9,46 @@ import {
   Technology,
   Ability,
   GodPower,
-} from "./types/civ";
-// In a real project with a bundler, you would import the JSON.
-// For this example to work standalone, we'll need to assume civData is available.
-// A fetch call would replace this in a live environment.
-import civData from "./data/civData.json";
+} from "./types/civ.ts"; // Assuming you moved civ.ts to src/types/
 
+// Our module-scoped variable, initialized to null.
+let data: Civ | null = null;
 
-const data = civData as unknown as Civ;
-
-// --- STATE MANAGEMENT (Preserved from your original code) ---
+// --- STATE MANAGEMENT ---
 
 let activeEntityName: string | null = localStorage.getItem("activeEntity") || null;
 let activeMajorGodKey: string = localStorage.getItem("activeMajorGod") || "zeus";
 let activeBuilding: string | null = localStorage.getItem("activeBuilding") || "town_center";
 
 
-// --- HELPERS (Preserved and expanded) ---
+// --- ASYNCHRONOUS DATA LOADING ---
+
+/**
+ * Fetches and loads data for a specific civilization.
+ * @param civName The name of the civilization to load (e.g., 'greek').
+ * @returns {Promise<boolean>} True if loading was successful, false otherwise.
+ */
+async function loadCivData(civName = 'greek'): Promise<boolean> {
+  try {
+    // THE FIX: The path must be relative to the project root, including `src`.
+    const response = await fetch(`./src/data/civs/${civName}.json`, { cache: 'no-cache' });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+    }
+    
+    data = await response.json() as Civ;
+    console.log("Civilization data loaded successfully:", data);
+    return true; // Signal success
+
+  } catch (error) {
+    console.error("Could not load civilization data:", error);
+    return false; // Signal failure
+  }
+}
+
+
+// --- HELPERS ---
 
 const STAT_ICONS = {
   hitpoints: "❤️",
@@ -58,7 +81,7 @@ function setActiveEntityName(entityName: string | null) {
 function setActiveBuilding(buildingName: string | null) {
   console.log("Setting activeBuilding:", buildingName);
   activeBuilding = buildingName ? buildingName.toLowerCase() : null;
-  setActiveEntityName(null); // Clear entity selection when changing building
+  setActiveEntityName(null); 
   localStorage.setItem("activeBuilding", buildingName || "");
   renderAll();
 }
@@ -68,6 +91,7 @@ function findRelatedBuildings(
   buildings: Record<string, Building>,
   relation: "trains_units" | "researches_techs"
 ): string[] {
+  if (!data) return [];
   return Object.values(buildings)
     .filter((building) => building.functions[relation]?.includes(entityName))
     .map((building) => building.name);
@@ -77,13 +101,15 @@ function findGodPowers(
   god: MajorGod | MinorGod,
   godPowers: Record<string, GodPower>
 ): GodPower[] {
+  if (!data) return [];
   return (god.godPowers || [])
     .map((name) => godPowers[name])
     .filter((power): power is GodPower => !!power);
 }
 
 function findEntityByName(entityName: string | null): Entity | null {
-    if (!entityName) return null;
+    if (!entityName || !data) return null;
+
     const nameLower = entityName.toLowerCase();
     for (const key of ['units', 'buildings', 'technologies', 'majorGods', 'minorGods', 'abilities', 'godPowers']) {
         const collection = data[key as keyof Civ] as Record<string, Entity>;
@@ -98,21 +124,14 @@ function findEntityByName(entityName: string | null): Entity | null {
 }
 
 
-// --- TEMPLATES  ---
-
-// In main.ts, REPLACE the existing majorGodsTemplate function with this one.
-
-// In main.ts, REPLACE the existing majorGodsTemplate function with this one.
-
-// In main.ts, REPLACE the existing majorGodsTemplate function with this one.
+// --- TEMPLATES (No changes needed in this section) ---
 
 const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
   const godKeys = Object.keys(gods);
   const numGods = godKeys.length;
-  const numTotalCards = numGods + 1; // +1 for the "add" card
+  const numTotalCards = numGods + 1;
   const activeIndex = godKeys.indexOf(activeMajorGodKey);
 
-  // Event Handlers
   const selectGod = (key: string) => {
     activeMajorGodKey = key;
     localStorage.setItem("activeMajorGod", key);
@@ -122,22 +141,12 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
   const openEditGodModal = (god: MajorGod) => console.log("Editing:", god.name);
   const removeGod = (key: string) => console.log("Removing god:", key);
 
-  // --- Template Rendering ---
   return html`
     ${godKeys.map((key, i) => {
       const god = gods[key];
-      
-      // --- Wrapping Logic ---
-      // This calculates the shortest distance between cards on a circle
       let offset = i - activeIndex;
-      if (offset > numTotalCards / 2) {
-        offset -= numTotalCards;
-      }
-      if (offset < -numTotalCards / 2) {
-        offset += numTotalCards;
-      }
-      // --- End of Wrapping Logic ---
-
+      if (offset > numTotalCards / 2) offset -= numTotalCards;
+      if (offset < -numTotalCards / 2) offset += numTotalCards;
       return html`
         <article
           class="card major-god"
@@ -147,7 +156,6 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
         >
           <h4>${god.name}</h4>
           <p>${god.tagline}</p>
-          
           ${offset === 0 ? html`
             <div class="card-actions">
               <button @click=${(e: Event) => { e.stopPropagation(); openEditGodModal(god); }} title="Edit">
@@ -161,12 +169,9 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
         </article>
       `;
     })}
-    <!-- The "Add New" card's offset is also calculated with wrapping logic -->
     ${(() => {
         let offset = numGods - activeIndex;
-        if (offset > numTotalCards / 2) {
-            offset -= numTotalCards;
-        }
+        if (offset > numTotalCards / 2) offset -= numTotalCards;
         return html`
         <article
             class="card add-new-god"
@@ -180,18 +185,21 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
   `;
 };
 
-const minorGodsTemplate = (gods: Record<string, MinorGod>) => html`
-  ${Object.values(gods)
-    .filter(god => !god.prerequisite_god || god.prerequisite_god.toLowerCase() === activeMajorGodKey)
-    .map(god => html`
-        <div class="tile minor-god" @click=${() => showPreview(god)} tabindex="0">
-          <img src="${god.image || "assets/placeholder.jpg"}" alt="${god.name}" class="sprite" />
-          <h5>${god.name}</h5>
-          <p>${god.tagline}</p>
-        </div>
-      `
-    )}
-`;
+const minorGodsTemplate = (gods: Record<string, MinorGod>) => {
+  if (!data) return ''; // Guard clause
+  return html`
+    ${Object.values(gods)
+      .filter(god => !god.prerequisite_god || god.prerequisite_god.toLowerCase() === activeMajorGodKey)
+      .map(god => html`
+          <div class="tile minor-god" @click=${() => showPreview(god)} tabindex="0">
+            <img src="${god.image || "assets/placeholder.jpg"}" alt="${god.name}" class="sprite" />
+            <h5>${god.name}</h5>
+            <p>${god.tagline}</p>
+          </div>
+        `
+      )}
+  `;
+}
 
 function createUnitsTechsGridLayout(
   units: Record<string, Unit>,
@@ -203,7 +211,7 @@ function createUnitsTechsGridLayout(
     [null, null, null, null, null, null],
   ];
 
-  if (!activeBuilding) return layout;
+  if (!activeBuilding || !data) return layout;
   const building = Object.values(data.buildings).find(b => b.name.toLowerCase() === activeBuilding);
   if (!building) return layout;
 
@@ -351,7 +359,7 @@ const previewCardTemplate = (entity: Entity | null) => {
                   ${entity.attack.hack_damage ? html`<div class="label">${STAT_ICONS.hack_damage} Hack</div><div class="value">${entity.attack.hack_damage}</div>` : ''}
                   ${entity.attack.pierce_damage ? html`<div class="label">${STAT_ICONS.pierce_damage} Pierce</div><div class="value">${entity.attack.pierce_damage}</div>` : ''}
                   ${entity.attack.crush_damage ? html`<div class="label">${STAT_ICONS.crush_damage} Crush</div><div class="value">${entity.attack.crush_damage}</div>` : ''}
-                  ${entity.attack.reload_time ? html`<div class="label">${STAT_ICONS.reload_time} Reload</div><div class="value">${entity.attack.reload_time}s</div>` : ''}
+                  ${'reload_time' in entity.attack && entity.attack.reload_time ? html`<div class="label">${STAT_ICONS.reload_time} Reload</div><div class="value">${entity.attack.reload_time}s</div>` : ''}
                   ${isRanged && entity.attack.range ? html`<div class="label">${STAT_ICONS.range} Range</div><div class="value">${entity.attack.range}</div>` : ''}
                   ${Object.entries(entity.attack).filter(([k,v])=>k.startsWith('vs_')&& v && v > 1).map(([k,v])=>html`<div class="multipliers">${v}x vs ${k.replace('vs_','')}</div>`)}
               </div>
@@ -381,9 +389,16 @@ function showPreview(entity: Entity) {
   renderAll();
 }
 
+
 // --- RENDER & INITIALIZATION ---
 
 function renderAll() {
+  // Guard Clause: If data hasn't been loaded, do nothing.
+  if (!data) {
+    console.warn("renderAll called before data was loaded. Aborting.");
+    return;
+  }
+
   const carouselContainer = document.querySelector('.major-gods .carousel');
     if (carouselContainer instanceof HTMLElement) {
         render(majorGodsTemplate(data.majorGods), carouselContainer);
@@ -397,23 +412,45 @@ function renderAll() {
 
   const unitsTechsContainer = document.querySelector(".units-techs .units-techs-grid");
   if(unitsTechsContainer instanceof HTMLElement) render(unitsTechsTemplate(data.units, data.technologies), unitsTechsContainer);
-  
-  // Other templates (like abilities, godpowers) would be called here.
 }
 
+
+/**
+ * The main entry point for the application.
+ */
+async function main() {
+  // Step 1: Attempt to load the critical data.
+  const isDataLoaded = await loadCivData('greek');
+
+  // If data loading fails, halt execution to prevent further errors.
+  if (!isDataLoaded) {
+    console.error("APPLICATION HALTED: Could not initialize due to data loading failure.");
+    // Optionally, display a user-friendly error message on the screen here.
+    return; 
+  }
+
+  // Step 2: Now that data is guaranteed to be loaded, proceed with rendering.
+  renderAll();
+    
+  // Step 3: Set up initial state and previews safely.
+  const initialEntity = findEntityByName(activeEntityName || activeBuilding);
+  if (initialEntity) {
+      showPreview(initialEntity);
+  }
+}
+
+// Global event listener to kick things off.
 document.addEventListener('DOMContentLoaded', () => {
+    // Set up non-data-dependent listeners first.
     const modal = document.getElementById('preview-modal');
     modal?.addEventListener('click', (e) => {
         if (e.target === modal || (e.target as HTMLElement).classList.contains('modal-close-btn')) {
-            modal.style.display = 'none';
+            if (modal instanceof HTMLElement) {
+              modal.style.display = 'none';
+            }
         }
     });
 
-    renderAll();
-    
-    // Show a default preview on load based on state
-    const initialEntity = findEntityByName(activeEntityName || activeBuilding);
-    if (initialEntity) {
-        showPreview(initialEntity);
-    }
+    // Call the main async function to start the application logic.
+    main();
 });
