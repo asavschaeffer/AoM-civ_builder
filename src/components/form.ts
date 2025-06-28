@@ -302,8 +302,10 @@ function renderAttackStatsForm(stats: AttackStats) {
                 <div class="form-field"><label for="attack-vs-myth">vs Myth</label><input id="attack-vs-myth" type="number" .value=${stats.vs_myth || 0} @input=${(e: Event) => updateState('attack_stats.vs_myth', (e.target as HTMLInputElement).value)}></div>
                 <div class="form-field"><label for="attack-vs-ranged">vs Ranged</label><input id="attack-vs-ranged" type="number" .value=${stats.vs_ranged || 0} @input=${(e: Event) => updateState('attack_stats.vs_ranged', (e.target as HTMLInputElement).value)}></div>
                 <div class="form-field"><label for="attack-vs-infantry">vs Infantry</label><input id="attack-vs-infantry" type="number" .value=${stats.vs_infantry || 0} @input=${(e: Event) => updateState('attack_stats.vs_infantry', (e.target as HTMLInputElement).value)}></div>
+                <div class="form-field"><label for="attack-vs-cavalry">vs Cavalry</label><input id="attack-vs-cavalry" type="number" .value=${stats.vs_cavalry || 0} @input=${(e: Event) => updateState('attack_stats.vs_cavalry', (e.target as HTMLInputElement).value)}></div>
                 <div class="form-field"><label for="attack-vs-siege">vs Siege</label><input id="attack-vs-siege" type="number" .value=${stats.vs_siege || 0} @input=${(e: Event) => updateState('attack_stats.vs_siege', (e.target as HTMLInputElement).value)}></div>
                 <div class="form-field"><label for="attack-vs-building">vs Building</label><input id="attack-vs-building" type="number" .value=${stats.vs_building || 0} @input=${(e: Event) => updateState('attack_stats.vs_building', (e.target as HTMLInputElement).value)}></div>
+                <div class="form-field"><label for="attack-vs-ship">vs Ship</label><input id="attack-vs-ship" type="number" .value=${stats.vs_ship || 0} @input=${(e: Event) => updateState('attack_stats.vs_ship', (e.target as HTMLInputElement).value)}></div>
                 </div>
         </fieldset>
     `;

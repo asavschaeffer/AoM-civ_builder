@@ -33,7 +33,8 @@ const attackStatsSchema = z.object({
   attack_speed: z.number().positive(),
   type: z.enum(['melee', 'ranged']).optional(),
   range: z.number().min(0).optional(),
-  number_projectiles: z.number().int().positive().optional(),
+  // UPDATED: Added min/max constraints as requested
+  number_projectiles: z.number().int().min(1).max(256).optional(),
   // Multipliers
   vs_human: z.number().optional(),
   vs_hero: z.number().optional(),
@@ -41,7 +42,6 @@ const attackStatsSchema = z.object({
   vs_ranged: z.number().optional(),
   vs_infantry: z.number().optional(),
   vs_siege: z.number().optional(),
-  // THE FIX: Added all missing multiplier keys from the data file.
   vs_building: z.number().optional(),
   vs_archer: z.number().optional(),
   vs_cavalry: z.number().optional(),
@@ -66,12 +66,12 @@ const baseEntitySchema = z.object({
 
 
 // =================================================================
-// PRIMARY UNIT SCHEMA
+// PRIMARY UNIT SCHEMA (Now with conditional logic)
 // =================================================================
 
 export const unitSchema = baseEntitySchema.extend({
   type: z.literal('unit'),
-  population_cost: z.number().int().min(0),
+  population_cost: z.number().int().min(0, "Population cost cannot be negative."),
   hitpoints: z.number().int().positive({ message: "Hitpoints must be greater than 0." }),
   speed: z.number().min(0),
   cost: costSchema,
@@ -84,4 +84,51 @@ export const unitSchema = baseEntitySchema.extend({
   gather_rate: gatherRateSchema,
   attack: attackStatsSchema,
   abilities: z.array(z.string()).optional(),
+}).superRefine((unit, ctx) => {
+    // This is a super-powered refinement function. It lets us add conditional rules.
+
+    // --- Ranged Unit Rules ---
+    if (unit.attack?.type === 'ranged') {
+        // Rule 1a: Ranged units must have a range value.
+        if (unit.attack.range === undefined || unit.attack.range <= 0) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ['attack.range'],
+                message: "Ranged units must have a range greater than 0.",
+            });
+        }
+        // Rule 1b: Ranged units must define their number of projectiles.
+        if (unit.attack.number_projectiles === undefined) {
+             ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ['attack.number_projectiles'],
+                message: "Ranged units must have at least 1 projectile.",
+            });
+        }
+    }
+
+    // --- Melee Unit Rules ---
+    // Rule 2: Based on your clarification, no specific validation is needed for melee range.
+    // We will handle the implied range of 1 in the UI/display logic later.
+
+    // --- Myth Unit Rules ---
+    // Rule 3: Myth units MUST have at least one ability defined.
+    if (unit.unit_category === 'myth' && (!unit.abilities || unit.abilities.length === 0)) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['abilities'],
+            message: "Myth units are special and must have at least one ability.",
+        });
+    }
+
+    // --- Hero Unit Rules ---
+    // Rule 4: Heroes may have an ability, so no validation needed for that.
+    // Rule 5: Heroes MUST have a damage multiplier vs. Myth units.
+    if (unit.unit_category === 'hero' && (!unit.attack || unit.attack.vs_myth === undefined || unit.attack.vs_myth <= 1)) {
+         ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['attack.vs_myth'], // Pinpoints the error to the specific multiplier
+            message: "Heroes must have a damage bonus (>1) against Myth units.",
+        });
+    }
 });
