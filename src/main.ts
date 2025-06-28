@@ -12,8 +12,8 @@ import {
 } from "./types/civ";
 import { openEditor } from "./components/form";
 
-// EXPORT these so they can be used in other modules like form.ts
 export let data: Civ | null = null;
+
 export function renderAll() {
   if (!data) {
     console.warn("renderAll called before data was loaded. Aborting.");
@@ -31,7 +31,6 @@ export function renderAll() {
   if(unitsTechsContainer instanceof HTMLElement) render(unitsTechsTemplate(data.units, data.technologies), unitsTechsContainer);
 }
 
-// Export showPreview so it can be called from form.ts
 export function showPreview(entity: Entity) {
   setActiveEntityName(entity.name);
   const template = previewCardTemplate(entity);
@@ -51,24 +50,20 @@ export function showPreview(entity: Entity) {
   }
 }
 
-
 // --- STATE MANAGEMENT ---
 let activeEntityName: string | null = localStorage.getItem("activeEntity") || null;
 let activeMajorGodKey: string = localStorage.getItem("activeMajorGod") || "zeus";
 let activeBuilding: string | null = localStorage.getItem("activeBuilding") || "town_center";
 
-
 // --- ASYNC DATA LOADING ---
 async function loadCivData(civName = 'greek'): Promise<boolean> {
   try {
-    // Check for locally saved data first.
     const localData = localStorage.getItem('customGreekCiv');
     if (localData) {
         console.log("Loading custom civilization from localStorage.");
         data = JSON.parse(localData);
         return true;
     }
-    // If no local data, fetch from file.
     const response = await fetch(`./src/data/civs/${civName}.json`, { cache: 'no-cache' });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     data = await response.json() as Civ;
@@ -80,14 +75,8 @@ async function loadCivData(civName = 'greek'): Promise<boolean> {
   }
 }
 
-
 // --- HELPERS ---
-
-const STAT_ICONS = {
-  hitpoints: "❤️", hack_armor: "🦺", pierce_armor: "🛡️", crush_armor: "🪨",
-  speed: "👟", hack_damage: "⚔️", pierce_damage: "🏹", crush_damage: "💥",
-  divine_damage: "⚡", reload_time: "〽️", range: "🎯", garrison: "🏰",
-};
+const STAT_ICONS = { hitpoints: "❤️", hack_armor: "🦺", pierce_armor: "🛡️", crush_armor: "🪨", speed: "👟", hack_damage: "⚔️", pierce_damage: "🏹", crush_damage: "💥", divine_damage: "⚡", reload_time: "〽️", range: "🎯", garrison: "🏰" };
 const GOD_ICONS = { zeus: "⚡", poseidon: "🔱", hades: "💀", default: "❓" };
 
 function setActiveEntityName(entityName: string | null) {
@@ -117,18 +106,20 @@ function findEntityByName(entityName: string | null): Entity | null {
     return null;
 }
 
-function handleEditClick(entity: Entity, event: Event) {
-  const triggerElement = (event.currentTarget as HTMLElement).closest('.tile, .card, .preview-card') as HTMLElement | null;
-  if (triggerElement) {
-      openEditor(entity, triggerElement);
-  } else {
-      console.error("Could not find a valid trigger element for the editor.");
-  }
+// THE FIX: The click handler now receives the entity's NAME instead of the whole object.
+function handleEditClick(entityName: string, event: Event) {
+    // Look up the fresh entity from our master data store.
+    const entityToEdit = findEntityByName(entityName);
+    const triggerElement = (event.currentTarget as HTMLElement).closest('.tile, .card, .preview-card') as HTMLElement | null;
+    
+    if (entityToEdit && triggerElement) {
+        openEditor(entityToEdit, triggerElement);
+    } else {
+        console.error("Could not find entity or trigger element for the editor.", {entityName, triggerElement});
+    }
 }
 
-
 // --- TEMPLATES ---
-
 const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
   const godKeys = Object.keys(gods);
   const activeIndex = godKeys.indexOf(activeMajorGodKey);
@@ -138,7 +129,7 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
       return html`<article class="card major-god" data-offset=${offset} style="background-image: url('${god.image || 'assets/placeholder.jpg'}')" @click=${() => offset !== 0 && selectGod(key)}>
           <div class="card-content"><h4>${god.name}</h4><p>${god.tagline}</p></div>
           <div class="card-actions-overlay">
-            <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god, e); }} title="Edit ${god.name}"><i class="fas fa-pencil-alt"></i></button>
+            <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }} title="Edit ${god.name}"><i class="fas fa-pencil-alt"></i></button>
             <button class="action-btn delete-btn" @click=${(e: Event) => { e.stopPropagation(); removeGod(key); }} title="Delete ${god.name}"><i class="fas fa-trash"></i></button>
           </div>
         </article>`;
@@ -153,7 +144,7 @@ const minorGodsTemplate = (gods: Record<string, MinorGod>) => {
         <img src="${god.image || "assets/placeholder.jpg"}" alt="${god.name}" class="sprite" />
         <div class="tile-content"><h5>${god.name}</h5><p>${god.tagline}</p></div>
         <div class="tile-actions-overlay">
-            <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god, e); }} title="Edit ${god.name}"><i class="fas fa-pencil-alt"></i></button>
+            <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }} title="Edit ${god.name}"><i class="fas fa-pencil-alt"></i></button>
             <button class="action-btn delete-btn" @click=${(e: Event) => { e.stopPropagation(); removeGod(god.name); }} title="Delete ${god.name}"><i class="fas fa-trash"></i></button>
         </div>
     </div>`)}`;
@@ -168,14 +159,13 @@ const unitsTechsTemplate = (units: Record<string, Unit>, technologies: Record<st
             <img src="${entity.image || 'assets/placeholder.jpg'}" class="sprite" alt="${entity.name}"/>
             <div class="tile-content"><h5>${entity.name}</h5></div>
              <div class="tile-actions-overlay">
-                <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity, e); }} title="Edit ${entity.name}"><i class="fas fa-pencil-alt"></i></button>
+                <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity.name, e); }} title="Edit ${entity.name}"><i class="fas fa-pencil-alt"></i></button>
                 <button class="action-btn delete-btn" @click=${(e: Event) => { e.stopPropagation(); removeEntity(entity.name); }} title="Delete ${entity.name}"><i class="fas fa-trash"></i></button>
             </div>
         </div>`;
     }))}`;
 }
 
-const buildingGridLayout = [ ["house", null, null, null, "temple", "dock"], ["barracks", "archery_range", "stable", null, "market", "armory"], ["town_center", "wall", "tower", "fortress", null, "wonder"], ];
 const buildingsTemplate = (buildings: Record<string, Building>) => {
     const removeBuilding = (key: string) => console.log("Removing building:", key);
     return html`${buildingGridLayout.map(row => row.map(buildingKey => {
@@ -186,7 +176,7 @@ const buildingsTemplate = (buildings: Record<string, Building>) => {
             <img src="${building.image || "assets/placeholder.jpg"}" alt="${building.name}" class="sprite" />
             <div class="tile-content"><h5>${building.name}</h5></div>
             <div class="tile-actions-overlay">
-                <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(building, e); }} title="Edit ${building.name}"><i class="fas fa-pencil-alt"></i></button>
+                <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(building.name, e); }} title="Edit ${building.name}"><i class="fas fa-pencil-alt"></i></button>
                 <button class="action-btn delete-btn" @click=${(e: Event) => { e.stopPropagation(); removeBuilding(building.name); }} title="Delete ${building.name}"><i class="fas fa-trash"></i></button>
             </div>
         </div>`;
@@ -196,7 +186,7 @@ const buildingsTemplate = (buildings: Record<string, Building>) => {
 const previewCardTemplate = (entity: Entity | null) => {
   if (!entity) return html`<div class="preview-card">Select an item.</div>`;
   const god = entity.prerequisite_god || (entity.type === 'majorGod' ? entity.name.toLowerCase() : activeMajorGodKey);
-  const hasAttack = 'attack' in entity && entity.attack; // Type guard
+  const hasAttack = 'attack' in entity && entity.attack; 
   const isRanged = hasAttack && entity.attack.type === 'ranged';
   
   return html`<div class="preview-card">
@@ -219,12 +209,14 @@ const previewCardTemplate = (entity: Entity | null) => {
               </div></div>` : ''}
       </div>
       <div class="preview-actions-overlay">
-        <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity, e); }} title="Edit ${entity.name}"><i class="fas fa-pencil-alt"></i></button>
+        <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity.name, e); }} title="Edit ${entity.name}"><i class="fas fa-pencil-alt"></i></button>
       </div>
   </div>`;
 };
 
+// These functions remain unchanged from the last correct version.
 function createUnitsTechsGridLayout(units: Record<string, Unit>, technologies: Record<string, Technology>): (Entity | null)[][] { const layout: (Entity | null)[][] = [ [null, null, null, null, null, null], [null, null, null, null, null, null], [null, null, null, null, null, null], ]; if (!activeBuilding || !data) return layout; const building = Object.values(data.buildings).find(b => b.name.toLowerCase() === activeBuilding); if (!building) return layout; const trainableUnits = (building.functions.trains_units || []).map(unitKey => { const keyLower = unitKey.toLowerCase(); return units[keyLower] || Object.values(units).find(u => u.name.toLowerCase() === keyLower); }).filter((unit): unit is Unit => !!unit); trainableUnits.slice(0, 6).forEach((unit, i) => { layout[0][i] = unit; }); const researchableTechs = (building.functions.researches_techs || []).map(techKey => { const keyLower = techKey.toLowerCase(); return technologies[keyLower] || Object.values(technologies).find(t => t.name.toLowerCase() === keyLower); }).filter((tech): tech is Technology => !!tech); const unitBasedTechs: Technology[] = []; const mythicGenericTechs: Technology[] = []; researchableTechs.forEach(tech => { const hasUnitEffect = tech.effects.some((effect) => effect.noun.unit_name || effect.noun.unit_tags?.length); if (hasUnitEffect) { unitBasedTechs.push(tech); } else { mythicGenericTechs.push(tech); } }); trainableUnits.forEach((unit, index) => { if (index >= 6) return; const matchingTech = unitBasedTechs.find(tech => tech.effects.some(effect => (effect.noun.unit_name === unit.name) || (effect.noun.unit_tags?.some(tag => unit.unit_tags.includes(tag) || unit.unit_category.toLowerCase() === tag.replace('is_', ''))))); if (matchingTech) { layout[1][index] = matchingTech; const techIndex = unitBasedTechs.indexOf(matchingTech); unitBasedTechs.splice(techIndex, 1); } }); const minorGods = data.majorGods[activeMajorGodKey]?.minorGods || []; const validTechs = mythicGenericTechs.filter(tech => !tech.prerequisite_god || minorGods.includes(tech.prerequisite_god)); validTechs.slice(0, 6).forEach((tech, i) => { layout[2][i] = tech; }); return layout; }
+const buildingGridLayout = [ ["house", null, null, null, "temple", "dock"], ["barracks", "archery_range", "stable", null, "market", "armory"], ["town_center", "wall", "tower", "fortress", null, "wonder"], ];
 
 async function main() {
   const isDataLoaded = await loadCivData('greek');

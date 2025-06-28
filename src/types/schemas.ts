@@ -77,7 +77,7 @@ export const unitSchema = baseEntitySchema.extend({
   cost: costSchema,
   unit_category: z.enum(['human', 'myth', 'hero']),
   unit_tags: z.array(z.enum([
-    'is_infantry', 'is_archer', 'is_siege', 'is_cavalry', 
+    'is_infantry', 'is_ranged', 'is_siege', 'is_cavalry', 
     'is_flying', 'is_economic', 'is_ship'
   ])),
   defensive_stats: defensiveStatsSchema,
