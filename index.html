@@ -34,12 +34,15 @@
           <div class="carousel">
               <!-- Content will be rendered by main.ts -->
           </div>
-      </div>
+        </div>
+        <!-- ADDED: Editor container for Major Gods -->
+        <div class="editor-container" style="display: none;"></div>
       </section>
 
       <section class="minor-gods" aria-labelledby="minor-gods-heading">
         <h3 id="minor-gods-heading">Minor Gods</h3>
         <div class="grid"></div>
+         <!-- Note: We might add an editor here later, but for now we focus on the main sections -->
       </section>
 
       <section class="units-techs" aria-labelledby="units-heading">
@@ -49,6 +52,8 @@
           <!-- This container holds the preview for desktop view -->
           <div class="preview-pane"></div>
         </div>
+        <!-- ADDED: Editor container for Units & Techs -->
+        <div class="editor-container" style="display: none;"></div>
       </section>
 
       <section class="buildings" aria-labelledby="buildings-heading">
@@ -57,14 +62,15 @@
           <div class="buildings-grid"></div>
            <!-- This container holds the preview for desktop view -->
            <div class="preview-pane"></div>
-              <!-- Desktop preview renders here -->
         </div>
+        <!-- ADDED: Editor container for Buildings -->
+        <div class="editor-container" style="display: none;"></div>
       </section>
 
     </section>
   </main>
 
-  <!-- Modal structure for mobile previews -->
+  <!-- This modal is now only for mobile/responsive fallback previews -->
   <div id="preview-modal" class="modal-overlay" aria-modal="true" role="dialog" style="display: none;">
     <div class="modal-content">
       <button class="modal-close-btn" aria-label="Close preview">&times;</button>

@@ -1,0 +1,246 @@
+Technical Proposal & Execution Plan: The Universal Morphing Editor
+
+Prepared for: The Civ Customizer Team
+Date: June 28, 2025
+Subject: A phased implementation plan for a contextual, morphing, schema-driven entity editor to be completed for the Phase 1 MVP.
+1. Executive Summary
+
+This document outlines a detailed execution plan to implement the core user-facing feature of our MVP: the Universal Editor. The goal is to create a seamless, intuitive editing experience that aligns with our design-forward vision. When a user elects to edit an entity (e.g., a unit, building, or god), the UI element they interact with will fluidly transform into a full-featured editing panel, occupying the contextual space of its parent section.
+
+This approach, while visually sophisticated, will be built on a robust, scalable, and maintainable foundation. We will address this implementation through a series of atomic, logical commits, ensuring code quality, testability, and a clear development trajectory.
+2. The User Experience Goal (The "Why")
+
+To satisfy both our client's vision and our designer's specifications, we are moving beyond generic pop-up modals.
+
+    Contextual Editing: The editor for the "Buildings" section will appear within the "Buildings" section.
+
+    Morphing Animation: The transition will be a fluid animation where the clicked element (be it a small grid tile or the larger preview card) appears to expand to fill the editor's space. This creates a tangible connection between the item and its editor.
+
+    Responsive Fallback: On smaller viewports, this behavior will gracefully degrade into a traditional, centered modal overlay for optimal usability on mobile devices.
+
+3. The Technical Architecture (The "How")
+
+We will achieve this using the FLIP (First, Last, Invert, Play) animation technique. This is a high-performance method that leverages CSS transforms to create smooth animations without causing layout recalculations, resulting in a jank-free experience.
+
+The core components of the architecture are:
+
+    Dedicated HTML Containers: Static containers in index.html that will house the editor content.
+
+    A Centralized Form Component (form.ts): A single module responsible for all editor logic, from rendering form fields to handling save operations.
+
+    Schema-Driven UI: Forms will be generated dynamically based on predefined schemas, ensuring consistency and easy scalability.
+
+    Stateful, Non-Destructive Editing: User changes will be held in a temporary state, only committed upon successful validation and an explicit save action.
+
+4. Phased Git Commit Execution Plan
+
+The following represents a logical sequence of commits to implement this feature.
+Commit 1: feat(ui): scaffold editor containers and styles
+
+Objective: Prepare the DOM and CSS for the editor's appearance and animation.
+
+index.html Changes:
+
+    Add <div class="editor-container" style="display: none;"></div> inside each major section (.major-gods, .units-techs, .buildings).
+
+civbuilder.css Changes:
+
+/* Add to civbuilder.css */
+.editor-container {
+  /* Default state: hidden, but ready to be shown */
+  display: none;
+  overflow: hidden;
+  background: var(--color-background-panel);
+  border: 1px solid var(--color-bronze-border);
+  border-radius: 4px;
+}
+
+.editor-container.is-editing {
+  display: block;
+}
+
+.editor-container.is-animating {
+  /* This is the key for the morphing animation */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+Commit 2: feat(form): create core form component and renderer
+
+Objective: Establish the form-generation logic, separating it from main.ts.
+
+New File: src/components/form.ts (Pseudocode)
+
+// src/components/form.ts
+import { html, render } from 'lit-html';
+import { Entity, Unit, Building } from '../types/civ.ts';
+
+// Module-level state for the editor
+let editingEntity = null; // A deep copy of the entity being edited
+
+// The main entry point for this module
+export function openEditor(entityToEdit: Entity, triggerElement: HTMLElement) {
+  // 1. Deep clone the entity to prevent modifying original data on cancel
+  editingEntity = JSON.parse(JSON.stringify(entityToEdit));
+
+  // 2. Determine which form to render
+  let formTemplate;
+  switch (editingEntity.type) {
+    case 'unit':
+      formTemplate = renderUnitForm(editingEntity);
+      break;
+    case 'building':
+      // formTemplate = renderBuildingForm(editingEntity);
+      break;
+    // ... other cases
+    default:
+      console.error("No form defined for this entity type");
+      return;
+  }
+
+  // 3. Find the correct editor container and render the form
+  const section = triggerElement.closest('section');
+  const editorContainer = section.querySelector('.editor-container');
+  render(formTemplate, editorContainer);
+
+  // 4. Trigger the animation (logic to be added in next commit)
+  // ...
+}
+
+// Renders the form for a Unit
+function renderUnitForm(unit: Unit) {
+  return html`
+    <form>
+      <label>Name: <input type="text" .value=${unit.name}></label>
+      <label>Hitpoints: <input type="number" .value=${unit.hitpoints}></label>
+      <!-- ... other simple fields ... -->
+
+      <!-- Example of handling nested fields -->
+      <fieldset>
+        <legend>Cost</legend>
+        <label>Food: <input type="number" .value=${unit.cost.food || 0}></label>
+        <label>Wood: <input type="number" .value=${unit.cost.wood || 0}></label>
+      </fieldset>
+    </form>
+  `;
+}
+
+Commit 3: feat(animation): implement FLIP morphing animation
+
+Objective: Bring the editor to life with the seamless expanding transition.
+
+src/components/form.ts Changes (Pseudocode for openEditor)
+
+// Inside openEditor(entityToEdit, triggerElement) function...
+// AFTER rendering the form...
+
+// FLIP Animation Logic
+const section = triggerElement.closest('section');
+const editorContainer = section.querySelector('.editor-container');
+const contentContainer = section.querySelector('.content-with-preview');
+
+// 1. FIRST: Get the position of the clicked element (the start)
+const startRect = triggerElement.getBoundingClientRect();
+
+// Hide original content, show the editor in its final state to measure it
+contentContainer.style.display = 'none';
+editorContainer.style.display = 'block';
+
+// 2. LAST: Get the position of the editor (the end)
+const endRect = editorContainer.getBoundingClientRect();
+
+// 3. INVERT: Calculate the difference and apply an inverse transform
+//    to make the editor start exactly where the trigger element was.
+const deltaX = startRect.left - endRect.left;
+const deltaY = startRect.top - endRect.top;
+const deltaW = startRect.width / endRect.width;
+const deltaH = startRect.height / endRect.height;
+
+editorContainer.style.transform = `
+  translateX(${deltaX}px)
+  translateY(${deltaY}px)
+  scaleX(${deltaW})
+  scaleY(${deltaH})
+`;
+
+// 4. PLAY: Force the browser to apply the transform, then remove it.
+//    The CSS transition will handle the animation.
+requestAnimationFrame(() => {
+  editorContainer.classList.add('is-animating');
+  editorContainer.style.transform = 'none'; // Animate to default state
+});
+
+// Clean up animation class after it finishes
+editorContainer.addEventListener('transitionend', () => {
+    editorContainer.classList.remove('is-animating');
+}, { once: true });
+
+Commit 4: refactor(form): add zod validation and persistence
+
+Objective: Add data validation with zod and persist changes to localStorage.
+
+New File: src/types/schemas.ts (Example)
+
+import { z } from 'zod';
+
+export const costSchema = z.object({
+  food: z.number().min(0).optional(),
+  wood: z.number().min(0).optional(),
+  // ...
+});
+
+export const unitSchema = z.object({
+  name: z.string().min(1, "Name cannot be empty"),
+  hitpoints: z.number().min(1, "Unit must have at least 1 HP"),
+  cost: costSchema,
+  // ... other fields matching the Unit type
+});
+
+src/components/form.ts Changes (Pseudocode)
+
+// Add a handleSave function
+function handleSave() {
+  try {
+    // 1. Validate the current state
+    const validatedEntity = unitSchema.parse(editingEntity);
+
+    // 2. Find and update the entity in the main `data` object
+    // This requires passing `data` into this module or having a setter function
+    updateGlobalEntity(validatedEntity);
+
+    // 3. Persist the entire civ to localStorage
+    localStorage.setItem('customGreekCiv', JSON.stringify(data));
+
+    // 4. Re-render the main UI to show changes
+    renderAll();
+
+    // 5. Close the editor with a reverse animation
+    closeEditor();
+
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      // Display validation errors to the user inside the form
+      displayFormErrors(err.flatten().fieldErrors);
+    }
+  }
+}
+
+Commit 5: feat(app): integrate editor into main application
+
+Objective: Wire up the "Edit" buttons throughout the app to trigger the new editor.
+
+main.ts Changes (Pseudocode in a template)
+
+// First, import the function from our new component
+import { openEditor } from './components/form.ts';
+
+// Inside a template, like majorGodsTemplate...
+const openEditGodModal = (god: MajorGod, event: Event) => {
+  console.log("Opening editor for:", god.name);
+  const triggerElement = (event.currentTarget as HTMLElement);
+  openEditor(god, triggerElement); // Call our new function
+};
+
+// The button now passes the event object
+html`<button @click=${(e: Event) => { e.stopPropagation(); openEditGodModal(god, e); }}>`
+
+This sequence of commits provides a clear, defensible path to achieving our feature goals. It front-loads the structural work, isolates complex logic into dedicated modules, and builds the feature layer by layer, starting with the UI shell, adding logic, animating it, and finally wiring it into the main application.
