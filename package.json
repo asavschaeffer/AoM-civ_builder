@@ -13,6 +13,7 @@
     "vite": "^7.0.0"
   },
   "dependencies": {
-    "lit-html": "^3.3.0"
+    "lit-html": "^3.3.0",
+    "zod": "^3.25.67"
   }
 }
