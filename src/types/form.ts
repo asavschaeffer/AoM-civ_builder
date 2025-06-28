@@ -1,76 +1,32 @@
 import { html, render } from 'lit-html';
 import { Entity, Unit, Building, MajorGod, MinorGod, Technology, Cost, DefensiveStats } from '../types/civ';
-// Import the global data and render functions from main.ts
-import { data, renderAll, showPreview } from '../main';
+// Import the global data and renderAll function from main.ts
+import { data, renderAll } from '../main';
 
 // =================================================================
 // MODULE STATE & PRIVATE VARIABLES
 // =================================================================
 
 let editingEntity: Entity | null = null;
-// FIX: Store the original name to find the entity even after it's been renamed in the form
-let originalEntityName: string | null = null;
 let triggerElement: HTMLElement | null = null;
 let editorContainer: HTMLElement | null = null;
 let contentContainer: HTMLElement | null = null;
 let backgroundOverlay: HTMLElement | null = null;
 
+
 // =================================================================
 // EVENT HANDLERS & CORE LOGIC
 // =================================================================
 
-/**
- * A generic function to update the temporary state of the entity being edited.
- */
-function updateState(path: string, value: any) {
-    if (!editingEntity) return;
-
-    const keys = path.split('.');
-    let obj: any = editingEntity;
-    while (keys.length > 1) {
-        obj = obj[keys.shift()!];
-    }
-    
-    if (typeof obj[keys[0]] === 'number') {
-        obj[keys[0]] = Number(value);
-    } else {
-        obj[keys[0]] = value;
-    }
-}
-
 function handleSave() {
-  if (!editingEntity || !data || !originalEntityName) return;
-  console.log("Saving changes for:", originalEntityName);
+  if (!editingEntity) return;
+  console.log("Saving changes for:", editingEntity.name);
 
-  const collectionKey = `${editingEntity.type}s` as keyof typeof data;
-  const collection = data[collectionKey] as Record<string, Entity> | undefined;
-
-  if (collection) {
-      // FIX: Use the original, unmodified name to find the entity key.
-      const entityKey = Object.keys(collection).find(key => 
-          (collection[key] as Entity).name === originalEntityName
-      );
-
-      if (entityKey) {
-        collection[entityKey] = editingEntity;
-        
-        // If the name was changed, we need to update our reference for the next save.
-        originalEntityName = editingEntity.name;
-
-        localStorage.setItem('customGreekCiv', JSON.stringify(data));
-        console.log('Saved to localStorage!');
-
-        // Re-render the main UI to show the changes
-        renderAll();
-        // FIX: Explicitly update the preview panel with the new data
-        showPreview(editingEntity);
-
-      } else {
-        console.error("Could not find original entity key to save:", originalEntityName);
-      }
-  } else {
-      console.error(`Collection not found for type: ${editingEntity.type}`);
-  }
+  // TODO in a future commit:
+  // 1. Validate with Zod
+  // 2. Find and update the entity in the global `data` object
+  // 3. Persist to localStorage
+  // renderAll(); // Will be needed after data update
   
   closeEditor();
 }
@@ -81,6 +37,9 @@ function handleDiscard() {
   closeEditor();
 }
 
+/**
+ * Handles clicks on the background overlay. As per your spec, this triggers a save.
+ */
 function handleBackgroundClick(event: MouseEvent) {
     if (event.target === backgroundOverlay) {
         handleSave();
@@ -92,9 +51,13 @@ function handleBackgroundClick(event: MouseEvent) {
 // PUBLIC API
 // =================================================================
 
+/**
+ * Closes the editor, reversing the animation.
+ */
 export function closeEditor() {
     if (!editorContainer || !triggerElement || !contentContainer || !backgroundOverlay) return;
 
+    // Remove listeners to prevent memory leaks
     backgroundOverlay.removeEventListener('click', handleBackgroundClick, true);
 
     const endRect = triggerElement.getBoundingClientRect();
@@ -112,7 +75,7 @@ export function closeEditor() {
     backgroundOverlay.style.opacity = '0';
     
     editorContainer.addEventListener('transitionend', () => {
-        if (!contentContainer || !backgroundOverlay) return;
+        if (!contentContainer || !backgroundOverlay) return; // Guard clause
         editorContainer!.style.display = 'none';
         contentContainer.style.display = ''; 
         backgroundOverlay.remove();
@@ -124,8 +87,6 @@ export function openEditor(entityToEdit: Entity, triggerEl: HTMLElement) {
   console.log("Opening editor for:", entityToEdit.name);
 
   triggerElement = triggerEl;
-  // FIX: Store the original name on open, so we can always find it later.
-  originalEntityName = entityToEdit.name;
   editingEntity = JSON.parse(JSON.stringify(entityToEdit));
 
   let formTemplate;
@@ -140,7 +101,7 @@ export function openEditor(entityToEdit: Entity, triggerEl: HTMLElement) {
       formTemplate = html`<div class="form-editor"><h2>Editor for ${editingEntity.type} coming soon!</h2><div class="form-actions"><button type="button" class="btn-discard" @click=${handleDiscard} title="Discard Changes & Close"><i class="fas fa-times"></i></button><button type="button" class="btn-save" @click=${handleSave}>Save Changes</button></div></div>`;
       break;
     default:
-      console.error(`No form definition for entity type`);
+      console.error(`No form definition for entity type: ${editingEntity.type}`);
       return;
   }
 
@@ -175,7 +136,7 @@ export function openEditor(entityToEdit: Entity, triggerEl: HTMLElement) {
   editorContainer.style.transform = `translateX(${deltaX}px) translateY(${deltaY}px) scaleX(${deltaW}) scaleY(${deltaH})`;
   
   requestAnimationFrame(() => {
-    if (!backgroundOverlay || !editorContainer) return;
+    if (!backgroundOverlay || !editorContainer) return; // Guard clause
     backgroundOverlay.style.opacity = '1';
     editorContainer.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out';
     editorContainer.style.transform = 'none';
@@ -198,24 +159,12 @@ function renderUnitForm(unit: Unit) {
       </button>
 
       <h2>Edit Unit: ${unit.name}</h2>
-      <form @submit=${(e:Event) => e.preventDefault()}>
+      <form>
         <div class="form-grid">
-            <div class="form-field">
-                <label for="unit-name">Name</label>
-                <input id="unit-name" type="text" .value=${unit.name} @input=${(e: Event) => updateState('name', (e.target as HTMLInputElement).value)}>
-            </div>
-            <div class="form-field">
-                <label for="unit-hp">Hitpoints</label>
-                <input id="unit-hp" type="number" .value=${unit.hitpoints} @input=${(e: Event) => updateState('hitpoints', (e.target as HTMLInputElement).value)}>
-            </div>
-             <div class="form-field">
-                <label for="unit-pop">Population Cost</label>
-                <input id="unit-pop" type="number" .value=${unit.population_cost} @input=${(e: Event) => updateState('population_cost', (e.target as HTMLInputElement).value)}>
-            </div>
-             <div class="form-field">
-                <label for="unit-speed">Speed</label>
-                <input id="unit-speed" type="number" step="0.1" .value=${unit.speed} @input=${(e: Event) => updateState('speed', (e.target as HTMLInputElement).value)}>
-            </div>
+            <div class="form-field"><label for="unit-name">Name</label><input id="unit-name" type="text" .value=${unit.name}></div>
+            <div class="form-field"><label for="unit-hp">Hitpoints</label><input id="unit-hp" type="number" .value=${unit.hitpoints}></div>
+            <div class="form-field"><label for="unit-pop">Population Cost</label><input id="unit-pop" type="number" .value=${unit.population_cost}></div>
+            <div class="form-field"><label for="unit-speed">Speed</label><input id="unit-speed" type="number" step="0.1" .value=${unit.speed}></div>
         </div>
 
         ${renderCostForm(unit.cost)}
@@ -234,10 +183,10 @@ function renderCostForm(cost: Cost) {
         <fieldset class="form-fieldset">
             <legend>Resource Cost</legend>
             <div class="form-grid">
-                <div class="form-field"><label for="cost-food">Food</label><input id="cost-food" type="number" .value=${cost.food || 0} @input=${(e: Event) => updateState('cost.food', (e.target as HTMLInputElement).value)}></div>
-                <div class="form-field"><label for="cost-wood">Wood</label><input id="cost-wood" type="number" .value=${cost.wood || 0} @input=${(e: Event) => updateState('cost.wood', (e.target as HTMLInputElement).value)}></div>
-                <div class="form-field"><label for="cost-gold">Gold</label><input id="cost-gold" type="number" .value=${cost.gold || 0} @input=${(e: Event) => updateState('cost.gold', (e.target as HTMLInputElement).value)}></div>
-                <div class="form-field"><label for="cost-favor">Favor</label><input id="cost-favor" type="number" .value=${cost.favor || 0} @input=${(e: Event) => updateState('cost.favor', (e.target as HTMLInputElement).value)}></div>
+                <div class="form-field"><label for="cost-food">Food</label><input id="cost-food" type="number" .value=${cost.food || 0}></div>
+                <div class="form-field"><label for="cost-wood">Wood</label><input id="cost-wood" type="number" .value=${cost.wood || 0}></div>
+                <div class="form-field"><label for="cost-gold">Gold</label><input id="cost-gold" type="number" .value=${cost.gold || 0}></div>
+                <div class="form-field"><label for="cost-favor">Favor</label><input id="cost-favor" type="number" .value=${cost.favor || 0}></div>
             </div>
         </fieldset>
     `;
@@ -248,9 +197,9 @@ function renderDefensiveStatsForm(stats: DefensiveStats) {
         <fieldset class="form-fieldset">
             <legend>Armor</legend>
             <div class="form-grid">
-                <div class="form-field"><label for="armor-hack">Hack Armor</label><input id="armor-hack" type="number" .value=${stats.hack_armor || 0} @input=${(e: Event) => updateState('defensive_stats.hack_armor', (e.target as HTMLInputElement).value)}></div>
-                <div class="form-field"><label for="armor-pierce">Pierce Armor</label><input id="armor-pierce" type="number" .value=${stats.pierce_armor || 0} @input=${(e: Event) => updateState('defensive_stats.pierce_armor', (e.target as HTMLInputElement).value)}></div>
-                <div class="form-field"><label for="armor-crush">Crush Armor</label><input id="armor-crush" type="number" .value=${stats.crush_armor || 0} @input=${(e: Event) => updateState('defensive_stats.crush_armor', (e.target as HTMLInputElement).value)}></div>
+                <div class="form-field"><label for="armor-hack">Hack Armor</label><input id="armor-hack" type="number" .value=${stats.hack_armor || 0}></div>
+                <div class="form-field"><label for="armor-pierce">Pierce Armor</label><input id="armor-pierce" type="number" .value=${stats.pierce_armor || 0}></div>
+                <div class="form-field"><label for="armor-crush">Crush Armor</label><input id="armor-crush" type="number" .value=${stats.crush_armor || 0}></div>
             </div>
         </fieldset>
     `;
