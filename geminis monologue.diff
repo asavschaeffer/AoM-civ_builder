@@ -1,0 +1,155 @@
+commit a5a3f5c7b1e9d0a6c8f4b2e1a3d0f5e7c9b1a4d0
+Author: Gemini <collaboration@google.com>
+Date:   Sun Jun 29 00:11:37 2025 +0900
+
+    feat(genesis): create shared understanding from initial spark
+
+    This commit represents the culmination of a collaborative process,
+    transforming a high-level vision into a tangible, robust, and
+    well-architected plan.
+
+    It moves from a simple, monolithic data structure to a flexible,
+    asynchronous, and validated system. The user experience is elevated
+    from a static display to a dynamic, animated, and stateful
+    editing interface.
+
+    This is not just code; it is a log of resolved bugs, refined
+    aesthetics, and the shared "Yatta!" moments of understanding. It's
+    the artifact of a conversation.
+
+diff --git a/src/thought.process.v1.ts b/src/thought.process.v2.ts
+index 1d6a9f3..e8b5a7c 100644
+--- a/src/thought.process.v1.ts
++++ b/src/thought.process.v2.ts
+@@ -1,32 +1,69 @@
+-// --- Data Strategy ---
+-import civData from "./data/civData.json"; // Quick and dirty. One big file.
+-
+-const data = civData; // What if this is slow? What if it's invalid?
+-
+-// --- UI Rendering ---
+-function renderAll() {
+-  // Just re-render everything. Hope the browser is fast enough.
+-}
+-
+-function showModal() {
+-  // Just pop up a generic box in the middle of the screen.
+-  // The form inside will be hardcoded.
+-}
+-
+-
+-// --- User Interaction ---
+-function onSave() {
+-  // Overwrite the data directly. No validation.
+-  // What if the user made a mistake?
+-  // How does the preview update? Who knows.
+-}
+-
+-function onCancel() {
+-  // Just close the modal. Was anything saved? Maybe.
+-}
+-
+-
+-// --- The Vague Idea ---
+-// We want a civ builder. It should be cool.
+-// Maybe we can use a database later. Or something.
+-// Let's launch this by August 2025.
++// --- Data Architecture & Persistence ---
++
++/**
++ * The core data store. Initialized as null to enforce asynchronous loading.
++ * This simple 'let' is the foundation of our entire state management.
++ */
++export let data: Civ | null = null;
++
++/**
++ * The Gatekeeper. A function that decouples the app from its data source.
++ * It understands the hierarchy: check for local, customized work first,
++ * then fall back to the default file. This is the runway for our database.
++ */
++async function loadCivData(): Promise<boolean> {
++  // The "what if" becomes the first check.
++  const localData = localStorage.getItem('customGreekCiv');
++  if (localData) {
++    // Found it! The user's work is safe.
++    data = JSON.parse(localData);
++    return true;
++  }
++  // Fallback to the pristine, original file.
++  const response = await fetch(`./src/data/civs/greek.json`);
++  data = await response.json();
++  return true;
++}
++
++
++// --- The Morphing Editor: A bridge between thought and action ---
++
++/**
++ * The editor is not just a modal; it's a transformation.
++ * It honors the user's context, growing from where they click.
++ * This is the "water spreading" effect, achieved with FLIP.
++ */
++export function openEditor(entityToEdit: Entity, triggerElement: HTMLElement) {
++  // FIRST: We measure the world as it is. Where did the user click?
++  const startRect = triggerElement.getBoundingClientRect();
++
++  // LAST: We prepare the world as it will be.
++  const editorContainer = findTheRightEditorContainer();
++  const endRect = editorContainer.getBoundingClientRect();
++
++  // INVERT: The illusion. We make the destination look like the origin.
++  // A simple calculation of deltas holds the entire animation's potential.
++  const deltaX = startRect.left - endRect.left;
++  const deltaY = startRect.top - endRect.top;
++  // ... and so on for scale.
++
++  // PLAY: "Animate from this inverted state back to your default."
++  requestAnimationFrame(() => {
++    // The 'display: none' bug was found here. A simple opacity toggle fixes it.
++    editorContainer.style.opacity = '1';
++    editorContainer.style.transform = 'none';
++  });
++}
++
++
++// --- The "Zoddy" Schema: Our shared contract for what is true. ---
++
++export const unitSchema = baseSchema.extend({
++  // ... all the basic fields
++}).superRefine((unit, ctx) => {
++  // This is where raw data gains intelligence.
++  // "A ranged unit MUST have a range."
++  // "A hero MUST have a bonus vs. myth."
++  // Our nitpicks and refinements, encoded as rules.
++  // The fix for the `vs_building` bug lives here.
++});
++
++
++// --- The "Yatta!" Moment ---
++
++function handleSave() {
++  // The culmination of the user's effort.
++  // It's not just overwriting; it's a careful, validated commit.
++  const result = unitSchema.safeParse(editingEntity);
++  if (!result.success) {
++    // We respect the rules. We show the user what's wrong.
++    formErrors = result.error.flatten().fieldErrors;
++    return; // Halt.
++  }
++
++  // If the rules are met, we update the master 'data' object.
++  // And we persist this new truth to the browser's memory.
++  localStorage.setItem('customGreekCiv', JSON.stringify(data));
++
++  // The preview panel now correctly updates.
++  showPreview(editingEntity);
++
++  // And the editor returns to its origin, its purpose fulfilled.
++  closeEditor();
++}
++
++
++// --- The Refined Idea ---
++// Beta by tomorrow.
++// Built on a foundation of sound architecture and shared understanding.
++// Ready for the next phase.
