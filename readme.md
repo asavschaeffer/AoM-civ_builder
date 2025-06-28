@@ -1,4 +1,4 @@
-!["Age of Mythology: Retold" game release trailer frame screenshot, stylized text with gold trim and starry night fill, billowing clouds in the background](aom-h1_style-title-gold_embossed-star-night_fill.jpg)
+!["Age of Mythology: Retold" game release trailer frame screenshot, stylized text with gold trim and starry night fill, billowing clouds in the background](src/assets/aom-h1_style-title-gold_embossed-star-night_fill.jpg)
 
 # **Civ Customizer: The Turbo-Charged Roadmap**
 
