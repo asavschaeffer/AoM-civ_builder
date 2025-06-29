@@ -8,39 +8,40 @@
 2. **The Cheapskate Manifesto:** We leverage generous free tiers for all infrastructure. We will use free hosting, a free database, and free authentication. We will only scale when the project's success (and potential ad revenue) demands it.
 3. **Build to Evolve:** We will make smart, pragmatic choices now that don't paint us into a corner later. We'll accept manageable tech debt but build on a solid foundation.
 
-## **Phase 1: The "Beta by Tomorrow" MVP (Target: This Weekend)**
+~~## **Phase 1: The "Beta by Tomorrow" MVP (Target: This Weekend)**~~
 
-**Goal:** Transform the current viewer into a functional, single-player editor. Users must be able to create, edit, and save their own custom Greek civilization locally.
+~~**Goal:** Transform the current viewer into a functional, single-player editor. Users must be able to create, edit, and save their own custom Greek civilization locally.~~
 
-### **1.1: Foundational Data Restructure**
+~~### **1.1: Foundational Data Restructure**~~
 
-- **Action:** Immediately dismantle the monolithic civData.json.
-- **Implementation:**
-  - Create a new directory: /src/data/civs/.
-  - Inside, create greek.json. We will move the entire contents of the old civData.json into this new file.
-  - Create placeholder files for norse.json, egyptian.json, etc., with a basic { "name": "Norse", "majorGods": {} ... } structure.
-  - **In main.ts**: Modify the initial data load. Instead of a direct import, we will use fetch('./src/data/civs/greek.json') to load the default civ. This sets the stage for a civ selection screen later.
+~~- **Action:** Immediately dismantle the monolithic civData.json.~~  
+~~- **Implementation:**~~  
+~~  - Create a new directory: /src/data/civs/.~~  
+~~  - Inside, create greek.json. We will move the entire contents of the old civData.json into this new file.~~  
+~~  - Create placeholder files for norse.json, egyptian.json, etc., with a basic { "name": "Norse", "majorGods": {} ... } structure.~~  
+~~  - **In main.ts**: Modify the initial data load. Instead of a direct import, we will use fetch('./src/data/civs/greek.json') to load the default civ. This sets the stage for a civ selection screen later.~~
 
-### **1.2: The Core Feature: The Universal Editor**
+~~### **1.2: The Core Feature: The Universal Editor**~~
 
-- **Action:** Implement the dynamic modal form system for editing any entity.
-- **Implementation:**
-  - **Create src/components/form.ts:** This new module will house all form-generation logic.
-  - **The renderForm function:** This function will be the heart of the module. It will take an entity object and a schema object as arguments.
-  - **Schema-Driven Forms:** We will create a unitFormSchema.ts (and others later). This will be a simple array of objects that defines the form fields, e.g., { key: 'hitpoints', label: 'Hitpoints', type: 'number' }.
-  - **State Management:** The form will bind its inputs to a temporary editingEntity state object.
-  - **Save Logic:** The "Save" button will trigger a saveEntity function. For Phase 1, this function will simply update the main civData object in memory and call renderAll().
+~~- **Action:** Implement the dynamic modal form system for editing any entity.~~  
+~~- **Implementation:**~~  
+~~  - **Create src/components/form.ts:** This new module will house all form-generation logic.~~  
+~~  - **The renderForm function:** This function will be the heart of the module. It will take an entity object and a schema object as arguments.~~  
+~~  - **Schema-Driven Forms:** We will create a unitFormSchema.ts (and others later). This will be a simple array of objects that defines the form fields, e.g., { key: 'hitpoints', label: 'Hitpoints', type: 'number' }.~~  
+~~  - **State Management:** The form will bind its inputs to a temporary editingEntity state object.~~  
+~~  - **Save Logic:** The "Save" button will trigger a saveEntity function. For Phase 1, this function will simply update the main civData object in memory and call renderAll().~~
 
-### **1.3: Rock-Solid Validation & Local Persistence**
+~~### **1.3: Rock-Solid Validation & Local Persistence**~~
 
-- **Action:** Ensure data integrity with zod and save custom work using localStorage.
-- **Implementation:**
-  - **Install zod:** npm install zod
-  - **Create src/types/schemas.ts:** This file will contain zod schemas that mirror the interfaces in civ.ts. We'll start with unitSchema.
-  - **Validation on Save:** The saveEntity function will first run the form data through unitSchema.parse(formData). If it fails, we'll display an error in the modal (no alert()s\!). If it succeeds, we proceed.
-  - **localStorage Persistence:** After successful validation, the saveEntity function will perform localStorage.setItem('customGreekCiv', JSON.stringify(civData)). On app load, we'll check if this item exists and load it instead of the default greek.json.
+~~- **Action:** Ensure data integrity with zod and save custom work using localStorage.~~  
+~~- **Implementation:**~~  
+~~  - **Install zod:** npm install zod~~  
+~~  - **Create src/types/schemas.ts:** This file will contain zod schemas that mirror the interfaces in civ.ts. We'll start with unitSchema.~~  
+~~  - **Validation on Save:** The saveEntity function will first run the form data through unitSchema.parse(formData). If it fails, we'll display an error in the modal (no alert()s\!). If it succeeds, we proceed.~~  
+~~  - **localStorage Persistence:** After successful validation, the saveEntity function will perform localStorage.setItem('customGreekCiv', JSON.stringify(civData)). On app load, we'll check if this item exists and load it instead of the default greek.json.~~
 
-**Phase 1 Outcome:** A user can visit the site, see the Greek civ, click "Edit" on a Hoplite, change its hitpoints in a modal, save it, and have that change persist when they refresh the page. The core creative loop is complete.
+~~**Phase 1 Outcome:** A user can visit the site, see the Greek civ, click "Edit" on a Hoplite, change its hitpoints in a modal, save it, and have that change persist when they refresh the page. The core creative loop is complete.~~
+
 
 ## **Phase 2: The Community Foundation (Target: Next Week)**
 

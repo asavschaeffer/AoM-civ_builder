@@ -1,5 +1,6 @@
 1) fix(edit): fix edit button to load edit form without needing to click on element beforehand
 2) fix preview pane repeat 2fr, 1 ending up as 2 columns for grid and 2 for panel container while panel grid only occupies the left and makes it have 3/4 filled and 1/4 empty space
+2.5) review responsive setup, particularly grid and tile views. ideally we have significant margins on the sides at full browser view to maintain the typical reader experienc and make room for ads in the future. the grid tile sizes need to adjust to the vw vh, rather than the grid-cols and grid-rows changing. all that being said we also need to significantly ponder the mobile experience
 3) add schemas for buildings and technologies and godpowers and gods and abilities and minor gods and major gods
     - add form editor for each
     - add validation for each
@@ -20,3 +21,6 @@
     - just use emojis? lol
 11) database
 12) homepage
+13) image uploading for gods and units and buildings and technologies and godpowers and abilities
+14) ai image gen from sample gods.. etc images 
+
