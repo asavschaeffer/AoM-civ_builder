@@ -116,8 +116,58 @@ function handleBackgroundClick(event: MouseEvent) { if (event.target === backgro
 // PUBLIC API (openEditor and closeEditor are unchanged from previous version)
 // =================================================================
 export function closeEditor() { if (!editorContainer || !triggerElement || !contentContainer || !backgroundOverlay) return; backgroundOverlay.removeEventListener('click', handleBackgroundClick, true); const endRect = triggerElement.getBoundingClientRect(); const startRect = editorContainer.getBoundingClientRect(); const deltaX = endRect.left - startRect.left; const deltaY = endRect.top - startRect.top; const deltaW = endRect.width / startRect.width; const deltaH = endRect.height / startRect.height; editorContainer.style.transformOrigin = 'top left'; editorContainer.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out'; editorContainer.style.transform = `translateX(${deltaX}px) translateY(${deltaY}px) scaleX(${deltaW}) scaleY(${deltaH})`; editorContainer.style.opacity = '0'; backgroundOverlay.style.opacity = '0'; editorContainer.addEventListener('transitionend', () => { if (!contentContainer || !backgroundOverlay) return; editorContainer!.style.display = 'none'; contentContainer.style.display = ''; backgroundOverlay.remove(); backgroundOverlay = null; }, { once: true }); }
-export function openEditor(entityToEdit: Entity, triggerEl: HTMLElement) { if (entityToEdit.type !== 'unit') { console.log(`Editor for ${entityToEdit.type} not implemented yet.`); return; } formErrors = null; triggerElement = triggerEl; originalEntityName = entityToEdit.name; editingEntity = JSON.parse(JSON.stringify(entityToEdit)); rerenderForm(); const section = triggerElement.closest('section'); if (!section) return; editorContainer = section.querySelector('.editor-container') as HTMLElement | null; contentContainer = section.querySelector('.content-with-preview, .carousel-scene') as HTMLElement | null; if (!editorContainer || !contentContainer) return; backgroundOverlay = document.createElement('div'); backgroundOverlay.className = 'editor-background-overlay'; document.body.appendChild(backgroundOverlay); const startRect = triggerElement.getBoundingClientRect(); contentContainer.style.display = 'none'; editorContainer.style.display = 'block'; editorContainer.style.opacity = '0'; const endRect = editorContainer.getBoundingClientRect(); const deltaX = startRect.left - endRect.left; const deltaY = startRect.top - endRect.top; const deltaW = startRect.width / endRect.width; const deltaH = startRect.height / endRect.height; editorContainer.style.transformOrigin = 'top left'; editorContainer.style.transform = `translateX(${deltaX}px) translateY(${deltaY}px) scaleX(${deltaW}) scaleY(${deltaH})`; requestAnimationFrame(() => { if (!backgroundOverlay || !editorContainer) return; backgroundOverlay.style.opacity = '1'; editorContainer.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out'; editorContainer.style.transform = 'none'; editorContainer.style.opacity = '1'; }); backgroundOverlay.addEventListener('click', handleBackgroundClick, true); }
+export function openEditor(entityToEdit: Entity, triggerEl: HTMLElement) {
+    if (entityToEdit.type !== 'unit') {
+        console.log(`Editor for ${entityToEdit.type} not implemented yet.`);
+        return;
+    }
+    formErrors = null;
+    triggerElement = triggerEl;
+    originalEntityName = entityToEdit.name;
+    editingEntity = JSON.parse(JSON.stringify(entityToEdit));
 
+    // Key Fix: Find the containers FIRST.
+    const section = triggerElement.closest('section');
+    if (!section) return;
+    editorContainer = section.querySelector('.editor-container') as HTMLElement | null;
+    contentContainer = section.querySelector('.content-with-preview, .carousel-scene') as HTMLElement | null;
+
+    if (!editorContainer || !contentContainer) return;
+
+    // NOW that you have the container, render the form's content into it.
+    rerenderForm();
+
+    // Finally, proceed with the animation setup using the fully rendered form.
+    backgroundOverlay = document.createElement('div');
+    backgroundOverlay.className = 'editor-background-overlay';
+    document.body.appendChild(backgroundOverlay);
+
+    const startRect = triggerElement.getBoundingClientRect();
+    contentContainer.style.display = 'none';
+    editorContainer.style.display = 'block';
+    editorContainer.style.opacity = '0'; // Keep it transparent for the start of the animation
+
+    // Measure the destination rectangle of the now-populated form
+    const endRect = editorContainer.getBoundingClientRect();
+
+    const deltaX = startRect.left - endRect.left;
+    const deltaY = startRect.top - endRect.top;
+    const deltaW = startRect.width / endRect.width;
+    const deltaH = startRect.height / endRect.height;
+
+    editorContainer.style.transformOrigin = 'top left';
+    editorContainer.style.transform = `translateX(${deltaX}px) translateY(${deltaY}px) scaleX(${deltaW}) scaleY(${deltaH})`;
+
+    requestAnimationFrame(() => {
+        if (!backgroundOverlay || !editorContainer) return;
+        backgroundOverlay.style.opacity = '1';
+        editorContainer.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out';
+        editorContainer.style.transform = 'none';
+        editorContainer.style.opacity = '1';
+    });
+
+    backgroundOverlay.addEventListener('click', handleBackgroundClick, true);
+}
 // =================================================================
 // FORM TEMPLATE RENDERERS
 // =================================================================
