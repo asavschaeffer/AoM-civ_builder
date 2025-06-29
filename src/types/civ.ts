@@ -49,7 +49,7 @@ export interface DefensiveStats {
 export type UnitCategory = 'human' | 'myth' | 'hero';
 export type UnitTag =
   | 'is_infantry'
-  | 'is_archer'
+  | 'is_ranged'
   | 'is_siege'
   | 'is_cavalry'
   | 'is_flying'
@@ -62,7 +62,10 @@ export interface DamageMultipliers {
   vs_myth?: number;
   vs_ranged?: number;
   vs_infantry?: number;
+  vs_cavalry?: number;
   vs_siege?: number;
+  vs_building?: number;
+  vs_ship?: number;
 }
 
 export interface AttackStats extends DamageMultipliers {
@@ -85,7 +88,7 @@ export interface Unit extends Entity {
   speed: number;
   cost: Cost;
   unit_category: UnitCategory; // One of: human, hero, myth
-  unit_tags: UnitTag[]; // e.g. is_infantry, is_archer
+  unit_tags: UnitTag[]; // e.g. is_infantry, is_ranged
   defensive_stats: DefensiveStats;
   gather_rate?: GatherRate;
   attack?: AttackStats;
