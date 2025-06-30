@@ -1,4 +1,4 @@
-import { html, render } from "lit-html";
+import { html, render, nothing } from "lit-html";
 import {
   Civ,
   Entity,
@@ -36,14 +36,14 @@ export function showPreview(entity: Entity) {
   const template = previewCardTemplate(entity);
   if (window.matchMedia("(max-width: 768px)").matches) {
     const modal = document.getElementById("preview-modal");
-    const content = modal?.querySelector(".preview-pane");
+    const content = modal?.querySelector(".preview-card");
     if (modal && content instanceof HTMLElement) { render(template, content); modal.style.display = "flex"; }
   } else {
-    let containerSelector = '.preview-pane';
+    let containerSelector = '.preview-card';
     if (entity.type === 'unit' || entity.type === 'technology') {
-        containerSelector = '.units-techs .preview-pane';
+        containerSelector = '.units-techs .preview-card';
     } else if (entity.type === 'building') {
-        containerSelector = '.buildings .preview-pane';
+        containerSelector = '.buildings .preview-card';
     }
     const container = document.querySelector(containerSelector);
     if (container instanceof HTMLElement) { render(template, container); }
@@ -184,12 +184,12 @@ const buildingsTemplate = (buildings: Record<string, Building>) => {
 }
 
 const previewCardTemplate = (entity: Entity | null) => {
-  if (!entity) return html`<div class="preview-card">Select an item.</div>`;
+  if (!entity) return nothing;
   const god = entity.prerequisite_god || (entity.type === 'majorGod' ? entity.name.toLowerCase() : activeMajorGodKey);
   const hasAttack = 'attack' in entity && entity.attack; 
   const isRanged = hasAttack && entity.attack.type === 'ranged';
   
-  return html`<div class="preview-card">
+  return html`
       <div class="bg-god-logo">${GOD_ICONS[god as keyof typeof GOD_ICONS] || GOD_ICONS.default}</div>
       <header class="preview-card-header"><div class="title-group"><h2>${entity.name}</h2><span class="user">by TheBradFad</span></div><div class="toolbar"><div class="level">1</div><div><button title="Info">ℹ️</button><button title="Stats">📈</button></div></div></header>
       <div class="preview-card-stats">
