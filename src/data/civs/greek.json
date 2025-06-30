@@ -298,7 +298,7 @@
       "line_of_sight": 16,
       "build_time": 12,
       "unit_category": "human",
-      "unit_tags": ["is_archer"],
+      "unit_tags": ["is_ranged"],
       "population_cost": 2,
       "hitpoints": 80,
       "speed": 3.6,
@@ -328,7 +328,7 @@
       "line_of_sight": 17,
       "build_time": 13,
       "unit_category": "human",
-      "unit_tags": ["is_archer"],
+      "unit_tags": ["is_ranged"],
       "population_cost": 2,
       "hitpoints": 90,
       "speed": 3.8,
@@ -359,7 +359,7 @@
       "line_of_sight": 18,
       "build_time": 15,
       "unit_category": "human",
-      "unit_tags": ["is_archer"],
+      "unit_tags": ["is_ranged"],
       "population_cost": 3,
       "hitpoints": 90,
       "speed": 3.8,
@@ -1432,7 +1432,7 @@
       "prerequisites": [{ "building": "temple" }, { "god": "apollo" }],
       "effects": [
         {
-          "noun": { "unit_tags": ["is_archer"] },
+          "noun": { "unit_tags": ["is_ranged"] },
           "verb": "add",
           "adjective": "pierce_damage",
           "value": 5
@@ -1453,7 +1453,7 @@
       "prerequisites": [{ "building": "temple" }, { "god": "artemis" }],
       "effects": [
         {
-          "noun": { "unit_tags": ["is_archer"] },
+          "noun": { "unit_tags": ["is_ranged"] },
           "verb": "multiply",
           "adjective": "pierce_damage",
           "value": 1.15
