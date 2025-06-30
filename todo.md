@@ -1,4 +1,7 @@
-1) ponder the mobile experience
+1) mobile experience:
+   - doubletap to select, tap to open editor modal
+   - maybe minor gods section needs a max height
+   - bug: modal popup right margin where tf is that shit comin from???
 2) improve json object templates across the board
 2.3) [buildings grid fix](https://github.com/asavschaeffer/AoM-civ_builder/issues/1)
 2.5) add basegame civs

@@ -34,10 +34,30 @@ export function renderAll() {
 export function showPreview(entity: Entity) {
   setActiveEntityName(entity.name);
   const template = previewCardTemplate(entity);
+
   if (window.matchMedia("(max-width: 768px)").matches) {
-    const modal = document.getElementById("preview-modal");
-    const content = modal?.querySelector(".preview-card");
-    if (modal && content instanceof HTMLElement) { render(template, content); modal.style.display = "flex"; }
+      const modal = document.getElementById("preview-modal") as HTMLDialogElement | null;
+      if (!modal) return; // Guard clause if modal doesn't exist
+
+      const content = modal.querySelector(".preview-card");
+      if (content instanceof HTMLElement) {
+          render(template, content);
+      }
+
+      // --- Event Listener Logic ---
+      // Define a function to handle closing
+      const handleClose = (e: Event) => {
+          // Check if the click was on the close button OR the backdrop
+          if ((e.target as HTMLElement).closest('.modal-close-btn') || e.target === modal) {
+              modal.close();
+              // IMPORTANT: Remove the listener after closing to prevent memory leaks
+              modal.removeEventListener('click', handleClose);
+          }
+      };
+
+      // Add the event listener right before opening
+      modal.addEventListener('click', handleClose);
+      modal.showModal();
   } else {
     let containerSelector = '.preview-card';
     if (entity.type === 'unit' || entity.type === 'technology') {
@@ -225,11 +245,5 @@ async function main() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('preview-modal');
-    modal?.addEventListener('click', (e) => {
-        if (e.target === modal || (e.target as HTMLElement).classList.contains('modal-close-btn')) {
-            if (modal instanceof HTMLElement) { modal.style.display = 'none'; }
-        }
-    });
     main();
 });

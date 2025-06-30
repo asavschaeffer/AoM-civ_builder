@@ -1,89 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Civ Customizer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="src/styles/civbuilder.css">
-  <link rel="stylesheet" href="src/styles/carousel.css">
-  <link rel="stylesheet" href="src/styles/actions.css">
-  <link rel="stylesheet" href="src/styles/form.css">
-  <script type="module" src="src/main.ts"></script>
-  <script type="module" src="src/components/form.ts"></script>
-</head>
-<body>
-  <header>
-    <h1>Civ Customizer</h1>
-    <nav aria-label="Main navigation">
-      <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#standard-civils">Standard Civs</a></li>
-        <li><a href="#custom-civs">Custom Civs</a></li>
-      </ul>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Civ Customizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="src/styles/civbuilder.css" />
+    <link rel="stylesheet" href="src/styles/carousel.css" />
+    <link rel="stylesheet" href="src/styles/actions.css" />
+    <link rel="stylesheet" href="src/styles/form.css" />
+    <script type="module" src="src/main.ts"></script>
+    <script type="module" src="src/components/form.ts"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Civ Customizer</h1>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#standard-civils">Standard Civs</a></li>
+          <li><a href="#custom-civs">Custom Civs</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section aria-labelledby="civ-name">
+        <h2 id="civ-name" contenteditable="true">My Custom Civ</h2>
 
-  <main>
-    <section aria-labelledby="civ-name">
-      <h2 id="civ-name" contenteditable="true">My Custom Civ</h2>
-
-      <section class="major-gods" aria-labelledby="major-gods-heading">
-        <h3 id="major-gods-heading">Major Gods</h3>
-        <div class="carousel-scene">
-          <div class="carousel">
+        <section class="major-gods" aria-labelledby="major-gods-heading">
+          <h3 id="major-gods-heading">Major Gods</h3>
+          <div class="carousel-scene">
+            <div class="carousel">
               <!-- Content will be rendered by main.ts -->
+            </div>
           </div>
-        </div>
-        <!-- ADDED: Editor container for Major Gods -->
-        <div class="editor-container" style="display: none;"></div>
+          <!-- ADDED: Editor container for Major Gods -->
+          <div class="editor-container" style="display: none"></div>
+        </section>
+
+        <section class="minor-gods" aria-labelledby="minor-gods-heading">
+          <h3 id="minor-gods-heading">Minor Gods</h3>
+          <div class="grid">
+            <div class="tile placeholder" tabindex="0"></div>
+          </div>
+
+          <!-- Note: We might add an editor here later, but for now we focus on the main sections -->
+        </section>
+
+        <section class="units-techs" aria-labelledby="units-heading">
+          <h3 id="units-heading">Units & Technologies</h3>
+          <div class="content-with-preview">
+            <div class="units-techs-grid"></div>
+            <!-- This container holds the preview for desktop view -->
+            <div class="preview-card"></div>
+          </div>
+          <!-- ADDED: Editor container for Units & Techs -->
+          <div class="editor-container" style="display: none"></div>
+        </section>
+
+        <section class="buildings" aria-labelledby="buildings-heading">
+          <h3 id="buildings-heading">Buildings</h3>
+          <div class="content-with-preview">
+            <div class="buildings-grid"></div>
+            <!-- This container holds the preview for desktop view -->
+            <div class="preview-card"></div>
+          </div>
+          <!-- ADDED: Editor container for Buildings -->
+          <div class="editor-container" style="display: none"></div>
+        </section>
       </section>
-
-      <section class="minor-gods" aria-labelledby="minor-gods-heading">
-        <h3 id="minor-gods-heading">Minor Gods</h3>
-        <div class="grid"></div>
-         <!-- Note: We might add an editor here later, but for now we focus on the main sections -->
-      </section>
-
-      <section class="units-techs" aria-labelledby="units-heading">
-        <h3 id="units-heading">Units & Technologies</h3>
-        <div class="content-with-preview">
-          <div class="units-techs-grid"></div>
-          <!-- This container holds the preview for desktop view -->
-          <div class="preview-card"></div>
-        </div>
-        <!-- ADDED: Editor container for Units & Techs -->
-        <div class="editor-container" style="display: none;"></div>
-      </section>
-
-      <section class="buildings" aria-labelledby="buildings-heading">
-        <h3 id="buildings-heading">Buildings</h3>
-        <div class="content-with-preview">
-          <div class="buildings-grid"></div>
-           <!-- This container holds the preview for desktop view -->
-           <div class="preview-card"></div>
-        </div>
-        <!-- ADDED: Editor container for Buildings -->
-        <div class="editor-container" style="display: none;"></div>
-      </section>
-
-    </section>
-  </main>
-
-  <!-- This modal is now only for mobile/responsive fallback previews -->
-  <div id="preview-modal" class="modal-overlay" aria-modal="true" role="dialog" style="display: none;">
-    <div class="modal-content">
-      <button class="modal-close-btn" aria-label="Close preview">&times;</button>
-      <!-- Mobile preview renders inside this div -->
-      <div class="preview-card"></div>
-    </div>
-  </div>
-
-  <footer>
-    <p>Made by Asa, always free and open source <a href="https://github.com/asaxschaeffer/aom-civ-builder">GitHub</a></p>
-  </footer>
-</body>
+    </main>
+    <aside class="column-container-left"></aside>
+    <aside class="column-container-right"></aside>
+    <footer>
+      <p>
+        Made by Asa, always free and open source
+        <a href="https://github.com/asaxschaeffer/aom-civ-builder">GitHub</a>
+      </p>
+    </footer>
+    <dialog
+      id="preview-modal"
+      class="modal-overlay"
+    >
+      <div class="modal-content">
+        <button class="modal-close-btn" aria-label="Close preview">
+          &times;
+        </button>
+        <!-- Mobile preview renders inside this div -->
+        <div class="preview-card"></div>
+      </div>
+    </dialog>
+  </body>
 </html>
