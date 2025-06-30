@@ -1,4 +1,4 @@
-1.5) unit/tech//building grid-tiles > square shape. the grid tile sizes need to adjust to the vw vh, rather than the grid-cols and grid-rows changing.
+1) ponder the mobile experience
 2) improve json object templates across the board
 2.3) [buildings grid fix](https://github.com/asavschaeffer/AoM-civ_builder/issues/1)
 2.5) add basegame civs
@@ -9,7 +9,6 @@
 4) fix all the fkin red man & reorganize the directories if needed
 5) [unit/tech/building grid tile, preview panel, minor/major god card to section-size form animation](https://x.com/i/grok?conversation=1938943522117501432)
 6) civ selection/creation via auto-complete from h2 id = "civ-name"
-7) ponder the mobile experience
 8) download json button
 9) export/share civ button that extracts just the major and minor gods as a nice reddit/twitter post format?
 10) massively overhaul form editor experience
