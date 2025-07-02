@@ -1,9 +1,9 @@
 /* ================================================== */
-/* == Action Buttons Styles (Refined) == */
+/* == Action Buttons Styles (Consolidated)         == */
 /* ================================================== */
 
 /* --- Overlay Containers --- */
-/* This container appears on hover over a tile or card */
+/* This is the base style for all action overlays. */
 .tile-actions-overlay,
 .card-actions-overlay,
 .preview-actions-overlay {
@@ -12,25 +12,36 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* REMOVED: No background or blur needed */
     opacity: 0;
-    pointer-events: none; /* Important: allows clicking through the overlay */
+    pointer-events: none; /* Allows clicking through the invisible overlay */
     transition: opacity 0.3s ease;
     z-index: 10;
 }
 
-/* Make the overlay visible and interactive on hover */
-.tile:hover .tile-actions-overlay,
-.card:hover .card-actions-overlay,
-.preview-card:hover .preview-actions-overlay {
+/* --- Visibility Logic --- */
+
+/* RULE FOR DESKTOP: Only applies to devices that can hover. */
+@media (hover: hover) {
+    .tile:hover .tile-actions-overlay,
+    .card:hover .card-actions-overlay,
+    .preview-card:hover .preview-actions-overlay {
+        opacity: 1;
+        pointer-events: all; /* Make buttons clickable on hover */
+    }
+}
+
+/* RULE FOR MOBILE: Applies when JavaScript adds the .actions-visible class. */
+.tile.actions-visible .tile-actions-overlay,
+.card.actions-visible .card-actions-overlay,
+.preview-card.actions-visible .preview-actions-overlay {
     opacity: 1;
-    pointer-events: all; /* Make buttons clickable */
+    pointer-events: all; /* Make buttons clickable on tap */
 }
 
 
 /* --- Base Button Styles --- */
 .action-btn {
-    position: absolute; /* Key change: positions buttons relative to the overlay */
+    position: absolute; /* Positions buttons relative to the overlay */
     border: none;
     cursor: pointer;
     display: flex;
@@ -44,8 +55,7 @@
 }
 
 .action-btn:hover {
-    /* NEW: Use translateY for a 'lift' effect instead of scale */
-    transform: translateY(-2px); 
+    transform: translateY(-2px); /* 'lift' effect */
     box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.3);
     mix-blend-mode: normal; 
 }
@@ -53,20 +63,19 @@
 /* --- Edit Button (Blue Pill) --- */
 .edit-btn {
     /* Positioning: bottom middle */
-    bottom: 0.5rem; /* A little space from the bottom edge */
+    bottom: 0.5rem;
     left: 50%;
-    /* UPDATED: combine the hover state with the centering transform */
     transform: translateX(-50%);
 }
 .edit-btn:hover {
-    /* Ensure the centering transform is maintained on hover */
+    /* Maintain the centering transform on hover */
     transform: translateX(-50%) translateY(-2px);
 }
 .edit-btn {
     background: rgba(50, 150, 255, 0.7);
     border-radius: 50px; /* Pill shape */
 
-    /* Responsive Sizing: Made slightly smaller */
+    /* Responsive Sizing */
     font-size: 0.8rem; 
     padding: 0.35rem 1.1rem;
 }
@@ -91,7 +100,7 @@
     background: rgba(220, 40, 40, 0.7);
     border-radius: 50%; /* Circle shape */
 
-    /* Responsive Sizing: Made slightly smaller */
+    /* Responsive Sizing */
     width: 2rem;
     height: 2rem;
     font-size: 0.8rem;

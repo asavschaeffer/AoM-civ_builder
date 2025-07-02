@@ -53,20 +53,39 @@ class AppState {
     this.data = data;
   }
 
-  // THE CONDUCTOR: Single point of entry for all state changes
-  setActive(entityKey: string | null, actionsKey: string | null = null) {
-    console.log(`AppState.setActive called with: entity="${entityKey}", actions="${actionsKey}"`);
-    
-    // 1. Update core state
-    this.activeEntityKey = entityKey;
-    this.activeActionsKey = actionsKey;
-    
-    // 2. Execute comprehensive downstream logic
-    this.updateDownstreamState();
-    
-    // 3. Global re-render
-    renderAll();
-  }
+// THE CONDUCTOR: Single point of entry for all state changes
+setActive(entityKey: string | null, actionsKey: string | null = null) {   
+  console.log(`AppState.setActive called with: entity="${entityKey}", actions="${actionsKey}"`);
+  console.log("setActive", entityKey, actionsKey, "mobile:", window.matchMedia("(max-width: 768px)").matches);
+  
+  // 1. Update core state
+  this.activeEntityKey = entityKey;
+  this.activeActionsKey = actionsKey;
+  
+  // DEBUG: Check state immediately after setting
+  console.log("State immediately after setting:", {
+    activeEntityKey: this.activeEntityKey,
+    activeActionsKey: this.activeActionsKey
+  });
+  
+  // 2. Execute comprehensive downstream logic
+  this.updateDownstreamState();
+  
+  // DEBUG: Check state after updateDownstreamState
+  console.log("State after updateDownstreamState:", {
+    activeEntityKey: this.activeEntityKey,
+    activeActionsKey: this.activeActionsKey
+  });
+  
+  // 3. Global re-render
+  renderAll();
+  
+  // DEBUG: Final state check
+  console.log("Final state before render:", {
+    activeEntityKey: this.activeEntityKey,
+    activeActionsKey: this.activeActionsKey
+  });
+}
 
   // THE MASTER CHECKLIST: Handles all downstream consequences
   private updateDownstreamState() {
@@ -102,18 +121,19 @@ class AppState {
     // Only show the preview pane automatically on non-mobile devices.
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     if (isMobile) {
-      // On mobile, we do NOT show the preview on a simple tap.
+      // On mobile, we do NOT show the preview pane, but we keep the actions state intact
       showPreview(null);
       return; 
     }
-
+  
+    // On desktop, show the preview pane for the active entity
     if (this.activeEntityKey && this.data) {
       const entity = this.findEntityByKey(this.activeEntityKey);
       if (entity) {
         showPreview(entity);
       }
     } else {
-      // Clear all preview panes
+      // Clear preview panes only on desktop
       showPreview(null);
     }
   }
@@ -301,6 +321,14 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
 
   const removeGod = (key: string) => console.log("Removing god:", key);
 
+  // DEBUG: Let's see what the state values are
+  console.log("majorGodsTemplate DEBUG:", {
+    activeEntity: appState.activeEntity,
+    activeActions: appState.activeActions,
+    activeMajorGod: appState.activeMajorGod,
+    godKeys: godKeys
+  });
+
   return html`${allCardKeys.map((key, i) => {
     let offset = i - activeIndex;
     if (offset > allCardKeys.length / 2) offset -= allCardKeys.length;
@@ -313,21 +341,32 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
     }
 
     const god = gods[key];
-    return html`<article class="card major-god" data-offset=${offset} 
-      style="background-image: url('${god.image || 'assets/placeholder.jpg'}')" 
-      @click=${() => offset !== 0 && selectGod(key)}>
+    const isActionsVisible = appState.activeActions === key;
+    
+    // DEBUG: Log each card's state
+    console.log(`Card ${key}:`, {
+      key,
+      godName: god.name,
+      activeActions: appState.activeActions,
+      isActionsVisible,
+      comparison: `${appState.activeActions} === ${key}`
+    });
+
+    return html`<article class="card major-god ${isActionsVisible ? 'actions-visible' : ''}" data-offset=${offset}
+      style="background-image: url('${god.image || 'assets/placeholder.jpg'}')"
+      @click=${() => selectGod(key)}>
       <div class="card-content">
         <h4>${god.name}</h4>
         <p>${god.tagline}</p>
       </div>
       <div class="card-actions-overlay">
-        <button class="action-btn edit-btn" 
-          @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }} 
+        <button class="action-btn edit-btn"
+          @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }}
           title="Edit ${god.name}">
           <i class="fas fa-pencil-alt"></i>
         </button>
-        <button class="action-btn delete-btn" 
-          @click=${(e: Event) => { e.stopPropagation(); removeGod(key); }} 
+        <button class="action-btn delete-btn"
+          @click=${(e: Event) => { e.stopPropagation(); removeGod(key); }}
           title="Delete ${god.name}">
           <i class="fas fa-trash"></i>
         </button>
@@ -338,11 +377,16 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
 
 const minorGodsTemplate = (gods: Record<string, MinorGod>) => {
   const removeGod = (key: string) => console.log("Removing minor god:", key);
-  
+
   return html`${Object.values(gods)
     .filter(god => !god.prerequisite_god || god.prerequisite_god.toLowerCase() === appState.activeMajorGod)
-    .map(god => html`
-      <div class="tile minor-god ${appState.activeEntity === god.name ? "active" : ""}" 
+    .map(god => {
+
+      const isActive = appState.activeEntity === god.name;
+      const isActionsVisible = appState.activeActions === god.name;
+
+      return html`
+      <div class="tile minor-god ${isActive ? "active" : ""} ${isActionsVisible ? "actions-visible" : ""}"
         @click=${() => handleEntityClick(god.name)} tabindex="0">
         <img src="${god.image || "assets/placeholder.jpg"}" alt="${god.name}" class="sprite" />
         <div class="tile-content">
@@ -350,42 +394,45 @@ const minorGodsTemplate = (gods: Record<string, MinorGod>) => {
           <p>${god.tagline}</p>
         </div>
         <div class="tile-actions-overlay">
-          <button class="action-btn edit-btn" 
-            @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }} 
+          <button class="action-btn edit-btn"
+            @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }}
             title="Edit ${god.name}">
             <i class="fas fa-pencil-alt"></i>
           </button>
-          <button class="action-btn delete-btn" 
-            @click=${(e: Event) => { e.stopPropagation(); removeGod(god.name); }} 
+          <button class="action-btn delete-btn"
+            @click=${(e: Event) => { e.stopPropagation(); removeGod(god.name); }}
             title="Delete ${god.name}">
             <i class="fas fa-trash"></i>
           </button>
         </div>
       </div>
-    `)}`;
+    `})}`;
 };
 
 const unitsTechsTemplate = (units: Record<string, Unit>, technologies: Record<string, Technology>) => {
   const gridLayout = createUnitsTechsGridLayout(units, technologies);
   const removeEntity = (key: string) => console.log("Removing entity:", key);
-  
+
   return html`${gridLayout.map(row => row.map(entity => {
     if (!entity) return html`<div class="tile placeholder"><span class="plus-icon">+</span></div>`;
-    
-    return html`<div class="tile ${entity.type} ${appState.activeEntity === entity.name ? "active" : ""}" 
+
+    const isActive = appState.activeEntity === entity.name;
+    const isActionsVisible = appState.activeActions === entity.name;
+
+    return html`<div class="tile ${entity.type} ${isActive ? "active" : ""} ${isActionsVisible ? "actions-visible" : ""}"
       @click=${() => handleEntityClick(entity.name)} tabindex="0">
       <img src="${entity.image || 'assets/placeholder.jpg'}" class="sprite" alt="${entity.name}"/>
       <div class="tile-content">
         <h5>${entity.name}</h5>
       </div>
       <div class="tile-actions-overlay">
-        <button class="action-btn edit-btn" 
-          @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity.name, e); }} 
+        <button class="action-btn edit-btn"
+          @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity.name, e); }}
           title="Edit ${entity.name}">
           <i class="fas fa-pencil-alt"></i>
         </button>
-        <button class="action-btn delete-btn" 
-          @click=${(e: Event) => { e.stopPropagation(); removeEntity(entity.name); }} 
+        <button class="action-btn delete-btn"
+          @click=${(e: Event) => { e.stopPropagation(); removeEntity(entity.name); }}
           title="Delete ${entity.name}">
           <i class="fas fa-trash"></i>
         </button>
@@ -396,27 +443,30 @@ const unitsTechsTemplate = (units: Record<string, Unit>, technologies: Record<st
 
 const buildingsTemplate = (buildings: Record<string, Building>) => {
   const removeBuilding = (key: string) => console.log("Removing building:", key);
-  
+
   return html`${buildingGridLayout.map(row => row.map(buildingKey => {
     if (!buildingKey) return html`<div class="tile placeholder"><span class="plus-icon">+</span></div>`;
-    
+
     const building = Object.values(buildings).find(b => b.name.toLowerCase() === buildingKey);
     if (!building) return html`<div class="tile empty"></div>`;
-    
-    return html`<div class="tile building ${appState.activeBuildingName === building.name.toLowerCase() ? "active" : ""}" 
+
+    const isActive = appState.activeBuildingName === building.name.toLowerCase();
+    const isActionsVisible = appState.activeActions === building.name;
+
+    return html`<div class="tile building ${isActive ? "active" : ""} ${isActionsVisible ? "actions-visible" : ""}"
       @click=${() => handleEntityClick(building.name)} tabindex="0">
       <img src="${building.image || "assets/placeholder.jpg"}" alt="${building.name}" class="sprite" />
       <div class="tile-content">
         <h5>${building.name}</h5>
       </div>
       <div class="tile-actions-overlay">
-        <button class="action-btn edit-btn" 
-          @click=${(e: Event) => { e.stopPropagation(); handleEditClick(building.name, e); }} 
+        <button class="action-btn edit-btn"
+          @click=${(e: Event) => { e.stopPropagation(); handleEditClick(building.name, e); }}
           title="Edit ${building.name}">
           <i class="fas fa-pencil-alt"></i>
         </button>
-        <button class="action-btn delete-btn" 
-          @click=${(e: Event) => { e.stopPropagation(); removeBuilding(building.name); }} 
+        <button class="action-btn delete-btn"
+          @click=${(e: Event) => { e.stopPropagation(); removeBuilding(building.name); }}
           title="Delete ${building.name}">
           <i class="fas fa-trash"></i>
         </button>
@@ -427,12 +477,16 @@ const buildingsTemplate = (buildings: Record<string, Building>) => {
 
 const previewCardTemplate = (entity: Entity | null) => {
   if (!entity) return nothing;
-  
+
+  // Added a check for actions visible on the preview card itself.
+  const isActionsVisible = appState.activeActions === entity.name;
   const god = entity.prerequisite_god || (entity.type === 'majorGod' ? entity.name.toLowerCase() : appState.activeMajorGod);
-  const hasAttack = 'attack' in entity && entity.attack; 
+  const hasAttack = 'attack' in entity && entity.attack;
   const isRanged = hasAttack && entity.attack.type === 'ranged';
-  
+
+  // Note the added class to the main container div
   return html`
+  <div class="preview-card-container ${isActionsVisible ? 'actions-visible' : ''}">
     <div class="bg-god-logo">${GOD_ICONS[god as keyof typeof GOD_ICONS] || GOD_ICONS.default}</div>
     <header class="preview-card-header">
       <div class="title-group">
@@ -475,12 +529,13 @@ const previewCardTemplate = (entity: Entity | null) => {
       ` : ''}
     </div>
     <div class="preview-actions-overlay">
-      <button class="action-btn edit-btn" 
-        @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity.name, e); }} 
+      <button class="action-btn edit-btn"
+        @click=${(e: Event) => { e.stopPropagation(); handleEditClick(entity.name, e); }}
         title="Edit ${entity.name}">
         <i class="fas fa-pencil-alt"></i>
       </button>
     </div>
+  </div>
   `;
 };
 

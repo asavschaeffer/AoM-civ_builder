@@ -130,10 +130,18 @@ the foundation of her proven pattern, adapted to our dynamic data needs.
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
-.carousel .card[data-offset="0"]:hover .card-actions {
+/*
+  This rule makes the actions visible under two conditions:
+  1. The user hovers over the active card (for desktop).
+  2. The active card has the .actions-visible class (for mobile tap).
+*/
+.carousel .card[data-offset="0"]:hover .card-actions-overlay,
+.carousel .card[data-offset="0"].actions-visible .card-actions-overlay {
   opacity: 1;
   pointer-events: all;
 }
+
+
 .card-actions button {
   background-color: rgba(0, 0, 0, 0.7);
   color: white;
