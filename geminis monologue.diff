@@ -154,6 +154,10 @@ index 1d6a9f3..e8b5a7c 100644
 +// Built on a foundation of sound architecture and shared understanding.
 +// Ready for the next phase.
 
+
+---------------------------------------------------------------------
+
+
 commit 243e24a588ccf1873ade22f336a174af7fa9aacb
 Author: Gemini <gemini@google.com>
 Date:   Wed Jul 2 15:28:00 2025 +0900
@@ -268,3 +272,105 @@ index 1a2b3c4..5d6e7f8 100644
 +
 +/* Concern C: Opening the editor is a separate, explicit action. */
 +const editButtonClickHandler = (entity, element) => openEditor(entity, element);
+
+
+-------------------------------------------------------------------------------------------
+
+
+commit a8e3d6f1a0b5c8e2d4f6a9b1c7d0e8f3a2b5c6d7
+Author: Gemini
+Date:   Thu Jul 4 00:12:21 2025 +0900
+
+    refactor(state): Introduce a conductor for all UI events
+
+    The system was a cacophony. Clicks in different places triggered
+    disparate, scattered logic, leading to unpredictable states, race
+    conditions, and a cascade of downstream bugs. The animation of the
+    carousel fought with the toggling of the action buttons. The mobile
+    experience was a ghost of the desktop's intent.
+
+    This change introduces a single source of truth: the AppState
+    conductor. It is the central nervous system for all user interactions.
+
+    All events now flow through a single, universal handler. The conductor
+    receives the user's intent and, with full context, orchestrates the
+    update of the entire application state. It follows a master checklist,
+    ensuring component-specific dependencies are met, previews are managed,
+    and the UI is rendered as a unified, predictable whole.
+
+    This is not just a bug fix. It is a shift from chaos to order.
+
+diff --git a/src/main.ts b/src/main.ts
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1,5 +1,5 @@
+-// A whisper in the dark, a function for each fear.
+-let activeMajorGodKey;
+-let activeBuilding;
+-let activeEntityName;
+-let activeActionsKey;
+-
+-// Each component, a soloist, deaf to the others.
+-function handleCarouselClick(key) {
+-  activeMajorGodKey = key;
+-  // ... its own cascade of logic ...
+-  renderCarousel();
+-  renderMinorGods();
+-}
+-
+-function handleBuildingClick(key) {
+-  activeBuilding = key;
+-  // ... a different, conflicting cascade ...
+-  renderBuildingPreview();
+-  renderUnitGrid();
+-}
+-
+-function handleUnitClick(key) {
+-  activeEntityName = key;
+-  // ... a simple, lonely cascade ...
+-  renderUnitPreview();
+-}
+-
+-function handleMobileTap(key) {
+-  // ... a frustrated attempt to glue logic together ...
+-  if (window.isMobile) {
+-    activeActionsKey = key;
+-    // ... but which preview to show? Which grid to update? ...
+-  }
+-  renderActions();
+-}
++// A single conductor, aware of the entire orchestra.
++class AppState {
++  private activeEntityKey: string | null;
++  private activeActionsKey: string | null;
++  private activeMajorGodKey: string;
++  private activeBuilding: string | null;
++
++  // The Conductor receives the user's intent.
++  setActive(key: string | null) {
++    // It sets the state with full context.
++    this.activeEntityKey = key;
++    this.activeActionsKey = key;
++
++    // It follows a master checklist of consequences.
++    this.updateDownstreamState();
++
++    // It commands the whole to re-render in unison.
++    renderAll();
++  }
++
++  private updateDownstreamState() {
++    // It knows the carousel needs the major god key.
++    if (entity.type === 'majorGod') this.activeMajorGodKey = this.activeEntityKey;
++    // It knows the unit grid needs the active building.
++    if (entity.type === 'building') this.activeBuilding = this.activeEntityKey;
++    // It knows not to show the preview on mobile.
++    if (isMobile) showPreview(null); else showPreview(entity);
++  }
++}
++
++// All interactions, from any part of the UI...
++function handleEntityClick(key: string) {
++  // ...speak through one single, unified voice.
++  appState.setActive(key);
++}
