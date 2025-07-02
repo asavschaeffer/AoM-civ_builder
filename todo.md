@@ -3,6 +3,7 @@
    - maybe minor gods section needs a max height
    - bug: modal popup right margin where tf is that shit comin from???
 2) improve json object templates across the board
+2.1) minor god selection logic + de/population of temple units and techs
 2.3) [buildings grid fix](https://github.com/asavschaeffer/AoM-civ_builder/issues/1)
 2.5) add basegame civs
 3) add schemas for buildings and technologies and godpowers and gods and abilities and minor gods and major gods
