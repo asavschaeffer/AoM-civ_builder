@@ -14,19 +14,18 @@ the foundation of her proven pattern, adapted to our dynamic data needs.
 
 /* 1. The Container: Defines the viewing area */
 .carousel {
-  height: 350px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
   overflow: hidden;
+  padding: 2rem;
 }
 
 /* 2. The Cards: Stacked and positioned by CSS transforms */
 .carousel .card {
-  position: absolute;
-  width: 250px;
-  height: 320px;
+  width: clamp(180px, 40vw, 250px);
+  grid-area: 1 / 1;
+  aspect-ratio: 250 / 320; 
+  min-height: 230px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   background-size: cover;
@@ -36,7 +35,9 @@ the foundation of her proven pattern, adapted to our dynamic data needs.
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 1rem;
+  text-align: center;
+  line-height: 3rem;
+  padding-bottom: 1rem;
   cursor: pointer;
   transition: transform 0.6s ease, opacity 0.6s ease, z-index 0.6s;
 }

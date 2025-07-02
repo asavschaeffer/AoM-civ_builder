@@ -140,19 +140,48 @@ function handleEditClick(entityName: string, event: Event) {
 
 // --- TEMPLATES ---
 const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
+  // 1. Create a unified list including a placeholder for the "Add" card.
   const godKeys = Object.keys(gods);
+  const allCardKeys = [...godKeys, 'add-new-god'];
+
+  // 2. The active "card" is still the active god.
   const activeIndex = godKeys.indexOf(activeMajorGodKey);
-  const selectGod = (key: string) => { activeMajorGodKey = key; localStorage.setItem("activeMajorGod", key); renderAll(); };
+
+  const selectGod = (key: string) => {
+    // Make sure we don't try to select the "add" card as a god
+    if (key !== 'add-new-god') {
+      activeMajorGodKey = key;
+      localStorage.setItem("activeMajorGod", key);
+      renderAll();
+    } else {
+      console.log('add god');
+    }
+  };
+
   const removeGod = (key: string) => console.log("Removing god:", key);
-  return html`${godKeys.map((key, i) => { const god = gods[key]; let offset = i - activeIndex; if (offset > godKeys.length / 2) offset -= godKeys.length; if (offset < -godKeys.length / 2) offset += godKeys.length;
-      return html`<article class="card major-god" data-offset=${offset} style="background-image: url('${god.image || 'assets/placeholder.jpg'}')" @click=${() => offset !== 0 && selectGod(key)}>
-          <div class="card-content"><h4>${god.name}</h4><p>${god.tagline}</p></div>
-          <div class="card-actions-overlay">
-            <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }} title="Edit ${god.name}"><i class="fas fa-pencil-alt"></i></button>
-            <button class="action-btn delete-btn" @click=${(e: Event) => { e.stopPropagation(); removeGod(key); }} title="Delete ${god.name}"><i class="fas fa-trash"></i></button>
-          </div>
-        </article>`;
-    })}<article class="card add-new-god" data-offset=${godKeys.length - activeIndex} @click=${() => console.log('add god')}><i class="fa-solid fa-plus"></i></article>`;
+
+  // 3. Map over the unified list.
+  return html`${allCardKeys.map((key, i) => {
+    // 4. The same circular offset logic is now applied to EVERY card.
+    let offset = i - activeIndex;
+    if (offset > allCardKeys.length / 2) offset -= allCardKeys.length;
+    if (offset < -allCardKeys.length / 2) offset += allCardKeys.length;
+
+    // 5. Check if the current item is the "add" card and render it.
+    if (key === 'add-new-god') {
+      return html`<article class="card add-new-god" data-offset=${offset} @click=${() => selectGod(key)}><i class="fa-solid fa-plus"></i></article>`;
+    }
+
+    // Otherwise, render a regular god card.
+    const god = gods[key];
+    return html`<article class="card major-god" data-offset=${offset} style="background-image: url('${god.image || 'assets/placeholder.jpg'}')" @click=${() => offset !== 0 && selectGod(key)}>
+        <div class="card-content"><h4>${god.name}</h4><p>${god.tagline}</p></div>
+        <div class="card-actions-overlay">
+          <button class="action-btn edit-btn" @click=${(e: Event) => { e.stopPropagation(); handleEditClick(god.name, e); }} title="Edit ${god.name}"><i class="fas fa-pencil-alt"></i></button>
+          <button class="action-btn delete-btn" @click=${(e: Event) => { e.stopPropagation(); removeGod(key); }} title="Delete ${god.name}"><i class="fas fa-trash"></i></button>
+        </div>
+      </article>`;
+  })}`;
 };
 
 const minorGodsTemplate = (gods: Record<string, MinorGod>) => {
