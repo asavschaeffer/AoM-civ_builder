@@ -153,3 +153,118 @@ index 1d6a9f3..e8b5a7c 100644
 +// Beta by tomorrow.
 +// Built on a foundation of sound architecture and shared understanding.
 +// Ready for the next phase.
+
+commit 243e24a588ccf1873ade22f336a174af7fa9aacb
+Author: Gemini <gemini@google.com>
+Date:   Wed Jul 2 15:28:00 2025 +0900
+
+    refactor(session): Evolve layout and logic through dialogue
+
+    This commit represents a collaborative process of refinement.
+    
+    It moves from initial, brittle implementations to a robust, scalable,
+    and semantic architecture. The changes reflect a shared understanding
+    developed through a cycle of proposals, corrections, and insights.
+    
+    The core achievement is the decoupling of structure from presentation,
+    and the prioritization of a logical, accessible user experience.
+
+diff --git a/src/thought.process b/src/thought.process
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/thought.process
++++ b/src/thought.process
+@@ -1,39 +1,52 @@
+-/* Initial State: A guess based on incomplete information. */
+-body {
+-  /* A simple grid, but the HTML order must be wrong for it to work. */
+-  grid-template-columns: auto 1fr auto;
+-}
+-
+-main {
+-  /* Centered, but with no protection from getting too wide. */
+-  margin: 0 auto;
+-}
+-
+-.tile {
+-  /* Brittle, inaccessible sizing. */
+-  width: 130px;
+-  height: 130px;
+-  font-size: 16px;
+-}
+-
+-/* The preview pane is a separate, unrelated component. */
+-.preview-pane {
+-  height: 400px; /* It has its own fixed height. */
+-}
+-
+-.modal {
+-  /* Manually controlled, prone to state errors. */
+-  display: none;
+-}
+-
+-/* Logic is tangled. One function tries to do too much. */
+-function handleTileClick(entity) {
+-  // This assumes a function that doesn't exist.
+-  // It tries to open the editor and the preview at the same time.
+-  openEditorAndPreview(entity);
+-}
+-
+-.tile-actions-overlay {
+-  /* Only one interaction model is considered. */
+-  opacity: 0;
+-}
+-.tile:hover .tile-actions-overlay {
+-  opacity: 1;
+-}
++/*
++ * Final State: An architecture built from shared understanding.
++ * The HTML source order is semantic, and the CSS adapts to it.
++ */
++body {
++  display: grid;
++  /* The layout is defined visually, independent of source order. */
++  grid-template-areas:
++    "header header header"
++    "left-ad main-content right-ad"
++    "footer footer footer";
++  /* The center column is flexible but constrained, creating natural margins. */
++  grid-template-columns: 1fr minmax(0, 120ch) 1fr;
++}
++
++/* Elements are assigned to named areas. */
++header { grid-area: header; }
++main { grid-area: main-content; }
++.ad-container-left { grid-area: left-ad; }
++
++/* Sizing is fluid, responsive, and accessible. */
++.tile {
++  /* Proportions are maintained automatically. */
++  aspect-ratio: 1 / 1;
++  /* Units scale with user preferences. */
++  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
++}
++
++/* The preview pane's height is implicitly tied to its sibling's height. */
++.content-with-preview {
++  display: grid;
++  align-items: stretch; /* This ensures both columns match height. */
++}
++
++/* The native <dialog> element handles its own state. */
++dialog:not([open]) {
++  display: none;
++}
++
++/* Logic is separated by concern. */
++
++/* Concern A: Setting the application state. */
++const tileClickHandler = (entity) => setActiveEntityName(entity.name);
++
++/* Concern B: Revealing contextual actions based on state. */
++.tile.active .tile-actions-overlay {
++  opacity: 1;
++  pointer-events: auto;
++}
++
++/* Concern C: Opening the editor is a separate, explicit action. */
++const editButtonClickHandler = (entity, element) => openEditor(entity, element);

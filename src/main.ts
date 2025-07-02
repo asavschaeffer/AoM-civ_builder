@@ -71,9 +71,9 @@ export function showPreview(entity: Entity) {
 }
 
 // --- STATE MANAGEMENT ---
-let activeEntityName: string | null = localStorage.getItem("activeEntity") || null;
+let activeEntityName: string | null = localStorage.getItem("activeEntity") || "villager";
 let activeMajorGodKey: string = localStorage.getItem("activeMajorGod") || "zeus";
-let activeBuilding: string | null = localStorage.getItem("activeBuilding") || "town_center";
+let activeBuilding: string | null = localStorage.getItem("activeBuilding") || "town center";
 
 // --- ASYNC DATA LOADING ---
 async function loadCivData(civName = 'greek'): Promise<boolean> {
@@ -234,7 +234,7 @@ const previewCardTemplate = (entity: Entity | null) => {
 };
 
 function createUnitsTechsGridLayout(units: Record<string, Unit>, technologies: Record<string, Technology>): (Entity | null)[][] { const layout: (Entity | null)[][] = [ [null, null, null, null, null, null], [null, null, null, null, null, null], [null, null, null, null, null, null], ]; if (!activeBuilding || !data) return layout; const building = Object.values(data.buildings).find(b => b.name.toLowerCase() === activeBuilding); if (!building) return layout; const trainableUnits = (building.functions.trains_units || []).map(unitKey => { const keyLower = unitKey.toLowerCase(); return units[keyLower] || Object.values(units).find(u => u.name.toLowerCase() === keyLower); }).filter((unit): unit is Unit => !!unit); trainableUnits.slice(0, 6).forEach((unit, i) => { layout[0][i] = unit; }); const researchableTechs = (building.functions.researches_techs || []).map(techKey => { const keyLower = techKey.toLowerCase(); return technologies[keyLower] || Object.values(technologies).find(t => t.name.toLowerCase() === keyLower); }).filter((tech): tech is Technology => !!tech); const unitBasedTechs: Technology[] = []; const mythicGenericTechs: Technology[] = []; researchableTechs.forEach(tech => { const hasUnitEffect = tech.effects.some((effect) => effect.noun.unit_name || effect.noun.unit_tags?.length); if (hasUnitEffect) { unitBasedTechs.push(tech); } else { mythicGenericTechs.push(tech); } }); trainableUnits.forEach((unit, index) => { if (index >= 6) return; const matchingTech = unitBasedTechs.find(tech => tech.effects.some(effect => (effect.noun.unit_name === unit.name) || (effect.noun.unit_tags?.some(tag => unit.unit_tags.includes(tag) || unit.unit_category.toLowerCase() === tag.replace('is_', ''))))); if (matchingTech) { layout[1][index] = matchingTech; const techIndex = unitBasedTechs.indexOf(matchingTech); unitBasedTechs.splice(techIndex, 1); } }); const minorGods = data.majorGods[activeMajorGodKey]?.minorGods || []; const validTechs = mythicGenericTechs.filter(tech => !tech.prerequisite_god || minorGods.includes(tech.prerequisite_god)); validTechs.slice(0, 6).forEach((tech, i) => { layout[2][i] = tech; }); return layout; }
-const buildingGridLayout = [ ["house", null, null, null, "temple", "dock"], ["barracks", "archery_range", "stable", null, "market", "armory"], ["town_center", "wall", "tower", "fortress", null, "wonder"], ];
+const buildingGridLayout = [ ["house", null, null, null, "temple", "dock"], ["barracks", "archery range", "stable", null, "market", "armory"], ["town center", "wall", "tower", "fortress", null, "wonder"], ];
 
 async function main() {
   const isDataLoaded = await loadCivData('greek');
