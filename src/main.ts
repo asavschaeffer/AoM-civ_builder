@@ -56,35 +56,16 @@ class AppState {
 // THE CONDUCTOR: Single point of entry for all state changes
 setActive(entityKey: string | null, actionsKey: string | null = null) {   
   console.log(`AppState.setActive called with: entity="${entityKey}", actions="${actionsKey}"`);
-  console.log("setActive", entityKey, actionsKey, "mobile:", window.matchMedia("(max-width: 768px)").matches);
   
   // 1. Update core state
   this.activeEntityKey = entityKey;
   this.activeActionsKey = actionsKey;
   
-  // DEBUG: Check state immediately after setting
-  console.log("State immediately after setting:", {
-    activeEntityKey: this.activeEntityKey,
-    activeActionsKey: this.activeActionsKey
-  });
-  
   // 2. Execute comprehensive downstream logic
   this.updateDownstreamState();
   
-  // DEBUG: Check state after updateDownstreamState
-  console.log("State after updateDownstreamState:", {
-    activeEntityKey: this.activeEntityKey,
-    activeActionsKey: this.activeActionsKey
-  });
-  
   // 3. Global re-render
   renderAll();
-  
-  // DEBUG: Final state check
-  console.log("Final state before render:", {
-    activeEntityKey: this.activeEntityKey,
-    activeActionsKey: this.activeActionsKey
-  });
 }
 
   // THE MASTER CHECKLIST: Handles all downstream consequences
@@ -174,13 +155,24 @@ setActive(entityKey: string | null, actionsKey: string | null = null) {
 const appState = AppState.getInstance();
 
 // === UNIVERSAL EVENT HANDLER ===
+let lastClickTime = 0;
+let lastClickEntity = '';
+
 function handleEntityClick(entityKey: string, event?: Event) {
-  
   // Prevent default behavior if it's a click event
   if (event) {
     event.preventDefault();
     event.stopPropagation();
   }
+  
+  // Debounce: Prevent double-clicks within 100ms
+  const now = Date.now();
+  if (now - lastClickTime < 100 && lastClickEntity === entityKey) {
+    console.log("Debounced duplicate click on", entityKey);
+    return;
+  }
+  lastClickTime = now;
+  lastClickEntity = entityKey;
   
   // Report user intent to the Conductor
   appState.setActive(entityKey, entityKey); // Using same key for actions for now
@@ -321,14 +313,6 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
 
   const removeGod = (key: string) => console.log("Removing god:", key);
 
-  // DEBUG: Let's see what the state values are
-  console.log("majorGodsTemplate DEBUG:", {
-    activeEntity: appState.activeEntity,
-    activeActions: appState.activeActions,
-    activeMajorGod: appState.activeMajorGod,
-    godKeys: godKeys
-  });
-
   return html`${allCardKeys.map((key, i) => {
     let offset = i - activeIndex;
     if (offset > allCardKeys.length / 2) offset -= allCardKeys.length;
@@ -342,15 +326,6 @@ const majorGodsTemplate = (gods: Record<string, MajorGod>) => {
 
     const god = gods[key];
     const isActionsVisible = appState.activeActions === key;
-    
-    // DEBUG: Log each card's state
-    console.log(`Card ${key}:`, {
-      key,
-      godName: god.name,
-      activeActions: appState.activeActions,
-      isActionsVisible,
-      comparison: `${appState.activeActions} === ${key}`
-    });
 
     return html`<article class="card major-god ${isActionsVisible ? 'actions-visible' : ''}" data-offset=${offset}
       style="background-image: url('${god.image || 'assets/placeholder.jpg'}')"
