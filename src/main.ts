@@ -99,6 +99,14 @@ class AppState {
   }
 
   private updatePreviewPane() {
+    // Only show the preview pane automatically on non-mobile devices.
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile) {
+      // On mobile, we do NOT show the preview on a simple tap.
+      showPreview(null);
+      return; 
+    }
+
     if (this.activeEntityKey && this.data) {
       const entity = this.findEntityByKey(this.activeEntityKey);
       if (entity) {
@@ -147,6 +155,7 @@ const appState = AppState.getInstance();
 
 // === UNIVERSAL EVENT HANDLER ===
 function handleEntityClick(entityKey: string, event?: Event) {
+  
   // Prevent default behavior if it's a click event
   if (event) {
     event.preventDefault();
